@@ -1,0 +1,22 @@
+services:
+
+  # The OmnipediaElement plug-in manager.
+  plugin.manager.omnipedia_element:
+    class: Drupal\omnipedia_content\OmnipediaElementManager
+    parent: default_plugin_manager
+    calls:
+      -
+        - setAddtionalDependencies
+        -
+          - '@messenger'
+          - '@renderer'
+          - '@string_translation'
+
+  # OmnipediaElement hook_theme() event subscriber.
+  omnipedia_content.theme_omnipedia_element_event_subscriber:
+    class: Drupal\omnipedia_content\EventSubscriber\Theme\ThemeOmnipediaElementEventSubscriber
+    arguments:
+      - '@module_handler'
+      - '@plugin.manager.omnipedia_element'
+    tags:
+      - { name: 'event_subscriber' }
