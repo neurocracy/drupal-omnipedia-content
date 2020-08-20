@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Default theme implementation for Omnipedia about element.
+ *
+ * Available variables:
+ *
+ * - 'about': The name of the subject that this is about.
+ *
+ * - 'uses': An array of zero or more alternative uses, each containing an array
+ *   with the following keys:
+ *
+ *   - 'use': The title of the alternative use.
+ *
+ *   - 'see': The title of the article on this alternative use.
+ *
+ * @ingroup themeable
+ *
+ * @see https://en.wikipedia.org/wiki/Template:About
+ *   The Wikipedia template that this is loosely based on.
+ */
+#}
+
+{% set base_class = 'omnipedia-about' %}
+
+{# This has to be rendered here because trying to render it in the {% trans %}
+   block won't work.
+
+   @see https://getlevelten.com/blog/mark-carver/drupal-8-twig-templates-and-translations
+#}
+{% set about = about|render %}
+
+<p{{ create_attribute({'class': [base_class]}) }}>{% trans %}
+  This article is about {{ about }}.
+{% endtrans %}
+{% for item in uses %}
+  {# Also must be rendered before the {% trans %} block. #}
+  {% set see = item.see|render %}
+
+  {% trans %}
+    For {{ item.use }}, see {{ see }}.
+  {% endtrans %}
+{% endfor %}</p>
