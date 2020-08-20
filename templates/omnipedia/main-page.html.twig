@@ -1,0 +1,82 @@
+{#
+/**
+ * @file
+ * Default theme implementation for Omnipedia main page content.
+ *
+ * Available variables:
+ *
+ * - 'featured_article': A short snippet of the featured article content.
+ *
+ * - 'featured_article_media': The media to display alongside the featured
+ *   article snippet.
+ *
+ * - 'featured_article_url': The title of the featured article, used for the
+ *   '(Full article...)' link.
+ *
+ * - 'news': The news for this day. Usually a list of several short items.
+ *
+ * - 'news_media': The media to display alongside the news.
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set base_class = 'omnipedia-main-page' %}
+
+<div{{ create_attribute({'class': [base_class]}) }}>
+  {# Featured article section. #}
+  <section{{ create_attribute({'class': [
+    base_class ~ '__item',
+    base_class ~ '__featured-article',
+  ]}) }}>
+    <h3{{ create_attribute({'class': [
+      base_class ~ '__heading',
+      base_class ~ '__featured-article-heading',
+    ]}) }}>{{
+      'Today\'s featured article'|trans
+    }}</h3>
+
+    <div{{ create_attribute({'class': [
+      base_class ~ '__content',
+      base_class ~ '__featured-article-content',
+    ]}) }}>
+      {{ featured_article_media }}
+
+      {{ featured_article }}
+
+      <span{{ create_attribute({'class': [
+        base_class ~ '__featured-article-full-article',
+      ]}) }}>({{
+        link(
+          'Full article...'|trans,
+          featured_article_url,
+          {
+            'class':  [base_class ~ '__featured-article-link']
+          }
+        )
+      }})</span>
+    </div>
+  </section>
+
+  {# News section. #}
+  <section{{ create_attribute({'class': [
+    base_class ~ '__item',
+    base_class ~ '__news',
+  ]}) }}>
+    <h3{{ create_attribute({'class': [
+      base_class ~ '__heading',
+      base_class ~ '__news-heading',
+    ]}) }}>{{
+      'In the news'|trans
+    }}</h3>
+
+    <div{{ create_attribute({'class': [
+      base_class ~ '__content',
+      base_class ~ '__news-content',
+    ]}) }}>
+      {{ news_media }}
+
+      {{ news }}
+    </div>
+  </section>
+</div>

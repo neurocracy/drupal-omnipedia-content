@@ -1,0 +1,4 @@
+component.main_page:
+  css:
+    component:
+      main_page.css: {}

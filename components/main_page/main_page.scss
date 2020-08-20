@@ -1,0 +1,81 @@
+// -----------------------------------------------------------------------------
+//   Omnipedia <main-page> element stylesheet
+// -----------------------------------------------------------------------------
+
+@import '../../../../ambientimpact/ambientimpact_core/stylesheets/_common.scss';
+@import '../_components.scss';
+
+.omnipedia-main-page {
+  * + &__item {
+    margin-top: $omnipedia-main-page-spacing * 2;
+  }
+
+  @include media('>=omnipedia-main-page-dual-column') {
+    // Since we're only dealing with two columns and one row at the moment,
+    // there's no point using grid as flexbox has been around longer and
+    // we'd just have to maintain two layout methods. If this gets more
+    // complex, i.e. with addtional rows, then grid will make more sense.
+    @supports (display: flex) {
+      display: flex;
+
+      justify-content: space-between;
+
+      &__item {
+        width:  49%;
+        width:  calc(50% - #{$omnipedia-main-page-spacing} / 2);
+
+        * + & {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+
+  &__item {
+    // Contain floated media.
+    overflow-y: hidden;
+
+    box-sizing: border-box;
+
+    @include media('>=omnipedia-main-page-dual-column') {
+      padding:  $omnipedia-main-page-spacing;
+    }
+  }
+
+  &__content {
+    // First children of this or any descendents should have no top margin,
+    // and also any element that directly follows a media file, since media
+    // files are floated, so they share the same line across the top.
+    :first-child:not(.omnipedia-media):not(.ambientimpact-icon),
+    .omnipedia-media + * {
+      margin-top: 0 !important;
+    }
+  }
+
+  &__heading {
+    margin-top:     0;
+    margin-bottom:  $general-spacing;
+
+    @include media('>=omnipedia-main-page-dual-column') {
+      margin-top:   -0.4em;
+    }
+  }
+
+  .omnipedia-media {
+    // Lines up roughly with top of adjacent text.
+    margin-top: 0.3em;
+
+    max-width:  33%;
+  }
+
+  &__featured-article {
+    &-link {
+      font-weight: bold;
+    }
+  }
+
+  & + * {
+    // Add a top margin before any element following this section.
+    margin-top: $omnipedia-main-page-spacing;
+  }
+}

@@ -1,0 +1,17 @@
+// -----------------------------------------------------------------------------
+//   Omnipedia <main-page> element partial
+// -----------------------------------------------------------------------------
+
+///
+/// Spacing around and within the main page container.
+///
+/// @require {variable} $general-spacing
+///
+$omnipedia-main-page-spacing: $general-spacing * 1.5 !default;
+
+@include add-breakpoints((
+  // The viewport width at which the main page switches from single column to
+  // two columns.
+  'omnipedia-main-page-dual-column': 70em
+));
+
