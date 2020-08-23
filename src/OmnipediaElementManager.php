@@ -176,7 +176,7 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
         // If there was an error in creating the crawler, skip this.
         if (!($newNode instanceof \DOMNode)) {
           $this->messenger->addError($this->t(
-            'Could not find the <body> element containing this <code>@element</code> element.',
+            'Could not find the &lt;body&gt; element containing this <code>@element</code> element.',
             ['@element' => '<' . $definition['html_element'] . '>']
           ));
 
@@ -203,7 +203,6 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
         /** @var \DOMNode|null */
         $elementParent = $elementCrawler->getNode(0)->parentNode;
 
-        //
         if ($elementParent === null) {
           $this->messenger->addError($this->t(
             'Could not find a valid parent for this <code>@element</code> element.',
