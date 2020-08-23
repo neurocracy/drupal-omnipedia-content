@@ -12,6 +12,8 @@
   ],
   "require": {
     "drupal/hook_event_dispatcher": "^2.0",
+    "drupal/markdown": "^2.0",
+    "league/commonmark": "^1.5",
     "symfony/dom-crawler": "^3.4",
     "symfony/css-selector": "^3.4"
   },
