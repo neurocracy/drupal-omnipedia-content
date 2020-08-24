@@ -1,0 +1,20 @@
+{
+  "name": "drupal/omnipedia_content_legacy",
+  "description": "Omnipedia - Content (legacy)",
+  "type": "project",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Ambient.Impact",
+      "homepage": "https://ambientimpact.com/",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "drupal/freelinking": "^3.1",
+    "symfony/dom-crawler": "^3.4",
+    "symfony/css-selector": "^3.4"
+  },
+  "require-dev": {
+  }
+}
