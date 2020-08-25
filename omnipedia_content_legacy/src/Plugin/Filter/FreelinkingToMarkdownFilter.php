@@ -10,8 +10,8 @@ use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
 use Drupal\freelinking\FreelinkingManagerInterface;
-use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Provides a filter to convert legacy Freelinking links to Markdown.
