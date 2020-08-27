@@ -99,7 +99,11 @@ class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactory
    */
   public function process($text, $langCode) {
     /** @var \Symfony\Component\DomCrawler\Crawler */
-    $rootCrawler = new Crawler($text);
+    $rootCrawler = new Crawler(
+      // The <div> is to prevent the PHP DOM from automatically wrapping any
+      // top-level text content in a <p> element.
+      '<div id="omnipedia-root">' . $text . '</div>'
+    );
 
     /** @var \Symfony\Component\DomCrawler\Crawler */
     $freelinksCrawler = $rootCrawler->filter(
@@ -153,7 +157,9 @@ class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactory
       );
     }
 
-    return new FilterProcessResult($rootCrawler->filter('body')->html());
+    return new FilterProcessResult(
+      $rootCrawler->filter('#omnipedia-root')->html()
+    );
   }
 
 }
