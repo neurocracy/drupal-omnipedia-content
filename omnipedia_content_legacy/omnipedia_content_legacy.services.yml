@@ -1,0 +1,20 @@
+services:
+
+  # The OmnipediaElementLegacy plug-in manager.
+  plugin.manager.omnipedia_element_legacy:
+    class: Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManager
+    parent: default_plugin_manager
+    calls:
+      -
+        - setAddtionalDependencies
+        -
+          - '@renderer'
+
+  # OmnipediaElementLegacy hook_theme() event subscriber.
+  omnipedia_content_legacy.theme_omnipedia_element_legacy_event_subscriber:
+    class: Drupal\omnipedia_content_legacy\EventSubscriber\Theme\ThemeOmnipediaElementLegacyEventSubscriber
+    arguments:
+      - '@module_handler'
+      - '@plugin.manager.omnipedia_element_legacy'
+    tags:
+      - { name: 'event_subscriber' }
