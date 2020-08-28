@@ -30,14 +30,11 @@
 #}
 {% set about = about|render %}
 
-<p{{ create_attribute({'class': [base_class]}) }}>{% trans %}
-  This article is about {{ about }}.
-{% endtrans %}
+<p{{ create_attribute({'class': [base_class]}) }}>
+  {% trans %}This article is about {{ about }}.{% endtrans %}
 {% for item in uses %}
   {# Also must be rendered before the {% trans %} block. #}
   {% set see = item.see|render %}
 
-  {% trans %}
-    For {{ item.use }}, see {{ see }}.
-  {% endtrans %}
+  {% trans %}For {{ item.use }}, see {{ see }}.{% endtrans %}
 {% endfor %}</p>
