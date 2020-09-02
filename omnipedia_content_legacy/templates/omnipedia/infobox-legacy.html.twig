@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Default theme implementation for legacy Omnipedia infobox element.
+ *
+ * Available variables:
+ *
+ * - 'type': The type or category this infobox describes.
+ *
+ * - 'name': The name or subject this infobox describes.
+ *
+ * - 'items': An array of one or more items following keys:
+ *
+ *   - 'label': The label or title of item.
+ *
+ *   - 'value': The value of the item that the label describes.
+ *
+ * @ingroup themeable
+ *
+ * @see https://en.wikipedia.org/wiki/Template:Infobox
+ *   The Wikipedia template that this is loosely based on.
+ */
+#}
+<infobox type="{{ type }}" name="{{ name }}">
+{% for item in items %}
+  <item label="{{ item.label }}">{{ item.value }}</item>
+{% endfor %}
+</infobox>

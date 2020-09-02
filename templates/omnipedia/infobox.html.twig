@@ -1,0 +1,71 @@
+{#
+/**
+ * @file
+ * Default theme implementation for Omnipedia infobox element.
+ *
+ * Available variables:
+ *
+ * - 'type': The type or category this infobox describes.
+ *
+ * - 'name': The name or subject this infobox describes.
+ *
+ * - 'items': An array of one or more items following keys:
+ *
+ *   - 'label': The label or title of item.
+ *
+ *   - 'value': The value of the item that the label describes.
+ *
+ * @ingroup themeable
+ *
+ * @see https://en.wikipedia.org/wiki/Template:Infobox
+ *   The Wikipedia template that this is loosely based on.
+ */
+#}
+
+{% set base_class = 'omnipedia-infobox' %}
+
+{% set itemLabelBaseClass = base_class ~ '__info-item-title' %}
+
+{% set itemValueBaseClass = base_class ~ '__info-item-value' %}
+
+<div{{ create_attribute({'class': [
+  base_class,
+  base_class ~ '--type-' ~ type,
+]}) }}>
+  <strong{{ create_attribute({'class': [base_class ~ '__name']}) }}>{{ name }}</strong>
+
+  <dl{{ create_attribute({'class': [base_class ~ '__info']}) }}>
+    {% for item in items %}
+      {# Attributes for the item label element. #}
+      {% set itemLabelAttributes = create_attribute({'class': [
+        itemLabelBaseClass,
+        itemLabelBaseClass ~ '--' ~ item.label|clean_class
+      ]}) %}
+
+      {# Attributes for the item value element. #}
+      {% set itemValueAttributes = create_attribute({'class': [
+        itemValueBaseClass,
+        itemValueBaseClass ~ '--' ~ item.label|clean_class
+      ]}) %}
+
+      {# Add modifier classes if this is a media item. #}
+      {% if item.isMedia %}
+        {% set itemLabelAttributes = itemLabelAttributes.addClass(
+          itemLabelBaseClass ~ '--is-media'
+        ) %}
+
+        {% set itemValueAttributes = itemValueAttributes.addClass(
+          itemValueBaseClass ~ '--is-media'
+        ) %}
+      {% endif %}
+
+      <dt{{ itemLabelAttributes }}>{{ item.label }}</dt>
+      <dd{{ itemValueAttributes }}>
+
+        {# Space before/after is required so Markdown is parsed correctly. #}
+        {{ item.value }}
+
+      </dd>
+    {% endfor %}
+  </dl>
+</div>

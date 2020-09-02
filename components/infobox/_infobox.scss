@@ -1,0 +1,23 @@
+// -----------------------------------------------------------------------------
+//   Omnipedia <infobox> element partial
+// -----------------------------------------------------------------------------
+
+///
+/// Spacing between the infobox and other elements.
+///
+/// @require {variable} $general-spacing
+///
+$omnipedia-infobox-outer-spacing: $general-spacing !default;
+
+///
+/// Spacing within the infobox and its inner elements.
+///
+/// @require {variable} $general-spacing
+///
+$omnipedia-infobox-inner-spacing: $general-spacing !default;
+
+@include add-breakpoints((
+  // The viewport width at which infoboxes can be floated alongside other
+  // content.
+  'omnipedia-infobox-floated': 30em
+));
