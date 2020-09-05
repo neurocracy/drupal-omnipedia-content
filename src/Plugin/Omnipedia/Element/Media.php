@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * creates a <drupal-media> element pointing to the matched media entity's UUID.
  *
  * @OmnipediaElement(
- *   id = "omnipedia_media",
+ *   id = "media",
  *   html_element = "media",
  *   title = @Translation("Media"),
  *   description = @Translation("Media element.")
@@ -69,12 +69,14 @@ class Media extends OmnipediaElementBase {
    */
   public static function getTheme(): array {
     return [
-      'variables' => [
-        'container_attributes'  => null,
-        'media_attributes'      => null,
-        'align'                 => 'right',
+      'omnipedia_media' => [
+        'variables' => [
+          'container_attributes'  => null,
+          'media_attributes'      => null,
+          'align'                 => 'right',
+        ],
+        'template'  => 'omnipedia-media',
       ],
-      'template'  => 'omnipedia-media',
     ];
   }
 
@@ -156,7 +158,7 @@ class Media extends OmnipediaElementBase {
 
     // @todo Remove this when we have default options/attributes implemented.
     if ($align === null) {
-      $align = self::getTheme()['variables']['align'];
+      $align = self::getTheme()['omnipedia_media']['variables']['align'];
     }
 
     // @todo Remove this when we have default options/attributes implemented.

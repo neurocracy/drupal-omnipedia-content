@@ -79,14 +79,16 @@ class MainPage extends OmnipediaElementBase {
    */
   public static function getTheme(): array {
     return [
-      'variables' => [
-        'featured_article'        => '',
-        'featured_article_media'  => '',
-        'featured_article_url'    => '',
-        'news'        => '',
-        'news_media'  => '',
+      'main_page' => [
+        'variables' => [
+          'featured_article'        => '',
+          'featured_article_media'  => '',
+          'featured_article_url'    => '',
+          'news'        => '',
+          'news_media'  => '',
+        ],
+        'template'  => 'main-page',
       ],
-      'template'  => 'main-page',
     ];
   }
 

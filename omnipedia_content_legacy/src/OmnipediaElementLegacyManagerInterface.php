@@ -42,7 +42,7 @@ interface OmnipediaElementLegacyManagerInterface {
    *
    *   - 'provider': The machine name of the provider, e.g. the module.
    *
-   *   - 'theme': The theme array, containing 'variables' and 'template' keys.
+   *   - 'theme': The theme array, containing elements for \hook_theme().
    */
   public function getTheme(): array;
 

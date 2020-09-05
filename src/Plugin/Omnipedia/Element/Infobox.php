@@ -22,12 +22,14 @@ class Infobox extends OmnipediaElementBase {
    */
   public static function getTheme(): array {
     return [
-      'variables' => [
-        'type'  => 'undefined',
-        'name'  => 'Undefined',
-        'items' => [],
+      'infobox' => [
+        'variables' => [
+          'type'  => 'undefined',
+          'name'  => 'Undefined',
+          'items' => [],
+        ],
+        'template'  => 'infobox',
       ],
-      'template'  => 'infobox',
     ];
   }
 
@@ -43,7 +45,7 @@ class Infobox extends OmnipediaElementBase {
         'Cannot find the <code>type</code> attribute.'
       ));
 
-      $type = self::getTheme()['variables']['type'];
+      $type = self::getTheme()['infobox']['variables']['type'];
     }
 
     /** @var string|null */
@@ -54,7 +56,7 @@ class Infobox extends OmnipediaElementBase {
         'Cannot find the <code>name</code> attribute.'
       ));
 
-      $name = self::getTheme()['variables']['name'];
+      $name = self::getTheme()['infobox']['variables']['name'];
     }
 
     /** @var array */

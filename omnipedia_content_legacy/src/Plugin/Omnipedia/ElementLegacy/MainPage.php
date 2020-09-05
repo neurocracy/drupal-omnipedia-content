@@ -9,7 +9,6 @@ use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyBase;
  *
  * @OmnipediaElementLegacy(
  *   id = "main_page",
- *   theme = "main_page_legacy",
  *   title = @Translation("Main page")
  * )
  */
@@ -20,15 +19,17 @@ class MainPage extends OmnipediaElementLegacyBase {
    */
   public static function getTheme(): array {
     return [
-      'variables' => [
-        'featured_article'        => '',
-        'featured_article_title'  => '',
-        'featured_article_media'  => '',
-        'news'                => '',
-        'news_media'          => '',
-        'news_media_caption'  => '',
+      'main_page_legacy' => [
+        'variables' => [
+          'featured_article'        => '',
+          'featured_article_title'  => '',
+          'featured_article_media'  => '',
+          'news'                => '',
+          'news_media'          => '',
+          'news_media_caption'  => '',
+        ],
+        'template'  => 'main-page-legacy',
       ],
-      'template'  => 'main-page-legacy',
     ];
   }
 

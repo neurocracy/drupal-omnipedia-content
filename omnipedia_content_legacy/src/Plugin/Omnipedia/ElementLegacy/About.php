@@ -9,7 +9,6 @@ use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyBase;
  *
  * @OmnipediaElementLegacy(
  *   id = "about",
- *   theme = "about_legacy",
  *   title = @Translation("About")
  * )
  */
@@ -20,11 +19,13 @@ class About extends OmnipediaElementLegacyBase {
    */
   public static function getTheme(): array {
     return [
-      'variables' => [
-        'about'     => '',
-        'uses'      => [],
+      'about_legacy' => [
+        'variables' => [
+          'about'     => '',
+          'uses'      => [],
+        ],
+        'template'  => 'about-legacy',
       ],
-      'template'  => 'about-legacy',
     ];
   }
 

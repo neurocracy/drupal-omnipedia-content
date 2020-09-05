@@ -78,11 +78,13 @@ class About extends OmnipediaElementBase {
    */
   public static function getTheme(): array {
     return [
-      'variables' => [
-        'about'     => '',
-        'uses'      => [],
+      'about' => [
+        'variables' => [
+          'about'     => '',
+          'uses'      => [],
+        ],
+        'template'  => 'about',
       ],
-      'template'  => 'about',
     ];
   }
 

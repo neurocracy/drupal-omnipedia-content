@@ -9,7 +9,6 @@ use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyBase;
  *
  * @OmnipediaElementLegacy(
  *   id = "infobox",
- *   theme = "infobox_legacy",
  *   title = @Translation("Infobox")
  * )
  */
@@ -20,12 +19,14 @@ class Infobox extends OmnipediaElementLegacyBase {
    */
   public static function getTheme(): array {
     return [
-      'variables' => [
-        'type'  => 'undefined',
-        'name'  => 'Undefined',
-        'items' => [],
+      'infobox_legacy' => [
+        'variables' => [
+          'type'  => 'undefined',
+          'name'  => 'Undefined',
+          'items' => [],
+        ],
+        'template'  => 'infobox-legacy',
       ],
-      'template'  => 'infobox-legacy',
     ];
   }
 

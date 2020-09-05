@@ -54,29 +54,32 @@ class ThemeOmnipediaElementLegacyEventSubscriber implements EventSubscriberInter
   }
 
   /**
-   * Defines the OmnipediaElement theme elements.
+   * Defines the OmnipediaElementLegacy theme elements.
    *
    * @param \Drupal\core_event_dispatcher\Event\Theme\ThemeEvent $event
    *   The event object.
    */
   public function theme(ThemeEvent $event) {
     /** @var array */
-    $elements = $this->elementLegacyManager->getTheme();
+    $plugins = $this->elementLegacyManager->getTheme();
 
-    foreach ($elements as $name => $values) {
-      // If the 'path' key isn't set, we have to build it as
-      // hook_event_dispatcher requires this.
-      //
-      // @see https://www.drupal.org/project/hook_event_dispatcher/issues/3038311
-      //
-      // @todo What about themes and other paths? Can these be specified in
-      //   the individual element classes?
-      if (empty($values['theme']['path'])) {
-        $values['theme']['path'] = $this->moduleHandler
-          ->getModule($values['provider'])->getPath() . '/templates/omnipedia';
+    foreach ($plugins as $pluginId => $pluginData) {
+      foreach ($pluginData['theme'] as $elementName => $elementData) {
+        // If the 'path' key isn't set, we have to build it as
+        // hook_event_dispatcher requires this.
+        //
+        // @see https://www.drupal.org/project/hook_event_dispatcher/issues/3038311
+        //
+        // @todo What about themes and other paths? Can these be specified in
+        //   the individual element classes?
+        if (empty($elementData['path'])) {
+          $elementData['path'] = $this->moduleHandler
+            ->getModule($pluginData['provider'])->getPath()
+             . '/templates/omnipedia';
+        }
+
+        $event->addNewTheme($elementName, $elementData);
       }
-
-      $event->addNewTheme($name, $values['theme']);
     }
   }
 

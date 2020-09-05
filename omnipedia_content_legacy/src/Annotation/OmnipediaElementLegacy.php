@@ -20,13 +20,6 @@ use Drupal\Component\Annotation\Plugin;
 class OmnipediaElementLegacy extends Plugin {
 
   /**
-   * The #theme element for this plug-in.
-   *
-   * @var string
-   */
-  public $theme;
-
-  /**
    * The human readable title of the element.
    *
    * @var \Drupal\Core\Annotation\Translation

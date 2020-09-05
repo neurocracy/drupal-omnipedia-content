@@ -151,7 +151,7 @@ class OmnipediaElementLegacyManager extends DefaultPluginManager implements Omni
     $theme = [];
 
     foreach ($definitions as $id => $definition) {
-      $theme[$definition['theme']] = [
+      $theme[$id] = [
         'provider'  => $definition['provider'],
         'theme'     => $definition['class']::getTheme(),
       ];

@@ -10,7 +10,6 @@ use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyBase;
  *
  * @OmnipediaElementLegacy(
  *   id = "media",
- *   theme = "omnipedia_media_legacy",
  *   title = @Translation("Media")
  * )
  */
@@ -21,10 +20,12 @@ class Media extends OmnipediaElementLegacyBase {
    */
   public static function getTheme(): array {
     return [
-      'variables' => [
-        'attributes'  => null,
+      'omnipedia_media_legacy' => [
+        'variables' => [
+          'attributes'  => null,
+        ],
+        'template'  => 'omnipedia-media-legacy',
       ],
-      'template'  => 'omnipedia-media-legacy',
     ];
   }
 

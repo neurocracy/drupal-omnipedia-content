@@ -14,20 +14,8 @@ interface OmnipediaElementLegacyInterface {
    * this method.
    *
    * @return array
-   *   An array with a valid format for \hook_theme(). Note that this will
-   *   automatically be nested under this plug-in's ID, e.g.:
-   *
-   *   @code
-   *   [
-   *     'variables' => [
-   *       'variable1'  => '',
-   *       'variable2'  => '',
-   *     ],
-   *     'template'  => 'my-element',
-   *   ]
-   *   @endcode
-   *
-   *   Then becomes:
+   *   An array with a valid format for \hook_theme() containing one or more
+   *   elements; example:
    *
    *   @code
    *   [
