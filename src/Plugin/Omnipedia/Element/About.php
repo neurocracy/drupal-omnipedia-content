@@ -161,7 +161,7 @@ class About extends OmnipediaElementBase {
       '#about'  => ['#markup' => $this->elements->html()],
       '#uses'   => $uses,
 
-      '#attached'   => [
+      '#attached' => [
         'library'   => ['omnipedia_content/component.about'],
       ],
     ];

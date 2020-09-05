@@ -31,7 +31,6 @@ class Infobox extends OmnipediaElementBase {
     ];
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -96,7 +95,7 @@ class Infobox extends OmnipediaElementBase {
       '#name'   => $name,
       '#items'  => $items,
 
-      '#attached'   => [
+      '#attached' => [
         'library'   => ['omnipedia_content/component.infobox'],
       ],
     ];
