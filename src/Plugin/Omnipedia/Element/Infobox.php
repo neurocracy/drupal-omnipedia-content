@@ -22,13 +22,13 @@ class Infobox extends OmnipediaElementBase {
    */
   public static function getTheme(): array {
     return [
-      'infobox' => [
+      'omnipedia_infobox' => [
         'variables' => [
           'type'  => 'undefined',
           'name'  => 'Undefined',
           'items' => [],
         ],
-        'template'  => 'infobox',
+        'template'  => 'omnipedia-infobox',
       ],
     ];
   }
@@ -45,7 +45,7 @@ class Infobox extends OmnipediaElementBase {
         'Cannot find the <code>type</code> attribute.'
       ));
 
-      $type = self::getTheme()['infobox']['variables']['type'];
+      $type = self::getTheme()['omnipedia_infobox']['variables']['type'];
     }
 
     /** @var string|null */
@@ -56,7 +56,7 @@ class Infobox extends OmnipediaElementBase {
         'Cannot find the <code>name</code> attribute.'
       ));
 
-      $name = self::getTheme()['infobox']['variables']['name'];
+      $name = self::getTheme()['omnipedia_infobox']['variables']['name'];
     }
 
     /** @var array */
@@ -92,7 +92,7 @@ class Infobox extends OmnipediaElementBase {
     }
 
     return [
-      '#theme'  => 'infobox',
+      '#theme'  => 'omnipedia_infobox',
       '#type'   => $type,
       '#name'   => $name,
       '#items'  => $items,

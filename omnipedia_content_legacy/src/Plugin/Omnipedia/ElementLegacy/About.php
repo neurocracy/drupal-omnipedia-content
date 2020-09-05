@@ -19,12 +19,12 @@ class About extends OmnipediaElementLegacyBase {
    */
   public static function getTheme(): array {
     return [
-      'about_legacy' => [
+      'omnipedia_about_legacy' => [
         'variables' => [
           'about'     => '',
           'uses'      => [],
         ],
-        'template'  => 'about-legacy',
+        'template'  => 'omnipedia-about-legacy',
       ],
     ];
   }
@@ -57,7 +57,7 @@ class About extends OmnipediaElementLegacyBase {
     }
 
     return [
-      '#theme'  => 'about_legacy',
+      '#theme'  => 'omnipedia_about_legacy',
       // Render any HTML elements nested inside the <about> element.
       '#about'  => ['#markup' => $this->options['about']],
       '#uses'   => $uses,

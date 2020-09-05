@@ -19,13 +19,13 @@ class Infobox extends OmnipediaElementLegacyBase {
    */
   public static function getTheme(): array {
     return [
-      'infobox_legacy' => [
+      'omnipedia_infobox_legacy' => [
         'variables' => [
           'type'  => 'undefined',
           'name'  => 'Undefined',
           'items' => [],
         ],
-        'template'  => 'infobox-legacy',
+        'template'  => 'omnipedia-infobox-legacy',
       ],
     ];
   }
@@ -42,7 +42,7 @@ class Infobox extends OmnipediaElementLegacyBase {
 
     /** @var array */
     $renderArray = [
-      '#theme'  => 'infobox_legacy',
+      '#theme'  => 'omnipedia_infobox_legacy',
       '#type'   => $this->options[0],
       '#name'   => $this->options['name'],
       '#items'  => [],

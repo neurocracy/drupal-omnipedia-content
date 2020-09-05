@@ -19,7 +19,7 @@ class MainPage extends OmnipediaElementLegacyBase {
    */
   public static function getTheme(): array {
     return [
-      'main_page_legacy' => [
+      'omnipedia_main_page_legacy' => [
         'variables' => [
           'featured_article'        => '',
           'featured_article_title'  => '',
@@ -28,7 +28,7 @@ class MainPage extends OmnipediaElementLegacyBase {
           'news_media'          => '',
           'news_media_caption'  => '',
         ],
-        'template'  => 'main-page-legacy',
+        'template'  => 'omnipedia-main-page-legacy',
       ],
     ];
   }
@@ -71,7 +71,7 @@ class MainPage extends OmnipediaElementLegacyBase {
     }
 
     return [
-      '#theme'                  => 'main_page_legacy',
+      '#theme'                  => 'omnipedia_main_page_legacy',
       '#featured_article'       => $this->options['featured_article'],
       '#featured_article_title' => $featuredArticleTitle,
       '#featured_article_media' => $mediaPaths['featured_article_media'],

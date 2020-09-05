@@ -79,7 +79,7 @@ class MainPage extends OmnipediaElementBase {
    */
   public static function getTheme(): array {
     return [
-      'main_page' => [
+      'omnipedia_main_page' => [
         'variables' => [
           'featured_article'        => '',
           'featured_article_media'  => '',
@@ -87,7 +87,7 @@ class MainPage extends OmnipediaElementBase {
           'news'        => '',
           'news_media'  => '',
         ],
-        'template'  => 'main-page',
+        'template'  => 'omnipedia-main-page',
       ],
     ];
   }
@@ -122,7 +122,7 @@ class MainPage extends OmnipediaElementBase {
       Url::fromUri('base:<front>') : $featuredArticleNode->toUrl();
 
     return [
-      '#theme' => 'main_page',
+      '#theme' => 'omnipedia_main_page',
       '#featured_article'       => [
         '#markup' => $featuredArticleElement->html(),
       ],

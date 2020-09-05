@@ -78,12 +78,12 @@ class About extends OmnipediaElementBase {
    */
   public static function getTheme(): array {
     return [
-      'about' => [
+      'omnipedia_about' => [
         'variables' => [
           'about'     => '',
           'uses'      => [],
         ],
-        'template'  => 'about',
+        'template'  => 'omnipedia-about',
       ],
     ];
   }
@@ -158,7 +158,7 @@ class About extends OmnipediaElementBase {
     }
 
     return [
-      '#theme'  => 'about',
+      '#theme'  => 'omnipedia_about',
       // Render any HTML elements nested inside the <about> element.
       '#about'  => ['#markup' => $this->elements->html()],
       '#uses'   => $uses,
