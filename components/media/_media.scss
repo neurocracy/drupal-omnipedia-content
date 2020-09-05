@@ -1,0 +1,15 @@
+// -----------------------------------------------------------------------------
+//   Omnipedia <media> element partial
+// -----------------------------------------------------------------------------
+
+///
+/// Spacing between media elements and other elements.
+///
+/// @require {variable} $general-spacing
+///
+$omnipedia-media-outer-spacing: $general-spacing !default;
+
+@include add-breakpoints((
+  // The minimum viewport width at which media can be floated left or right.
+  'omnipedia-media-floated': 30em
+));

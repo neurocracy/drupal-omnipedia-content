@@ -1,0 +1,43 @@
+// -----------------------------------------------------------------------------
+//   Omnipedia <media> element stylesheet
+// -----------------------------------------------------------------------------
+
+@import '../../../../ambientimpact/ambientimpact_core/stylesheets/_common.scss';
+@import '../_components.scss';
+
+.omnipedia-media {
+  max-width: 100%;
+
+  margin-bottom: $omnipedia-media-outer-spacing;
+
+  @include media('>=omnipedia-media-floated') {
+    // Alignment.
+    &--align-left,
+    &--align-right {
+      max-width: 50%;
+    }
+    &--align-left {
+      float:        left;
+      clear:        left;
+      margin-right: $omnipedia-media-outer-spacing;
+    }
+    &--align-right {
+      float:        right;
+      clear:        right;
+      margin-left:  $omnipedia-media-outer-spacing;
+    }
+  }
+
+  // &--style-frameless {
+  //   figure {
+  //     padding:           0 !important;
+  //     border-width:      0 !important;
+  //     background-color:  transparent !important;
+  //   }
+  // }
+
+  // // A link, if it exists.
+  // &__link {
+  //   display: block;
+  // }
+}
