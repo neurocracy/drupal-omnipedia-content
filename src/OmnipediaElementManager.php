@@ -160,7 +160,7 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
         // Render the new element as an HTML string.
         //
         // @todo Remove this once we have a system in place to return a
-        //   serialzable format that can be saved as a placeholder for later
+        //   serializable format that can be saved as a placeholder for later
         //   rendering.
         $newHtml = (string) $this->renderer->render($renderArray);
 
