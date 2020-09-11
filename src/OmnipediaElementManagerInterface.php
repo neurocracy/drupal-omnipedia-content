@@ -37,11 +37,17 @@ interface OmnipediaElementManagerInterface {
    * @param string $html
    *   The HTML to parse.
    *
+   * @param array $ignorePlugins
+   *   An array of zero or more plug-in IDs to skip creating instances for. This
+   *   is intended for internal use to prevent infinite recursion.
+   *
    * @return string
    *   The $html parameter with any custom elements that have OmnipediaElement
    *   plug-ins rendered as standard HTML.
    */
-  public function convertElements(string $html): string;
+  public function convertElements(
+    string $html, array $ignorePlugins = []
+  ): string;
 
   /**
    * Get theme definitions from all element plug-ins.

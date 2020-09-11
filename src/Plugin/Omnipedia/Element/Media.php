@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\omnipedia_content\OmnipediaElementBase;
+use Drupal\omnipedia_content\OmnipediaElementManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -39,11 +40,13 @@ class Media extends OmnipediaElementBase {
    */
   public function __construct(
     array $configuration, string $pluginID, array $pluginDefinition,
+    OmnipediaElementManagerInterface $elementManager,
     TranslationInterface        $stringTranslation,
     EntityTypeManagerInterface  $entityTypeManager
   ) {
     parent::__construct(
-      $configuration, $pluginID, $pluginDefinition, $stringTranslation
+      $configuration, $pluginID, $pluginDefinition,
+      $elementManager, $stringTranslation
     );
 
     // Save dependencies.
@@ -59,6 +62,7 @@ class Media extends OmnipediaElementBase {
   ) {
     return new static(
       $configuration, $pluginID, $pluginDefinition,
+      $container->get('plugin.manager.omnipedia_element'),
       $container->get('string_translation'),
       $container->get('entity_type.manager')
     );

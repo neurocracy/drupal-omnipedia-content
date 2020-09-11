@@ -130,16 +130,30 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
    *   The Freelinking filter creates placeholders which are rendered by their
    *   service at the end of the rendering process.
    */
-  public function convertElements(string $html): string {
+  public function convertElements(
+    string $html, array $ignorePlugins = []
+  ): string {
     /** @var array */
     $definitions = $this->getDefinitions();
 
     /** @var \Symfony\Component\DomCrawler\Crawler */
-    $rootCrawler = new Crawler($html);
+    $rootCrawler = new Crawler(
+      // The <div> is to prevent the PHP DOM automatically wrapping any
+      // top-level text content in a <p> element.
+      '<div id="omnipedia-element-manager-root">' . $html . '</div>'
+    );
 
     // Loop over all plug-in definitions, parsing and rendering any whose
     // matching HTML elements are found in the HTML content.
     foreach ($definitions as $pluginID => $definition) {
+      // Skip any plug-in IDs in $ignorePlugins to avoid infinite recursion.
+      if (\in_array($pluginID, $ignorePlugins)) {
+        continue;
+      }
+
+      // Add this plug-in ID to $ignorePlugins.
+      $ignorePlugins[] = $pluginID;
+
       /** @var \Symfony\Component\DomCrawler\Crawler */
       $pluginCrawler = $rootCrawler->filter($definition['html_element']);
 
@@ -151,7 +165,8 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
 
         /** @var \Drupal\omnipedia_content\OmnipediaElementInterface */
         $instance = $this->createInstance($pluginID, [
-          'elements' => $elementCrawler,
+          'elements'      => $elementCrawler,
+          'ignorePlugins' => $ignorePlugins,
         ]);
 
         /** @var array */
@@ -166,25 +181,33 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
 
         // Parse the new element HTML into a DOM tree.
         /** @var \Symfony\Component\DomCrawler\Crawler */
-        $newNodesCrawler = new Crawler($newHtml);
+        $newNodesCrawler = new Crawler(
+          // The <div> is to prevent the PHP DOM automatically wrapping any
+          // top-level text content in a <p> element.
+          '<div id="omnipedia-element-manager-root">' .
+            $newHtml .
+          '</div>'
+        );
 
-        // Attempt to get the <body> element in the newly parsed DOM. Note that
-        // if there was an error parsing the DOM, this will be null.
+        // Attempt to find the first rendered element in the newly parsed DOM.
+        // Rather than using \DOMNode::firstChild(), which can return text nodes
+        // (including white-space-only nodes), we're using a CSS selector to
+        // ensure only an actual element is selected. Also note that if there
+        // was an error parsing the DOM, this will be null.
         /** @var \DOMNode|null */
-        $newNode = $newNodesCrawler->filter('body')->getNode(0);
+        $newNode = $newNodesCrawler->filter(
+          '#omnipedia-element-manager-root > :first-child'
+        )->getNode(0);
 
         // If there was an error in creating the crawler, skip this.
         if (!($newNode instanceof \DOMNode)) {
           $this->messenger->addError($this->t(
-            'Could not find the &lt;body&gt; element containing this <code>@element</code> element.',
+            'Could not find the rendered element for this <code>@element</code> element.',
             ['@element' => '<' . $definition['html_element'] . '>']
           ));
 
           continue;
         }
-
-        /** @var \DOMNode */
-        $newNode = $newNode->firstChild;
 
         // Log any errors this instance reports. Note that we allow processing
         // to go ahead regardless.
@@ -198,8 +221,8 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
         }
 
         // We need to find the new node's parent to use the replaceChild()
-        // method, awkward though it may be. This should be the <body> element,
-        //
+        // method, awkward though it may be. This should be the
+        // '#omnipedia-element-manager-root' element.
         /** @var \DOMNode|null */
         $elementParent = $elementCrawler->getNode(0)->parentNode;
 
@@ -246,7 +269,7 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
       }
     }
 
-    return $rootCrawler->filter('body')->html();
+    return $rootCrawler->filter('#omnipedia-element-manager-root')->html();
   }
 
   /**

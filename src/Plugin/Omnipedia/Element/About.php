@@ -4,6 +4,7 @@ namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\omnipedia_content\OmnipediaElementBase;
+use Drupal\omnipedia_content\OmnipediaElementManagerInterface;
 use Drupal\omnipedia_core\Service\TimelineInterface;
 use Drupal\omnipedia_core\Service\WikiNodeRevisionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -45,12 +46,14 @@ class About extends OmnipediaElementBase {
    */
   public function __construct(
     array $configuration, string $pluginID, array $pluginDefinition,
+    OmnipediaElementManagerInterface $elementManager,
     TranslationInterface      $stringTranslation,
     TimelineInterface         $timeline,
     WikiNodeRevisionInterface $wikiNodeRevision
   ) {
     parent::__construct(
-      $configuration, $pluginID, $pluginDefinition, $stringTranslation
+      $configuration, $pluginID, $pluginDefinition,
+      $elementManager, $stringTranslation
     );
 
     // Save dependencies.
@@ -67,6 +70,7 @@ class About extends OmnipediaElementBase {
   ) {
     return new static(
       $configuration, $pluginID, $pluginDefinition,
+      $container->get('plugin.manager.omnipedia_element'),
       $container->get('string_translation'),
       $container->get('omnipedia.timeline'),
       $container->get('omnipedia.wiki_node_revision')
