@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * This essentially acts as a converter from a more human friendly format - a
  * <media> element that looks up the provided media entity name - which then
- * creates a <drupal-media> element pointing to the matched media entity's UUID.
+ * renders the found media entity.
  *
  * @OmnipediaElement(
  *   id = "media",
@@ -71,9 +71,10 @@ class Media extends OmnipediaElementBase {
     return [
       'omnipedia_media' => [
         'variables' => [
-          'container_attributes'  => null,
-          'media_attributes'      => null,
-          'align'                 => 'right',
+          'media'       => [],
+          'attributes'  => null,
+          'align'       => 'right',
+          'view_mode'   => 'omnipedia_embedded',
         ],
         'template'  => 'omnipedia-media',
       ],
@@ -132,27 +133,6 @@ class Media extends OmnipediaElementBase {
     /** @var Drupal\Core\Template\Attribute */
     $containerAttributes = new Attribute();
 
-    /** @var Drupal\Core\Template\Attribute */
-    $mediaAttributes = new Attribute([
-      'data-entity-type'  => 'media',
-      'data-entity-uuid'  => $mediaEntity->uuid(),
-    ]);
-
-    // Copy over attributes for the core MediaEmbed and FilterCaption filters.
-    foreach ([
-      'size'    => 'view-mode',
-      'caption' => 'caption',
-    ] as $ourAttribute => $drupalAttribute) {
-      /** @var string|null */
-      $foundValue = $this->elements->attr($ourAttribute);
-
-      if ($foundValue === null) {
-        continue;
-      }
-
-      $mediaAttributes->setAttribute('data-' . $drupalAttribute, $foundValue);
-    }
-
     /** @var string|null */
     $align = $this->elements->attr('align');
 
@@ -161,21 +141,44 @@ class Media extends OmnipediaElementBase {
       $align = self::getTheme()['omnipedia_media']['variables']['align'];
     }
 
+    /** @var string|null */
+    $viewMode = $this->elements->attr('view-mode');
+
     // @todo Remove this when we have default options/attributes implemented.
-    if (!$mediaAttributes->hasAttribute('data-view-mode')) {
-      $mediaAttributes->setAttribute('data-view-mode', 'omnipedia_embedded');
+    if ($viewMode === null) {
+      $viewMode = self::getTheme()['omnipedia_media']['variables']['view_mode'];
     }
 
+    /** @var array */
+    $mediaRenderArray = $this->entityTypeManager
+      ->getViewBuilder('media')
+      // @todo $langcode?
+      ->view($mediaEntity, $viewMode);
+
+    if (!isset($mediaRenderArray['#attributes'])) {
+      /** @var Drupal\Core\Template\Attribute */
+      $mediaRenderArray['#attributes'] = new Attribute();
+    }
+
+    /** @var string|null */
+    $caption = $this->elements->attr('caption');
+
+    if ($caption !== null) {
+      $mediaRenderArray['#attributes']->setAttribute('data-caption', $caption);
+    }
+
+    $mediaRenderArray['#embed'] = true;
+
     return [
-      '#theme' => 'omnipedia_media',
+      '#theme'      => 'omnipedia_media',
 
-      '#container_attributes' => $containerAttributes,
-      '#media_attributes'     => $mediaAttributes,
+      '#media'      => $mediaRenderArray,
+      '#attributes' => $containerAttributes,
+      '#align'      => $align,
+      '#view_mode'  => $viewMode,
 
-      '#align'  => $align,
-
-      '#attached' => [
-        'library'   => ['omnipedia_content/component.media'],
+      '#attached'   => [
+        'library'     => ['omnipedia_content/component.media'],
       ],
     ];
   }

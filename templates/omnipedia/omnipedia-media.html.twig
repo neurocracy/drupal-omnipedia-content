@@ -3,16 +3,17 @@
  * @file
  * Default theme implementation for Omnipedia media element.
  *
- * This is just a basic wrapper around the <drupal-media> element.
- *
  * Available variables:
  *
- * - 'container_attributes': Attribute object for the container element.
+ * - 'media': A render array for the media entity.
  *
- * - 'media_attributes': Attribute object for the <drupal-media> element.
+ * - 'attributes': Attribute object for the container element.
  *
  * - 'align': The direction to float this media element ('left' or 'right'), or
  *   no floating (a value of 'none').
+ *
+ * - 'view_mode': The view mode to display the media entity as. Defaults to
+ *   'omnipedia_embedded'.
  *
  * @ingroup themeable
  */
@@ -20,13 +21,17 @@
 
 {% set base_class = 'omnipedia-media' %}
 
-{% set container_attributes = container_attributes.addClass([
+{% set attributes = attributes.addClass([
   base_class,
   base_class ~ '--align-' ~ align,
 ]) %}
 
-<div{{ container_attributes }}>
-  <drupal-media{{ media_attributes.addClass([
+{% set media = media|merge({
+  '#attributes': media['#attributes'].addClass([
     base_class ~ '__media',
-  ]) }}></drupal-media>
+  ])
+}) %}
+
+<div{{ attributes }}>
+  {{ media }}
 </div>
