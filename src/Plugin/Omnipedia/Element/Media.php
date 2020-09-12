@@ -78,6 +78,7 @@ class Media extends OmnipediaElementBase {
           'media'       => [],
           'attributes'  => null,
           'align'       => 'right',
+          'style'       => 'framed',
           'view_mode'   => 'omnipedia_embedded',
         ],
         'template'  => 'omnipedia-media',
@@ -146,6 +147,14 @@ class Media extends OmnipediaElementBase {
     }
 
     /** @var string|null */
+    $style = $this->elements->attr('style');
+
+    // @todo Remove this when we have default options/attributes implemented.
+    if ($style === null) {
+      $style = self::getTheme()['omnipedia_media']['variables']['style'];
+    }
+
+    /** @var string|null */
     $viewMode = $this->elements->attr('view-mode');
 
     // @todo Remove this when we have default options/attributes implemented.
@@ -179,6 +188,7 @@ class Media extends OmnipediaElementBase {
       '#media'      => $mediaRenderArray,
       '#attributes' => $containerAttributes,
       '#align'      => $align,
+      '#style'      => $style,
       '#view_mode'  => $viewMode,
 
       '#attached'   => [
