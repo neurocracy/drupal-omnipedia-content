@@ -79,9 +79,20 @@ class Infobox extends OmnipediaElementBase {
       /** @var \Symfony\Component\DomCrawler\Crawler */
       $itemCrawler = new Crawler($itemElement);
 
-      // Temporary hard coding until the <media> element is implemented.
-      if ($item['label'] === 'Media' || $item['label'] === 'Caption') {
+      /** @var \Symfony\Component\DomCrawler\Crawler */
+      $mediaCrawler = $itemCrawler->filter('media');
+
+      // Mark items that contain media for special handling.
+      if (\count($mediaCrawler) > 0) {
         $item['isMedia'] = true;
+
+        /** @var \DOMElement */
+        $mediaElement = $mediaCrawler->getNode(0);
+
+        // @todo Should these be made configurable, and should these only be
+        //   applied if they aren't already set by the author?
+        $mediaElement->setAttribute('align', 'none');
+        $mediaElement->setAttribute('style', 'frameless');
       } else {
         $item['isMedia'] = false;
       }
