@@ -7,6 +7,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyInterface;
+use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -15,6 +16,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class OmnipediaElementLegacyBase extends PluginBase implements ContainerFactoryPluginInterface, OmnipediaElementLegacyInterface {
 
   use StringTranslationTrait;
+
+  /**
+   * The OmnipediaElementLegacy plug-in manager.
+   *
+   * @var \Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManagerInterface
+   */
+  protected $legacyElementManager;
 
   /**
    * Element options parsed from the content provided by our plug-in manager.
@@ -36,20 +44,34 @@ abstract class OmnipediaElementLegacyBase extends PluginBase implements Containe
    *   The plug-in implementation definition. PluginBase defines this as mixed,
    *   but we should always have an array so the type is specified.
    *
+   * @param \Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManagerInterface $legacyElementManager
+   *   The OmnipediaElement plug-in manager.
+   *
    * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
    *   The Drupal string translation service.
    */
   public function __construct(
     array $configuration, string $pluginID, array $pluginDefinition,
+    OmnipediaElementLegacyManagerInterface $legacyElementManager,
     TranslationInterface $stringTranslation
   ) {
     parent::__construct($configuration, $pluginID, $pluginDefinition);
 
     // Save dependencies.
-    $this->stringTranslation  = $stringTranslation;
+    $this->legacyElementManager = $legacyElementManager;
+    $this->stringTranslation    = $stringTranslation;
 
-    // String content provided by our plug-in manager for this plug-in instance.
-    $this->options = $this->parseOptions($configuration['content']);
+    // Determine what to do with the content passed to us.
+    if (isset($configuration['content'])) {
+      // If content is a string, attempt to parse it.
+      if (\is_string($configuration['content'])) {
+        $this->options = $this->parseOptions($configuration['content']);
+
+      // If it's an array, use it as-is.
+      } else if (\is_array($configuration['content'])) {
+        $this->options = $configuration['content'];
+      }
+    }
   }
 
   /**
@@ -61,6 +83,7 @@ abstract class OmnipediaElementLegacyBase extends PluginBase implements Containe
   ) {
     return new static(
       $configuration, $pluginID, $pluginDefinition,
+      $container->get('plugin.manager.omnipedia_element_legacy'),
       $container->get('string_translation')
     );
   }
