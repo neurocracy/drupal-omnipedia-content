@@ -79,14 +79,28 @@ class Infobox extends OmnipediaElementBase {
       /** @var \Symfony\Component\DomCrawler\Crawler */
       $itemCrawler = new Crawler($itemElement);
 
-      $item['value'] = ['#markup' => $itemCrawler->html()];
-
       // Temporary hard coding until the <media> element is implemented.
       if ($item['label'] === 'Media' || $item['label'] === 'Caption') {
         $item['isMedia'] = true;
       } else {
         $item['isMedia'] = false;
       }
+
+      // Recursively convert and render any elements contained in this item.
+      $item['value'] = [
+        // This bypasses any further rendering, including XSS filtering - which
+        // strips 'style' attributes that are needed for intrinsic ratios on
+        // images to function correctly.
+        //
+        // @todo Is this a security risk, given that the generated markup has
+        //   already been rendered in the element mananger via Drupal's
+        //   renderer?
+        //
+        // @see \Drupal\Component\Utility\Xss::attributes()
+        //   Strips 'style' attributes.
+        '#printed'  => true,
+        '#markup'   => $this->convertElements($itemCrawler->html()),
+      ];
 
       $items[] = $item;
     }
