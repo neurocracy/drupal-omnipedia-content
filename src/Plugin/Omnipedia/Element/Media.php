@@ -2,6 +2,7 @@
 
 namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
+use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Template\Attribute;
@@ -178,6 +179,15 @@ class Media extends OmnipediaElementBase {
 
     if ($caption !== null) {
       $mediaRenderArray['#attributes']->setAttribute('data-caption', $caption);
+
+      // Save a hash of the caption to the media entity render array's cache
+      // keys so that Drupal knows to cache multiple instances of this media
+      // entity with different captions separately. Without this, the first time
+      // this media entity render array would be rendered in this view mode,
+      // it'll be cached and used for all subsequent instances, regardless of
+      // the caption contents.
+      $mediaRenderArray['#cache']['keys'][] =
+        'caption-hash:' . Crypt::hashBase64($caption);
     }
 
     $mediaRenderArray['#embed'] = true;
