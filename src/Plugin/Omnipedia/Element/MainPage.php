@@ -9,6 +9,7 @@ use Drupal\omnipedia_content\OmnipediaElementManagerInterface;
 use Drupal\omnipedia_core\Service\TimelineInterface;
 use Drupal\omnipedia_core\Service\WikiNodeRevisionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Main page element.
@@ -125,22 +126,67 @@ class MainPage extends OmnipediaElementBase {
     $featuredArticleUrl = $featuredArticleNode === null ?
       Url::fromUri('base:<front>') : $featuredArticleNode->toUrl();
 
-    return [
+    /** @var array */
+    $renderArray = [
       '#theme' => 'omnipedia_main_page',
       '#featured_article'       => [
         '#markup' => $featuredArticleElement->html(),
       ],
-      '#featured_article_media' => $featuredArticleElement->attr('media'),
       '#featured_article_url'   => $featuredArticleUrl,
       '#news'       => [
         '#markup' => $newsElement->html(),
       ],
-      '#news_media' => $newsElement->attr('media'),
 
       '#attached'   => [
         'library'   => ['omnipedia_content/component.main_page'],
       ],
     ];
+
+    // Build the media elements for the featured article and news sections.
+    foreach ([
+      'featured_article_media'  => [
+        'element' => $featuredArticleElement,
+        'align'   => 'left',
+        'caption' => $featuredArticleElement->attr('media-caption'),
+      ],
+      'news_media'              => [
+        'element' => $newsElement,
+        'align'   => 'right',
+        'caption' => $newsElement->attr('media-caption'),
+      ],
+    ] as $variableName => $mediaType) {
+      $mediaName = $mediaType['element']->attr('media');
+
+      if ($mediaName === null) {
+        continue;
+      }
+
+      // Create a new <media> element onto which we set the found options.
+      /** @var \Symfony\Component\DomCrawler\Crawler */
+      $mediaCrawler = new Crawler('<media></media>');
+
+      /** @var \DOMElement */
+      $mediaElement = $mediaCrawler->filter('media')->getNode(0);
+
+      $mediaElement->setAttribute('name',   $mediaName);
+      $mediaElement->setAttribute('align',  $mediaType['align']);
+      $mediaElement->setAttribute('style', 'frameless');
+
+      // If a caption exists and has been read from the relevant attribute, it
+      // will be a string and only null if it doesn't exist.
+      if ($mediaType['caption'] !== null) {
+        $mediaElement->setAttribute('caption', $mediaType['caption']);
+      }
+
+      // Create the plug-in instance.
+      $mediaInstance = $this->elementManager->createInstance('media', [
+        'elements' => new Crawler($mediaElement),
+      ]);
+
+      $renderArray['#' . $variableName] = $mediaInstance->getRenderArray();
+    }
+
+    return $renderArray;
   }
 
 }
