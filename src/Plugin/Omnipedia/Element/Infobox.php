@@ -100,8 +100,8 @@ class Infobox extends OmnipediaElementBase {
       // Recursively convert and render any elements contained in this item.
       $item['value'] = [
         // This bypasses any further rendering, including XSS filtering - which
-        // strips 'style' attributes that are needed for intrinsic ratios on
-        // images to function correctly.
+        // strips 'style' attributes that are needed for inline max-widths on
+        // image fields to function correctly.
         //
         // @todo Is this a security risk, given that the generated markup has
         //   already been rendered in the element mananger via Drupal's
