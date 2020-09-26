@@ -11,6 +11,7 @@ dependencies:
   - ambientimpact_core:ambientimpact_core
   - ambientimpact_media:ambientimpact_media
   - hook_event_dispatcher:core_event_dispatcher
+  - hook_event_dispatcher:views_event_dispatcher
   - markdown:markdown
 
 config_devel:
