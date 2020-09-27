@@ -308,13 +308,7 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
   }
 
   /**
-   * Get all logged element errors.
-   *
-   * @return array
-   *   An array of element errors.
-   *
-   * @see $this->elementErrors
-   *   Describes the structure.
+   * {@inheritdoc}
    */
   public function getElementErrors(): array {
     return $this->elementErrors;

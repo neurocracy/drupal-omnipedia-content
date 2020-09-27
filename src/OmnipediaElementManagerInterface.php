@@ -62,4 +62,15 @@ interface OmnipediaElementManagerInterface {
    */
   public function getTheme(): array;
 
+  /**
+   * Get all logged element errors.
+   *
+   * @return array
+   *   An array of element errors.
+   *
+   * @see \Drupal\omnipedia_content\OmnipediaElementManager::elementErrors
+   *   Describes the errror structure.
+   */
+  public function getElementErrors(): array;
+
 }
