@@ -69,8 +69,19 @@ interface OmnipediaElementManagerInterface {
    *   An array of element errors.
    *
    * @see \Drupal\omnipedia_content\OmnipediaElementManager::elementErrors
-   *   Describes the errror structure.
+   *   Describes the error structure.
    */
   public function getElementErrors(): array;
+
+  /**
+   * Get all logged element errors, formatted for form validation messages.
+   *
+   * @return array
+   *   An array of element errors.
+   *
+   * @see \Drupal\omnipedia_content\OmnipediaElementManager::elementErrors
+   *   Describes the error structure.
+   */
+  public function getElementFormValidationErrors(): array;
 
 }

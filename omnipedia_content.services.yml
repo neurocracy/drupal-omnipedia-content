@@ -12,6 +12,15 @@ services:
           - '@renderer'
           - '@string_translation'
 
+  # Event subscriber to add Omnipedia element validation to wiki node edit form.
+  omnipedia_content.form_wiki_node_element_validate_event_subscriber:
+    class: Drupal\omnipedia_content\EventSubscriber\Form\WikiNodeElementValidateEventSubscriber
+    arguments:
+      - '@plugin.manager.omnipedia_element'
+      - '@renderer'
+    tags:
+      - { name: 'event_subscriber' }
+
   # OmnipediaElement hook_theme() event subscriber.
   omnipedia_content.theme_omnipedia_element_event_subscriber:
     class: Drupal\omnipedia_content\EventSubscriber\Theme\ThemeOmnipediaElementEventSubscriber

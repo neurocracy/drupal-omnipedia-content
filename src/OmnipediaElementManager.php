@@ -247,28 +247,6 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
       }
     }
 
-    /** @var array */
-    $errors = $this->getElementErrors();
-
-    // Output all errors.
-    //
-    // @todo Move this to a validation step that will create one or more form
-    //   errors when trying to save content using the OmnipediaElementFilter
-    //   text filter plug-in.
-    if (!empty($errors)) {
-      foreach ($errors as $pluginID => $pluginErrors) {
-        foreach ($pluginErrors as $error) {
-          $this->messenger->addError($this->t(
-            '<code>@element</code> element: @error',
-            [
-              '@element'  => '<' . $definitions[$pluginID]['html_element'] . '>',
-              '@error'    => $error,
-            ]
-          ));
-        }
-      }
-    }
-
     return $rootCrawler->filter('#omnipedia-element-manager-root')->html();
   }
 
@@ -312,6 +290,38 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
    */
   public function getElementErrors(): array {
     return $this->elementErrors;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getElementFormValidationErrors(): array {
+    /** @var array */
+    $errors = $this->getElementErrors();
+
+    /** @var array */
+    $formErrors = [];
+
+    if (count($errors) === 0) {
+      return $formErrors;
+    }
+
+    /** @var array */
+    $definitions = $this->getDefinitions();
+
+    foreach ($errors as $pluginID => $pluginErrors) {
+      foreach ($pluginErrors as $error) {
+        $formErrors[$pluginID][] = $this->t(
+          '<code>@element</code> element: @error',
+          [
+            '@element'  => '<' . $definitions[$pluginID]['html_element'] . '>',
+            '@error'    => $error,
+          ]
+        );
+      }
+    }
+
+    return $formErrors;
   }
 
 }
