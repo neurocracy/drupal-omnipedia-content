@@ -4,9 +4,11 @@ namespace Drupal\omnipedia_content\Plugin\Markdown\CommonMark;
 
 use Drupal\markdown\Plugin\Markdown\CommonMark\CommonMark as MarkdownCommonMark;
 use League\CommonMark\Environment;
+use League\CommonMark\Event\DocumentParsedEvent;
 use Drupal\omnipedia_content\CommonMark\Block\Element\IndentedContent;
 use Drupal\omnipedia_content\CommonMark\Block\Parser\IndentedContentParser;
 use Drupal\omnipedia_content\CommonMark\Block\Renderer\IndentedContentRenderer;
+use Drupal\omnipedia_content\CommonMark\EventListener\WikimediaLinkEventListener;
 
 /**
  * CommonMark Markdown plug-in extended with Omnipedia functionality.
@@ -28,6 +30,9 @@ use Drupal\omnipedia_content\CommonMark\Block\Renderer\IndentedContentRenderer;
  *
  * @see \Drupal\omnipedia_content\CommonMark\Block\Renderer\IndentedContentRenderer
  *   Indented content CommonMark renderer.
+ *
+ * @see \Drupal\omnipedia_content\CommonMark\EventListener\WikimediaLinkEventListener
+ *   Wikimedia link event listener; expands links with a prefix to full URLs.
  */
 class CommonMark extends MarkdownCommonMark {
 
@@ -56,6 +61,14 @@ class CommonMark extends MarkdownCommonMark {
     //   Default CommonMark parsers added here.
     $environment->addBlockRenderer(
       IndentedContent::class, new IndentedContentRenderer()
+    );
+
+    /** @var \Drupal\omnipedia_content\CommonMark\EventListener\WikimediaLinkEventListener */
+    $wikimediaLinkListener = new WikimediaLinkEventListener($environment);
+
+    $environment->addEventListener(
+      DocumentParsedEvent::class,
+      [$wikimediaLinkListener, 'onDocumentParsed']
     );
 
     return $environment;

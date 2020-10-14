@@ -125,10 +125,33 @@ class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactory
         continue;
       }
 
-      /** @var array */
-      $renderArray = \call_user_func_array([
-        $this->freelinkingManager, 'createFreelinkElement'
-      ], $parsedArguments['query']);
+      // If the Freelinking link is a Wikimedia link, build our Markdown
+      // equivalent.
+      if ($parsedArguments['query'][0] === 'wiki') {
+        /** @var array */
+        $linkParts = \explode('|', $parsedArguments['query'][1]);
+
+        /** @var string */
+        $linkContent = $linkParts[1];
+
+        /** @var string */
+        $linkUrl = $parsedArguments['query'][2] . ':' .
+          \str_replace(' ', '_', $linkParts[0]);
+
+      // Otherwise, have the Freelinking manager build a render array for us and
+      // grab the link content and URL from that.
+      } else {
+        /** @var array */
+        $renderArray = \call_user_func_array([
+          $this->freelinkingManager, 'createFreelinkElement'
+        ], $parsedArguments['query']);
+
+        /** @var string */
+        $linkContent = \trim($renderArray['#link']['#title']);
+
+        /** @var string */
+        $linkUrl = $renderArray['#link']['#url']->toString();
+      }
 
       // We need to find the new node's parent to use the replaceChild()
       // method, awkward though it may be.
@@ -149,8 +172,7 @@ class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactory
       $elementParent->replaceChild(
         // New node.
         $element->ownerDocument->createTextNode(
-          '[' . \trim($renderArray['#link']['#title']) . ']' .
-          '(' . $renderArray['#link']['#url']->toString() . ')'
+          '[' . $linkContent . '](' . $linkUrl . ')'
         ),
         // Old node.
         $element
