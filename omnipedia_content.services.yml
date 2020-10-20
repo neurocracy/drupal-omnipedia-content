@@ -21,6 +21,18 @@ services:
     tags:
       - { name: 'event_subscriber' }
 
+  # Event subscriber to add CommonMark indented content parser and renderer.
+  omnipedia_content.markdown_commonmark_indented_content_event_subscriber:
+    class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\IndentedContentEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+
+  # Event subscriber to expand Wikimedia prefixed link URLs to full URLs.
+  omnipedia_content.markdown_commonmark_wikimedia_link_event_subscriber:
+    class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\WikimediaLinkEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+
   # OmnipediaElement hook_theme() event subscriber.
   omnipedia_content.theme_omnipedia_element_event_subscriber:
     class: Drupal\omnipedia_content\EventSubscriber\Theme\ThemeOmnipediaElementEventSubscriber

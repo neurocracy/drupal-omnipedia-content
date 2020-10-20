@@ -1,13 +1,14 @@
 <?php
 
-namespace Drupal\omnipedia_content\CommonMark\EventListener;
+namespace Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark;
 
-use League\CommonMark\EnvironmentInterface;
-use League\CommonMark\Event\DocumentParsedEvent;
+use Drupal\ambientimpact_markdown\AmbientImpactMarkdownEventInterface;
+use Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent;
 use League\CommonMark\Inline\Element\Link;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Wikimedia link event listener; expands links with a prefix to full URLs.
+ * Event subscriber to expand Wikimedia prefixed link URLs to full URLs.
  *
  * For example, the following:
  *
@@ -22,8 +23,10 @@ use League\CommonMark\Inline\Element\Link;
  *
  * @see self::$wikiPrefixes
  *   List of prefixes that are recognized, corresponding to Wikimedia sites.
+ *
+ * @todo Should this functionality be moved to a service or utility class?
  */
-class WikimediaLinkEventListener {
+class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
 
   /**
    * The Wikimedia site prefixes we recognize at the start of link URLs.
@@ -40,20 +43,12 @@ class WikimediaLinkEventListener {
   ];
 
   /**
-   * The CommonMark evironment.
-   *
-   * @var \League\CommonMark\EnvironmentInterface
+   * {@inheritdoc}
    */
-  protected $environment;
-
-  /**
-   * Event listener constructor; saves dependencies.
-   *
-   * @param \League\CommonMark\EnvironmentInterface $environment
-   *   The CommonMark evironment.
-   */
-  public function __construct(EnvironmentInterface $environment) {
-    $this->environment = $environment;
+  public static function getSubscribedEvents(): array {
+    return [
+      AmbientImpactMarkdownEventInterface::COMMONMARK_DOCUMENT_PARSED => 'onCommonMarkDocumentParsed',
+    ];
   }
 
   /**
@@ -61,10 +56,10 @@ class WikimediaLinkEventListener {
    *
    * This expands link URLs with a Wikimedia prefix to full URLs.
    *
-   * @param \League\CommonMark\Event\DocumentParsedEvent $event
-   *   The document parsed event object.
+   * @param \Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent $event
+   *   The event object.
    */
-  public function onDocumentParsed(DocumentParsedEvent $event): void {
+  public function onCommonMarkDocumentParsed(DocumentParsedEvent $event): void {
     /** @var \League\CommonMark\Block\Element\Document */
     $document = $event->getDocument();
 
@@ -86,7 +81,6 @@ class WikimediaLinkEventListener {
       /** @var string */
       $newUrl = $this->buildWikimediaUrl($url);
 
-      // if ($this->isWikimediaPrefixUrl($url)) {
       if ($url !== $newUrl) {
         $node->setUrl($newUrl);
       }

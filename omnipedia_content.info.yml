@@ -9,6 +9,7 @@ dependencies:
   - drupal:media
   - omnipedia_core:omnipedia_core
   - ambientimpact_core:ambientimpact_core
+  - ambientimpact_markdown:ambientimpact_markdown
   - ambientimpact_media:ambientimpact_media
   - hook_event_dispatcher:core_event_dispatcher
   - hook_event_dispatcher:views_event_dispatcher
