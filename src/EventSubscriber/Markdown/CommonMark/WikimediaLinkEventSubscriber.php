@@ -27,6 +27,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @see self::$wikiPrefixes
  *   List of prefixes that are recognized, corresponding to Wikimedia sites.
  *
+ * @see https://en.wikipedia.org/wiki/Interwiki_links
+ *   Our Wikimedia prefix URLs are similar in concept to interwiki links in
+ *   MediaWiki.
+ *
  * @todo Should this functionality be moved to a service or utility class?
  */
 class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
