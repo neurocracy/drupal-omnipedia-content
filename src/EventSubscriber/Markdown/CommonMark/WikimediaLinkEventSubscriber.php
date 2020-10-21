@@ -4,7 +4,10 @@ namespace Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark;
 
 use Drupal\ambientimpact_markdown\AmbientImpactMarkdownEventInterface;
 use Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent;
+use Drupal\omnipedia_content\Event\Omnipedia\WikimediaLinkBuildEvent;
+use Drupal\omnipedia_content\OmnipediaContentEventInterface;
 use League\CommonMark\Inline\Element\Link;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -58,13 +61,30 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent $event
    *   The event object.
+   *
+   * @param string $eventName
+   *   The name of the event being dispatched.
+   *
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+   *   The Symfony event dispatcher service.
    */
-  public function onCommonMarkDocumentParsed(DocumentParsedEvent $event): void {
+  public function onCommonMarkDocumentParsed(
+    DocumentParsedEvent $event,
+    string $eventName,
+    EventDispatcherInterface $eventDispatcher
+  ): void {
     /** @var \League\CommonMark\Block\Element\Document */
     $document = $event->getDocument();
 
     /** @var \League\CommonMark\Node\NodeWalker */
     $walker = $document->walker();
+
+    // Determine if there are any subscribers/listeners to the Wikimedia link
+    // build event here so that we don't have to check on every while iteration.
+    /** @var bool */
+    $hasListeners = $eventDispatcher->hasListeners(
+      OmnipediaContentEventInterface::WIKIMEDIA_LINK_BUILD
+    );
 
     while ($event = $walker->next()) {
       /** @var \League\CommonMark\Node\Node */
@@ -76,13 +96,39 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
       }
 
       /** @var string */
-      $url = $node->getUrl();
+      $prefixedUrl = $node->getUrl();
 
       /** @var string */
-      $newUrl = $this->buildWikimediaUrl($url);
+      $builtUrl = $this->buildWikimediaUrl($prefixedUrl);
 
-      if ($url !== $newUrl) {
-        $node->setUrl($newUrl);
+      if ($hasListeners) {
+        /** @var \Drupal\omnipedia_content\Event\Omnipedia\WikimediaLinkBuildEvent */
+        $linkEvent = new WikimediaLinkBuildEvent(
+          $node, $prefixedUrl, $builtUrl
+        );
+
+        $eventDispatcher->dispatch(
+          OmnipediaContentEventInterface::WIKIMEDIA_LINK_BUILD,
+          $linkEvent
+        );
+
+        /** @var string */
+        $alteredPrefixedUrl = $linkEvent->getPrefixedUrl();
+
+        if ($prefixedUrl !== $alteredPrefixedUrl ) {
+          $prefixedUrl = $alteredPrefixedUrl;
+        }
+
+        /** @var string */
+        $alteredBuiltUrl = $linkEvent->getBuiltUrl();
+
+        if ($builtUrl !== $alteredBuiltUrl) {
+          $builtUrl = $alteredBuiltUrl;
+        }
+      }
+
+      if ($prefixedUrl !== $builtUrl) {
+        $node->setUrl($builtUrl);
       }
     }
   }
