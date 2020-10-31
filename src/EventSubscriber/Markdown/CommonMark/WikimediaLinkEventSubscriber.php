@@ -6,6 +6,7 @@ use Drupal\ambientimpact_markdown\AmbientImpactMarkdownEventInterface;
 use Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent;
 use Drupal\omnipedia_content\Event\Omnipedia\WikimediaLinkBuildEvent;
 use Drupal\omnipedia_content\OmnipediaContentEventInterface;
+use Drupal\omnipedia_content\Service\WikimediaLinkInterface;
 use League\CommonMark\Inline\Element\Link;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -13,41 +14,28 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Event subscriber to expand Wikimedia prefixed link URLs to full URLs.
  *
- * For example, the following:
- *
- * wikipedia:Anthropogenic_climate_change
- *
- * is expanded into:
- *
- * https://en.wikipedia.org/wiki/Anthropogenic_climate_change
- *
- * @see https://commonmark.thephpleague.com/1.5/customization/event-dispatcher/
- *   CommonMark event dispatcher documentation.
- *
- * @see self::$wikiPrefixes
- *   List of prefixes that are recognized, corresponding to Wikimedia sites.
- *
- * @see https://en.wikipedia.org/wiki/Interwiki_links
- *   Our Wikimedia prefix URLs are similar in concept to interwiki links in
- *   MediaWiki.
- *
- * @todo Should this functionality be moved to a service or utility class?
+ * @see Drupal\omnipedia_content\Service\WikimediaLinkInterface
+ *   The Omnipedia Wikimedia link service which expands prefixed URLs into full
+ *   URLs.
  */
 class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * The Wikimedia site prefixes we recognize at the start of link URLs.
+   * The Omnipedia Wikimedia link service.
    *
-   * @var array
+   * @var \Drupal\omnipedia_content\Service\WikimediaLinkInterface
    */
-  protected $wikiPrefixes = [
-    'wikipedia',
-    'wikiquote',
-    'wiktionary',
-    'wikinews',
-    'wikisource',
-    'wikibooks',
-  ];
+  protected $wikimediaLink;
+
+  /**
+   * Event subscriber constructor; saves dependencies.
+   *
+   * @param \Drupal\omnipedia_content\Service\WikimediaLinkInterface $wikimediaLink
+   *   The Omnipedia Wikimedia link service.
+   */
+  public function __construct(WikimediaLinkInterface $wikimediaLink) {
+    $this->wikimediaLink = $wikimediaLink;
+  }
 
   /**
    * {@inheritdoc}
@@ -103,7 +91,7 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
       $prefixedUrl = $node->getUrl();
 
       /** @var string */
-      $builtUrl = $this->buildWikimediaUrl($prefixedUrl);
+      $builtUrl = $this->wikimediaLink->buildUrl($prefixedUrl);
 
       if ($hasListeners) {
         /** @var \Drupal\omnipedia_content\Event\Omnipedia\WikimediaLinkBuildEvent */
@@ -135,55 +123,6 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
         $node->setUrl($builtUrl);
       }
     }
-  }
-
-  /**
-   * Determine if the provided URL begins with a Wikimedia prefix.
-   *
-   * @param string $url
-   *   The URL to test.
-   *
-   * @return boolean
-   *   True if the $url parameter begins with a Wikimedia prefix and false
-   *   otherwise.
-   */
-  protected function isWikimediaPrefixUrl(string $url): bool {
-    /** @var array */
-    $urlSplit = \explode(':', $url, 2);
-
-    return isset($urlSplit[0]) && \in_array($urlSplit[0], $this->wikiPrefixes);
-  }
-
-  /**
-   * Build a Wikimedia URL from the provided prefixed URL.
-   *
-   * @param string $url
-   *   The prefixed Wikimedia URL to build into a full URL.
-   *
-   * @return string
-   *   The built Wikimedia URL if the $url parameter begins with a Wikimedia
-   *   prefix. If the $url parameter does not begin with a Wikimedia prefix,
-   *   returns $url as-is.
-   *
-   * @todo i18n
-   */
-  protected function buildWikimediaUrl(string $url): string {
-    if (!$this->isWikimediaPrefixUrl($url)) {
-      return $url;
-    }
-
-    /** @var array */
-    $urlSplit = \explode(':', $url, 2);
-
-    // @todo i18n
-    /** @var string */
-    $langCode = 'en';
-
-    /** @var string */
-    $article = \str_replace(' ', '_', $urlSplit[1]);
-
-    return
-      'https://' . $langCode . '.' . $urlSplit[0] . '.org/wiki/' . $article;
   }
 
 }

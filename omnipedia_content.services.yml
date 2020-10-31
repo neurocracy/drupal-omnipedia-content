@@ -12,6 +12,12 @@ services:
           - '@renderer'
           - '@string_translation'
 
+  # The Omnipedia Wikimedia link service.
+  omnipedia.wikimedia_link:
+    class: Drupal\omnipedia_content\Service\WikimediaLink
+    arguments:
+      - '@string_translation'
+
   # Event subscriber to add Omnipedia element validation to wiki node edit form.
   omnipedia_content.form_wiki_node_element_validate_event_subscriber:
     class: Drupal\omnipedia_content\EventSubscriber\Form\WikiNodeElementValidateEventSubscriber
@@ -30,6 +36,8 @@ services:
   # Event subscriber to expand Wikimedia prefixed link URLs to full URLs.
   omnipedia_content.markdown_commonmark_wikimedia_link_event_subscriber:
     class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\WikimediaLinkEventSubscriber
+    arguments:
+      - '@omnipedia.wikimedia_link'
     tags:
       - { name: 'event_subscriber' }
 
