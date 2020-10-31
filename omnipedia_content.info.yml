@@ -6,6 +6,7 @@ core: 8.x
 core_version_requirement: ^8 || ^9
 
 dependencies:
+  - drupal:datetime_range
   - drupal:media
   - omnipedia_core:omnipedia_core
   - ambientimpact_core:ambientimpact_core
