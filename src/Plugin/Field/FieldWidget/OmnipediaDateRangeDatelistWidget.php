@@ -136,9 +136,6 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
     ) {
       parent::validateStartEnd($element, $formState, $completeForm);
     }
-
-    dpm('DateRangeOmnipediaDatelistWidget::validateStartEnd():');
-    dpm($element);
   }
 
   /**
@@ -147,6 +144,8 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
   public function massageFormValues(
     array $values, array $form, FormStateInterface $formState
   ) {
+    // Convert the 'first' and 'last' start and end values to null so that
+    // Drupal allows saving them to the date fields.
     foreach ($values as &$item) {
       if ($item['value'] === 'first') {
         $item['value'] = null;
@@ -158,9 +157,6 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
 
     /** @var array */
     $values = parent::massageFormValues($values, $form, $formState);
-
-    dpm('DateRangeOmnipediaDatelistWidget::massageFormValues():');
-    dpm($values);
 
     return $values;
   }
