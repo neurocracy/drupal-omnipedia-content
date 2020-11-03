@@ -22,12 +22,15 @@ use Drupal\datetime_range\Plugin\Field\FieldType\DateRangeItem;
  *   dates are null, but those have specific meaning as the first and last days
  *   in Omnipedia and thus are not empty data.
  *
+ * - Sets the default widget to 'omnipedia_daterange_datelist' and the default
+ *   formatter to 'omnipedia_daterange'.
+ *
  * @FieldType(
  *   id = "omnipedia_daterange",
  *   label = @Translation("Date range (Omnipedia)"),
  *   description = @Translation("Create and store date ranges."),
- *   default_widget = "daterange_default",
- *   default_formatter = "daterange_default",
+ *   default_widget     = "omnipedia_daterange_datelist",
+ *   default_formatter  = "omnipedia_daterange",
  *   list_class = "\Drupal\datetime_range\Plugin\Field\FieldType\DateRangeFieldItemList"
  * )
  */
