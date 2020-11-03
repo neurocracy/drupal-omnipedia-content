@@ -9,10 +9,18 @@ use Drupal\datetime_range\Plugin\Field\FieldType\DateRangeItem;
 /**
  * Plugin implementation of the 'omnipedia_daterange' field type.
  *
- * This extends the Drupal core 'daterange' field type to make a single change:
- * the 'end_value' property is marked as not required, so that it's possible to
- * set a start date but no end date, which is not possible with the core
- * 'daterange' field type.
+ * This extends the Drupal core 'daterange' field type to make the following
+ * changes:
+ *
+ * - The 'end_value' property is marked as not required, so that it's possible
+ *   to set a start date but no end date, which is not possible with the core
+ *   'daterange' field type.
+ *
+ * - The isEmpty() method always returns false to ensure that Drupal will always
+ *   pass the field item to the formatter's viewElements() method. Without this,
+ *   Drupal would consider a date range field empty if both the start and end
+ *   dates are null, but those have specific meaning as the first and last days
+ *   in Omnipedia and thus are not empty data.
  *
  * @FieldType(
  *   id = "omnipedia_daterange",
@@ -37,6 +45,13 @@ class OmnipediaDateRangeItem extends DateRangeItem {
     $properties['end_value']->setRequired(false);
 
     return $properties;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isEmpty() {
+    return false;
   }
 
 }
