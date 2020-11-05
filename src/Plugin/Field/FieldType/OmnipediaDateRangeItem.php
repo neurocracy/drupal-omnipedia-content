@@ -20,12 +20,12 @@ use Drupal\datetime_range\Plugin\Field\FieldType\DateRangeItem;
  *   formatter to 'omnipedia_daterange'.
  *
  * @FieldType(
- *   id = "omnipedia_daterange",
- *   label = @Translation("Date range (Omnipedia)"),
- *   description = @Translation("Create and store date ranges."),
+ *   id                 = "omnipedia_daterange",
+ *   label              = @Translation("Date range (Omnipedia)"),
+ *   description        = @Translation("Create and store date ranges."),
  *   default_widget     = "omnipedia_daterange_datelist",
  *   default_formatter  = "omnipedia_daterange",
- *   list_class = "\Drupal\datetime_range\Plugin\Field\FieldType\DateRangeFieldItemList"
+ *   list_class         = "\Drupal\datetime_range\Plugin\Field\FieldType\DateRangeFieldItemList"
  * )
  */
 class OmnipediaDateRangeItem extends DateRangeItem {
