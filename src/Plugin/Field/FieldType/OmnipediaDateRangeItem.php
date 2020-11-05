@@ -16,12 +16,6 @@ use Drupal\datetime_range\Plugin\Field\FieldType\DateRangeItem;
  *   to set a start date but no end date, which is not possible with the core
  *   'daterange' field type.
  *
- * - The isEmpty() method always returns false to ensure that Drupal will always
- *   pass the field item to the formatter's viewElements() method. Without this,
- *   Drupal would consider a date range field empty if both the start and end
- *   dates are null, but those have specific meaning as the first and last days
- *   in Omnipedia and thus are not empty data.
- *
  * - Sets the default widget to 'omnipedia_daterange_datelist' and the default
  *   formatter to 'omnipedia_daterange'.
  *
@@ -48,13 +42,6 @@ class OmnipediaDateRangeItem extends DateRangeItem {
     $properties['end_value']->setRequired(false);
 
     return $properties;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isEmpty() {
-    return false;
   }
 
 }
