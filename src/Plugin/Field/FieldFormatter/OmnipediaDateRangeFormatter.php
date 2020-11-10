@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   viewElements() method to the OmnipediaDateRangeItem class so that this
  *   formatter doesn't need to know about their existence?
  *
- * @todo Implement omnipedia-date-range.html.twig template.
+ * @todo Implement omnipedia-date-range-formatter.html.twig template.
  */
 class OmnipediaDateRangeFormatter extends FormatterBase {
 
