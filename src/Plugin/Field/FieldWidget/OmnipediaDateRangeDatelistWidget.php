@@ -103,17 +103,25 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
     /** @var array */
     $element = parent::formElement($items, $delta, $element, $form, $formState);
 
-    foreach (['value', 'end_value'] as $key) {
+   foreach ([
+      'value'     => 'first',
+      'end_value' => 'last',
+    ] as $key => $nullValue) {
       $element[$key]['#type'] = 'select';
       $element[$key]['#options'] = $options;
+
+      if ($items->{$key} !== null) {
+        $element[$key]['#default_value'] = $items->{$key};
+
+      } else {
+        $element[$key]['#default_value'] = $nullValue;
+      }
     }
 
     $element['value']['#options'] =
       ['first' => $this->t('First date')] + $element['value']['#options'];
-    $element['value']['#default_value'] = 'first';
 
     $element['end_value']['#options']['last'] = $this->t('Last date');
-    $element['end_value']['#default_value'] = 'last';
 
     return $element;
   }
