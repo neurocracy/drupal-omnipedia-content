@@ -28,7 +28,7 @@ class OmnipediaDate extends InOperator {
   protected $timeline;
 
   /**
-   * Constructs a OmnipediaDate object.
+   * Constructs an OmnipediaDate object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plug-in instance.
