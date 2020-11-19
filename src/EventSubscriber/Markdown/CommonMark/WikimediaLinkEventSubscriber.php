@@ -96,7 +96,8 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
       if ($hasListeners) {
         /** @var \Drupal\omnipedia_content\Event\Omnipedia\WikimediaLinkBuildEvent */
         $linkEvent = new WikimediaLinkBuildEvent(
-          $node, $prefixedUrl, $builtUrl
+          $node, $prefixedUrl, $builtUrl,
+          $this->wikimediaLink->getArticleTitleFromPrefixedUrl($prefixedUrl)
         );
 
         $eventDispatcher->dispatch(

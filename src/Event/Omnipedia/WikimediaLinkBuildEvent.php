@@ -24,13 +24,19 @@ class WikimediaLinkBuildEvent extends Event {
    */
   protected $prefixedUrl;
 
-
   /**
    * The built URL.
    *
    * @var string
    */
   protected $builtUrl;
+
+  /**
+   * The Wikimedia article title for this link.
+   *
+   * @var string
+   */
+  protected $articleTitle;
 
   /**
    * Constructs this event object.
@@ -43,13 +49,17 @@ class WikimediaLinkBuildEvent extends Event {
    *
    * @param string $builtUrl
    *   The built URL.
+   *
+   * @param string $articleTitle
+   *   The Wikimedia article title for this link.
    */
   public function __construct(
-    Link $link, string $prefixedUrl, string $builtUrl
+    Link $link, string $prefixedUrl, string $builtUrl, string $articleTitle
   ) {
     $this->link         = $link;
     $this->prefixedUrl  = $prefixedUrl;
     $this->builtUrl     = $builtUrl;
+    $this->articleTitle = $articleTitle;
   }
 
   /**
@@ -100,6 +110,16 @@ class WikimediaLinkBuildEvent extends Event {
    */
   public function setBuiltUrl(string $builtUrl): void {
     $this->builtUrl = $builtUrl;
+  }
+
+  /**
+   * Get the Wikimedia article title for this link.
+   *
+   * @return string
+   *   The Wikimedia article title for this link.
+   */
+  public function getArticleTitle(): string {
+    return $this->articleTitle;
   }
 
 }
