@@ -95,4 +95,18 @@ class WikimediaLink implements WikimediaLinkInterface {
       'https://' . $langCode . '.' . $urlSplit[0] . '.org/wiki/' . $article;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getArticleTitleFromPrefixedUrl(string $url): ?string {
+    if (!$this->isPrefixUrl($url)) {
+      return null;
+    }
+
+    /** @var array */
+    $urlSplit = \explode(':', $url, 2);
+
+    return \str_replace('_', ' ', $urlSplit[1]);
+  }
+
 }

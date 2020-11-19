@@ -53,4 +53,16 @@ interface WikimediaLinkInterface {
    */
   public function buildUrl(string $url): string;
 
+  /**
+   * Get the article title from the provided prefixed URL.
+   *
+   * @param string $url
+   *   The prefixed Wikimedia URL to get the article title for.
+   *
+   * @return string|null
+   *   The article title as a string, or null if the provided URL is not a valid
+   *   Wikimedia prefixed URL.
+   */
+  public function getArticleTitleFromPrefixedUrl(string $url): ?string;
+
 }
