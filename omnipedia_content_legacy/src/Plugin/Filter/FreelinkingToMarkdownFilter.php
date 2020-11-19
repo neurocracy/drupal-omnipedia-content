@@ -136,6 +136,8 @@ class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactory
 
         /** @var string */
         $linkUrl = $parsedArguments['query'][2] . ':' .
+          // Note that CommonMark will not recognize this as a link if there's a
+          // space in the URL, so we have to replace them with underscores.
           \str_replace(' ', '_', $linkParts[0]);
 
       // Otherwise, have the Freelinking manager build a render array for us and
