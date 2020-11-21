@@ -90,6 +90,11 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
       /** @var string */
       $prefixedUrl = $node->getUrl();
 
+      // Skip this link if it doesn't have a Wikimedia prefixed URL.
+      if (!$this->wikimediaLink->isPrefixUrl($prefixedUrl)) {
+        continue;
+      }
+
       /** @var string */
       $builtUrl = $this->wikimediaLink->buildUrl($prefixedUrl);
 
