@@ -7,9 +7,9 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\Url;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
-use Drupal\freelinking\FreelinkingManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -28,13 +28,6 @@ use Symfony\Component\DomCrawler\Crawler;
 class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
-
-  /**
-   * The Freelinking plug-in manager.
-   *
-   * @var \Drupal\freelinking\FreelinkingManagerInterface
-   */
-  protected $freelinkingManager;
 
   /**
    * The Drupal messenger service.
@@ -56,9 +49,6 @@ class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactory
    *   The plug-in implementation definition. PluginBase defines this as mixed,
    *   but we should always have an array so the type is set.
    *
-   * @param \Drupal\freelinking\FreelinkingManagerInterface $freelinkingManager
-   *   The Freelinking plug-in manager.
-   *
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The Drupal messenger service.
    *
@@ -67,14 +57,12 @@ class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactory
    */
   public function __construct(
     array $configuration, string $pluginID, array $pluginDefinition,
-    FreelinkingManagerInterface $freelinkingManager,
-    MessengerInterface          $messenger,
-    TranslationInterface        $stringTranslation
+    MessengerInterface    $messenger,
+    TranslationInterface  $stringTranslation
   ) {
     parent::__construct($configuration, $pluginID, $pluginDefinition);
 
     // Save dependencies.
-    $this->freelinkingManager = $freelinkingManager;
     $this->messenger          = $messenger;
     $this->stringTranslation  = $stringTranslation;
   }
@@ -88,7 +76,6 @@ class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactory
   ) {
     return new static(
       $configuration, $pluginID, $pluginDefinition,
-      $container->get('freelinking.manager'),
       $container->get('messenger'),
       $container->get('string_translation')
     );
@@ -140,19 +127,17 @@ class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactory
           // space in the URL, so we have to replace them with underscores.
           \str_replace(' ', '_', $linkParts[0]);
 
-      // Otherwise, have the Freelinking manager build a render array for us and
-      // grab the link content and URL from that.
+      // Otherwise, assume that it's a link to another wiki page on this site
+      // and build the URL for that.
       } else {
         /** @var array */
-        $renderArray = \call_user_func_array([
-          $this->freelinkingManager, 'createFreelinkElement'
-        ], $parsedArguments['query']);
+        $linkParts = \explode('|', $parsedArguments['query'][1]);
 
         /** @var string */
-        $linkContent = \trim($renderArray['#link']['#title']);
+        $linkContent = $linkParts[1];
 
         /** @var string */
-        $linkUrl = $renderArray['#link']['#url']->toString();
+        $linkUrl = Url::fromUserInput('/wiki/' . $linkParts[0])->toString();
       }
 
       // We need to find the new node's parent to use the replaceChild()
