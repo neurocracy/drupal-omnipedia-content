@@ -89,6 +89,11 @@ class Media extends OmnipediaElementBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @todo Rather than using the media entity list cache tag on the error render
+   *   array, can we instead set a custom cache tag on it containing the name of
+   *   the non-existent media and have that specific tag invalidated when media
+   *   is edited/added and begins to match that specific media name?
    */
   public function getRenderArray(): array {
     /** @var string|null */
@@ -124,10 +129,26 @@ class Media extends OmnipediaElementBase {
 
       $this->setError($error);
 
-      return [
+      /** @var array */
+      $errorRenderArray = [
         '#theme'    => 'media_embed_error',
         '#message'  => $error,
       ];
+
+      // Get the media entity type definition so that we can get the list cache
+      // tag for the error message, so that the error message is invalidated
+      // when any media is edited/added, in case media will match this. Getting
+      // the cache tag this way is is considered a best practice over hard
+      // coding it.
+      /** @var Drupal\Core\Entity\EntityTypeInterface|null */
+      $mediaEntityType = $this->entityTypeManager->getDefinition('media');
+
+      if ($mediaEntityType instanceof EntityTypeInterface) {
+        $errorRenderArray['#cache']['tags'] =
+          $mediaEntityType->getListCacheTags();
+      }
+
+      return $errorRenderArray;
     }
 
     // Grab the first media entity in the array.
