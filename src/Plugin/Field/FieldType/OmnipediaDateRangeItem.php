@@ -12,9 +12,9 @@ use Drupal\datetime_range\Plugin\Field\FieldType\DateRangeItem;
  * This extends the Drupal core 'daterange' field type to make the following
  * changes:
  *
- * - The 'end_value' property is marked as not required, so that it's possible
- *   to set a start date but no end date, which is not possible with the core
- *   'daterange' field type.
+ * - The 'value' and 'end_value' properties are marked as not required, so that
+ *   it's possible to set a start date but no end date and vice versa, which is
+ *   not possible with the core 'daterange' field type.
  *
  * - Sets the default widget to 'omnipedia_daterange_datelist' and the default
  *   formatter to 'omnipedia_daterange'.
@@ -39,6 +39,7 @@ class OmnipediaDateRangeItem extends DateRangeItem {
     /** @var array */
     $properties = parent::propertyDefinitions($fieldDefinition);
 
+    $properties['value']->setRequired(false);
     $properties['end_value']->setRequired(false);
 
     return $properties;
