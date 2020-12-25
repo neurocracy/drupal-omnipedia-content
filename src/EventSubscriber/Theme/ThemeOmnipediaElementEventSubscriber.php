@@ -23,7 +23,7 @@ class ThemeOmnipediaElementEventSubscriber implements EventSubscriberInterface {
   /**
    * The OmnipediaElement plug-in manager.
    *
-   * @var Drupal\omnipedia_content\OmnipediaElementManagerInterface
+   * @var \Drupal\omnipedia_content\OmnipediaElementManagerInterface
    */
   protected $elementManager;
 

@@ -140,7 +140,7 @@ class Media extends OmnipediaElementBase {
       // when any media is edited/added, in case media will match this. Getting
       // the cache tag this way is is considered a best practice over hard
       // coding it.
-      /** @var Drupal\Core\Entity\EntityTypeInterface|null */
+      /** @var \Drupal\Core\Entity\EntityTypeInterface|null */
       $mediaEntityType = $this->entityTypeManager->getDefinition('media');
 
       if ($mediaEntityType instanceof EntityTypeInterface) {
@@ -157,7 +157,7 @@ class Media extends OmnipediaElementBase {
     /** @var \Drupal\media\MediaInterface */
     $mediaEntity = \reset($foundMedia);
 
-    /** @var Drupal\Core\Template\Attribute */
+    /** @var \Drupal\Core\Template\Attribute */
     $containerAttributes = new Attribute();
 
     /** @var string|null */
@@ -191,7 +191,7 @@ class Media extends OmnipediaElementBase {
       ->view($mediaEntity, $viewMode);
 
     if (!isset($mediaRenderArray['#attributes'])) {
-      /** @var Drupal\Core\Template\Attribute */
+      /** @var \Drupal\Core\Template\Attribute */
       $mediaRenderArray['#attributes'] = new Attribute();
     }
 

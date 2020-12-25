@@ -33,7 +33,7 @@ class Media extends OmnipediaElementLegacyBase {
    * {@inheritdoc}
    */
   public function getRenderArray(): array {
-    /** @var Drupal\Core\Template\Attribute */
+    /** @var \Drupal\Core\Template\Attribute */
     $attributes = new Attribute();
 
     if (isset($this->options[0])) {
