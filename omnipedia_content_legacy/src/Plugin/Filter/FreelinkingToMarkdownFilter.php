@@ -17,10 +17,10 @@ use Symfony\Component\DomCrawler\Crawler;
  * Provides a filter to convert legacy Freelinking links to Markdown.
  *
  * @Filter(
- *   id = "omnipedia_freelinking_to_markdown",
- *   title = @Translation("Omnipedia: convert legacy Freelinking links to Markdown"),
- *   description = @Translation("This converts legacy Freelinking links to Markdown. This should be placed <strong>after</strong> the Freelinking filter in the processing order."),
- *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_REVERSIBLE
+ *   id           = "omnipedia_freelinking_to_markdown",
+ *   title        = @Translation("Omnipedia: convert legacy Freelinking links to Markdown"),
+ *   description  = @Translation("This converts legacy Freelinking links to Markdown. This should be placed <strong>after</strong> the Freelinking filter in the processing order."),
+ *   type         = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_REVERSIBLE
  * )
  *
  * @see \Drupal\freelinking\FreelinkingManagerInterface::createFreelinkElement()

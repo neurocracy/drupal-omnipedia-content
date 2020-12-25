@@ -8,8 +8,8 @@ use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyBase;
  * Infobox legacy element.
  *
  * @OmnipediaElementLegacy(
- *   id = "infobox",
- *   title = @Translation("Infobox")
+ *   id     = "infobox",
+ *   title  = @Translation("Infobox")
  * )
  */
 class Infobox extends OmnipediaElementLegacyBase {

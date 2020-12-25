@@ -8,9 +8,9 @@ use Drupal\ambientimpact_core\ComponentBase;
  * Omnipedia <main-page> element component.
  *
  * @Component(
- *   id = "main_page",
- *   title = @Translation("Omnipedia &lt;main-page&gt; element"),
- *   description = @Translation("Main page template, intended to abstract as much of the main page structure as possible.")
+ *   id           = "main_page",
+ *   title        = @Translation("Omnipedia &lt;main-page&gt; element"),
+ *   description  = @Translation("Main page template, intended to abstract as much of the main page structure as possible.")
  * )
  */
 class MainPage extends ComponentBase {

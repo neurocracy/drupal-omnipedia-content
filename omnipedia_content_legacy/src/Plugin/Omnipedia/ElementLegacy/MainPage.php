@@ -8,8 +8,8 @@ use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyBase;
  * Main page legacy element.
  *
  * @OmnipediaElementLegacy(
- *   id = "main_page",
- *   title = @Translation("Main page")
+ *   id     = "main_page",
+ *   title  = @Translation("Main page")
  * )
  */
 class MainPage extends OmnipediaElementLegacyBase {

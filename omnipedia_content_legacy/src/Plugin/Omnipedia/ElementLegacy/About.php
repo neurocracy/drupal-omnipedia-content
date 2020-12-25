@@ -8,8 +8,8 @@ use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyBase;
  * About legacy element.
  *
  * @OmnipediaElementLegacy(
- *   id = "about",
- *   title = @Translation("About")
+ *   id     = "about",
+ *   title  = @Translation("About")
  * )
  */
 class About extends OmnipediaElementLegacyBase {

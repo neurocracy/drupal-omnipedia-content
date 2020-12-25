@@ -9,8 +9,8 @@ use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyBase;
  * Media legacy element.
  *
  * @OmnipediaElementLegacy(
- *   id = "media",
- *   title = @Translation("Media")
+ *   id     = "media",
+ *   title  = @Translation("Media")
  * )
  */
 class Media extends OmnipediaElementLegacyBase {

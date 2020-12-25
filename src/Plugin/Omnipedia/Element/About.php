@@ -13,10 +13,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * About element.
  *
  * @OmnipediaElement(
- *   id = "about",
+ *   id           = "about",
  *   html_element = "about",
- *   title = @Translation("About"),
- *   description = @Translation("Loosely based on the <a href='https://en.wikipedia.org/wiki/Template:About'>Wikipedia Template:About</a>.")
+ *   title        = @Translation("About"),
+ *   description  = @Translation("Loosely based on the <a href='https://en.wikipedia.org/wiki/Template:About'>Wikipedia Template:About</a>.")
  * )
  */
 class About extends OmnipediaElementBase {

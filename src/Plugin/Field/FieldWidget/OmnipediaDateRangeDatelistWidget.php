@@ -22,9 +22,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * this field was saved.
  *
  * @FieldWidget(
- *   id = "omnipedia_daterange_datelist",
- *   label = @Translation("Select list (Omnipedia dates)"),
- *   field_types = {
+ *   id           = "omnipedia_daterange_datelist",
+ *   label        = @Translation("Select list (Omnipedia dates)"),
+ *   field_types  = {
  *     "daterange",
  *     "omnipedia_daterange"
  *   }

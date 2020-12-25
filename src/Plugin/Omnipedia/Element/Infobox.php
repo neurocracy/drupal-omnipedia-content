@@ -9,10 +9,10 @@ use Symfony\Component\DomCrawler\Crawler;
  * Infobox element.
  *
  * @OmnipediaElement(
- *   id = "infobox",
+ *   id           = "infobox",
  *   html_element = "infobox",
- *   title = @Translation("Infobox"),
- *   description = @Translation("Loosely based on the <a href='https://en.wikipedia.org/wiki/Template:Infobox'>Wikipedia Template:Infobox</a>.")
+ *   title        = @Translation("Infobox"),
+ *   description  = @Translation("Loosely based on the <a href='https://en.wikipedia.org/wiki/Template:Infobox'>Wikipedia Template:Infobox</a>.")
  * )
  */
 class Infobox extends OmnipediaElementBase {

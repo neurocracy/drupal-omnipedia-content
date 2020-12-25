@@ -15,10 +15,10 @@ use Symfony\Component\DomCrawler\Crawler;
  * Main page element.
  *
  * @OmnipediaElement(
- *   id = "main_page",
+ *   id           = "main_page",
  *   html_element = "main-page",
- *   title = @Translation("Main page"),
- *   description = @Translation("Main page template, intended to abstract as much of the main page structure as possible.")
+ *   title        = @Translation("Main page"),
+ *   description  = @Translation("Main page template, intended to abstract as much of the main page structure as possible.")
  * )
  */
 class MainPage extends OmnipediaElementBase {

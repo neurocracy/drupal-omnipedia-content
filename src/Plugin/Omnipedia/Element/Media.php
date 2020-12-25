@@ -18,10 +18,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * renders the found media entity.
  *
  * @OmnipediaElement(
- *   id = "media",
+ *   id           = "media",
  *   html_element = "media",
- *   title = @Translation("Media"),
- *   description = @Translation("Media element.")
+ *   title        = @Translation("Media"),
+ *   description  = @Translation("Media element.")
  * )
  */
 class Media extends OmnipediaElementBase {

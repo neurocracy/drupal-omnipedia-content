@@ -12,9 +12,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a filter to convert legacy Omnipedia Mustache tags to custom HTML.
  *
  * @Filter(
- *   id = "omnipedia_mustache_to_html",
- *   title = @Translation("Omnipedia: convert legacy Mustache tags"),
- *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE
+ *   id     = "omnipedia_mustache_to_html",
+ *   title  = @Translation("Omnipedia: convert legacy Mustache tags"),
+ *   type   = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE
  * )
  */
 class MustacheToHtmlFilter extends FilterBase implements ContainerFactoryPluginInterface {

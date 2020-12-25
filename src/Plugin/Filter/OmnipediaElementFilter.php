@@ -12,9 +12,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a filter to convert Omnipedia elements into standard HTML.
  *
  * @Filter(
- *   id = "omnipedia_elements",
- *   title = @Translation("Omnipedia: convert Omnipedia elements to HTML"),
- *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE
+ *   id     = "omnipedia_elements",
+ *   title  = @Translation("Omnipedia: convert Omnipedia elements to HTML"),
+ *   type   = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE
  * )
  */
 class OmnipediaElementFilter extends FilterBase implements ContainerFactoryPluginInterface {
