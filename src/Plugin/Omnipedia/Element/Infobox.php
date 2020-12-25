@@ -110,7 +110,9 @@ class Infobox extends OmnipediaElementBase {
         // @see \Drupal\Component\Utility\Xss::attributes()
         //   Strips 'style' attributes.
         '#printed'  => true,
-        '#markup'   => $this->convertElements($itemCrawler->html()),
+        '#markup'   => $this->elementManager->convertElements(
+          $itemCrawler->html()
+        ),
       ];
 
       $items[] = $item;

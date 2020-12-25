@@ -130,9 +130,7 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
    *   The Freelinking filter creates placeholders which are rendered by their
    *   service at the end of the rendering process.
    */
-  public function convertElements(
-    string $html, array $ignorePlugins = []
-  ): string {
+  public function convertElements(string $html): string {
     /** @var array */
     $definitions = $this->getDefinitions();
 
@@ -146,14 +144,6 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
     // Loop over all plug-in definitions, parsing and rendering any whose
     // matching HTML elements are found in the HTML content.
     foreach ($definitions as $pluginID => $definition) {
-      // Skip any plug-in IDs in $ignorePlugins to avoid infinite recursion.
-      if (\in_array($pluginID, $ignorePlugins)) {
-        continue;
-      }
-
-      // Add this plug-in ID to $ignorePlugins.
-      $ignorePlugins[] = $pluginID;
-
       /** @var \Symfony\Component\DomCrawler\Crawler */
       $pluginCrawler = $rootCrawler->filter($definition['html_element']);
 
@@ -165,8 +155,7 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
 
         /** @var \Drupal\omnipedia_content\OmnipediaElementInterface */
         $instance = $this->createInstance($pluginID, [
-          'elements'      => $elementCrawler,
-          'ignorePlugins' => $ignorePlugins,
+          'elements' => $elementCrawler,
         ]);
 
         /** @var array */

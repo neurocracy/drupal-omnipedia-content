@@ -96,33 +96,6 @@ abstract class OmnipediaElementBase extends PluginBase implements ContainerFacto
   }
 
   /**
-   * Convert all child elements that have element plug-ins into standard HTML.
-   *
-   * This should be used whenever an element requires child elements to be
-   * rendered. Using this method ensures that infinite recursion is avoided, as
-   * the current plug-in ID will be ignored and thus two nested elements of the
-   * same type will only have the first one rendered.
-   *
-   * @param string $html
-   *   The HTML to parse.
-   *
-   * @return string
-   *   The $html parameter with any custom elements that have OmnipediaElement
-   *   plug-ins rendered as standard HTML.
-   *
-   * @see \Drupal\omnipedia_content\OmnipediaElementManagerInterface::convertElements()
-   *   Wraps this method.
-   */
-  protected function convertElements(string $html): string {
-    return $this->elementManager->convertElements(
-      // Note that the plug-in manager will have already added the current
-      // plug-in's ID to 'ignorePlugins', so we don't have to do anything here
-      // other than pass it along.
-      $html, $this->configuration['ignorePlugins']
-    );
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function hasErrors(): bool {
