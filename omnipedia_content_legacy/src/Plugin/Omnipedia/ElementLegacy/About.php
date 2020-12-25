@@ -38,7 +38,7 @@ class About extends OmnipediaElementLegacyBase {
 
     foreach ($this->options as $optionName => $optionValue) {
       // Determine if this is a numbered 'use' attribute, skipping if not.
-      \preg_match('%use(\d+)%', $optionName, $optionNameMatches);
+      \preg_match('%^use(\d+)$%', $optionName, $optionNameMatches);
 
       if (!isset($optionNameMatches[1])) {
         continue;
@@ -46,7 +46,7 @@ class About extends OmnipediaElementLegacyBase {
 
       $optionIndex = $optionNameMatches[1];
 
-      if (!$this->options['see' . $optionIndex]) {
+      if (!isset($this->options['see' . $optionIndex])) {
         continue;
       }
 
