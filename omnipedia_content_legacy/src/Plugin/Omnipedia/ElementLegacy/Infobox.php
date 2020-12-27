@@ -38,7 +38,7 @@ class Infobox extends OmnipediaElementLegacyBase {
     // via '#items' in the render array because the new infobox handles them
     // differently or they need special processing.
     /** @var array */
-    $ignoreItemOptions = [0, 'name', 'media', 'caption'];
+    $ignoreItemOptions = [0, 'name', 'media', 'media_caption'];
 
     /** @var array */
     $renderArray = [
@@ -59,8 +59,8 @@ class Infobox extends OmnipediaElementLegacyBase {
       ];
 
       // Transfer the caption if one is found.
-      if (isset($this->options['caption'])) {
-        $mediaOptions['caption'] = $this->options['caption'];
+      if (isset($this->options['media_caption'])) {
+        $mediaOptions['caption'] = $this->options['media_caption'];
       }
 
       /** @var \Drupal\omnipedia_content_legacy\OmnipediaElementLegacyInterface */
