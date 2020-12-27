@@ -47,6 +47,19 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
   protected $renderer;
 
   /**
+   * Generated XPath for any element names that render their own children.
+   *
+   * This starts off as null to indicate that it has not been built, and if no
+   * elements that render their own children are registered, this will be an
+   * empty string.
+   *
+   * @var string|null
+   *
+   * @see $this->getNonRenderingElementXPath()
+   */
+  protected $nonRenderingElementXPath = null;
+
+  /**
    * Creates the discovery object.
    *
    * @param \Traversable $namespaces
@@ -117,6 +130,71 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
   }
 
   /**
+   * Get the names of any elements that render their own children.
+   *
+   * @return string[]
+   *   An array of element name strings.
+   */
+  protected function getNonRenderingElementNames(): array {
+    /** @var array */
+    $definitions = $this->getDefinitions();
+
+    /** @var array */
+    $elements = [];
+
+    foreach ($definitions as $pluginID => $definition) {
+      if ($definition['render_children'] === false) {
+        $elements[] = $definition['html_element'];
+      }
+    }
+
+    return $elements;
+  }
+
+  /**
+   * Get the XPath expression for any elements that render their own children.
+   *
+   * @return string
+   *
+   * @see $this->nonRenderingElementXPath
+   */
+  protected function getNonRenderingElementXPath(): string {
+    /** @var string[] */
+    $nonRenderingElementNames = $this->getNonRenderingElementNames();
+
+    if ($this->nonRenderingElementXPath === null) {
+      if (count($nonRenderingElementNames) === 0) {
+        // Set this to an empty stirng if no elements that render their own
+        // children are registered so that we don't have to build this again
+        // during this request.
+        $this->nonRenderingElementXPath = '';
+
+      } else {
+        /** @var string[] */
+        $nonRenderingElementXPathArray = [];
+
+        foreach ($nonRenderingElementNames as $element) {
+          // This evaluates to true if one of the ancestors of whatever element
+          // this XPath is applied to is this element that renders its own
+          // children.
+          /** @var string */
+          $nonRenderingElementXPathArray[] =
+            'count(ancestor::' . $element . ')=0';
+        }
+
+        // Glue the generated XPath strings into an "and" clause. Note that
+        // \implode() correctly handles zero or one elements as you would
+        // expect, without the need for additional logic.
+        $this->nonRenderingElementXPath = \implode(
+          ' and ', $nonRenderingElementXPathArray
+        );
+      }
+    }
+
+    return $this->nonRenderingElementXPath;
+  }
+
+  /**
    * {@inheritdoc}
    *
    * @todo Rather than rendering the final HTML here, can we create a
@@ -130,9 +208,20 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
    *   The Freelinking filter creates placeholders which are rendered by their
    *   service at the end of the rendering process.
    */
-  public function convertElements(string $html): string {
+  public function convertElements(
+    string $html, bool $forceRenderChildren = false
+  ): string {
     /** @var array */
     $definitions = $this->getDefinitions();
+
+    if ($forceRenderChildren === false) {
+      /** @var string */
+      $nonRenderingElementXPath = $this->getNonRenderingElementXPath();
+
+    } else {
+      /** @var string */
+      $nonRenderingElementXPath = '';
+    }
 
     /** @var \Symfony\Component\DomCrawler\Crawler */
     $rootCrawler = new Crawler(
@@ -144,13 +233,28 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
     // Loop over all plug-in definitions, parsing and rendering any whose
     // matching HTML elements are found in the HTML content.
     foreach ($definitions as $pluginID => $definition) {
-      /** @var \Symfony\Component\DomCrawler\Crawler */
-      $pluginCrawler = $rootCrawler->filter($definition['html_element']);
+      // If there is at least one element plug-in that renders its own children,
+      // filter using XPath so that we only render if the current element is not
+      // within one of those.
+      if (!empty($nonRenderingElementXPath) && $forceRenderChildren === false) {
+        /** @var \Symfony\Component\DomCrawler\Crawler */
+        $pluginCrawler = $rootCrawler->filterXPath(
+          '//' . $definition['html_element'] . '[' .
+            $nonRenderingElementXPath .
+          ']'
+        );
+
+      // Otherwise, just use the cheaper CSS selector filtering.
+      } else {
+        /** @var \Symfony\Component\DomCrawler\Crawler */
+        $pluginCrawler = $rootCrawler->filter($definition['html_element']);
+      }
 
       // If we've found any elements in the HTML matching this plug-in
       // definition, create a plug-in instance for each occurance, so that the
       // plug-in can parse it and build a render array.
       foreach ($pluginCrawler as $element) {
+        /** @var \Symfony\Component\DomCrawler\Crawler */
         $elementCrawler = new Crawler($element);
 
         /** @var \Drupal\omnipedia_content\OmnipediaElementInterface */

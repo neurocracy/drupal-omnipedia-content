@@ -26,6 +26,16 @@ class OmnipediaElement extends Plugin {
   public $html_element;
 
   /**
+   * Whether children of this element should be automatically rendered.
+   *
+   * If this is false, the plug-in is responsible for rendering any child
+   * elements via the element plug-in manager.
+   *
+   * @var boolean
+   */
+  public $render_children = true;
+
+  /**
    * The human readable title of the element.
    *
    * @var \Drupal\Core\Annotation\Translation

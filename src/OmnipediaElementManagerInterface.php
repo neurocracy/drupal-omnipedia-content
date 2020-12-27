@@ -37,11 +37,19 @@ interface OmnipediaElementManagerInterface {
    * @param string $html
    *   The HTML to parse.
    *
+   * @param bool $forceRenderChildren
+   *   If true, will ignore the 'render_children' definition property of
+   *   plug-ins and always render their children. Defaults to false. This is
+   *   intended to be called by plug-ins to render their children.
+   *
    * @return string
    *   The $html parameter with any custom elements that have OmnipediaElement
    *   plug-ins rendered as standard HTML.
    */
-  public function convertElements(string $html): string;
+  public function convertElements(
+    string $html,
+    bool $forceRenderChildren = false
+  ): string;
 
   /**
    * Get theme definitions from all element plug-ins.
