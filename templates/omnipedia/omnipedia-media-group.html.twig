@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Default theme implementation for Omnipedia media group element.
+ *
+ * Available variables:
+ *
+ * - 'items': One or more media items, each containing a media element render
+ *   array.
+ *
+ * - 'align': The direction to float this media element ('left' or 'right'), or
+ *   no floating (a value of 'none').
+ *
+ * - 'view_mode': The view mode to display the media entities as. Defaults to
+ *   'omnipedia_embedded_group'.
+ *
+ * - 'caption': A caption for the entire media group.
+ *
+ * @ingroup themeable
+ *
+ * @todo Is there a better element we can use for the caption that has more
+ *   appropriate semantics than a <p>?
+ */
+#}
+
+{% set base_class = 'omnipedia-media-group' %}
+
+<div{{ create_attribute({'class': [
+  base_class,
+  base_class ~ '--align-' ~ align,
+]}) }}>
+  <ol{{ create_attribute({'class': [base_class ~ '__list']}) }}>
+  {% for item in items %}
+    <li>{{ item }}</li>
+  {% endfor %}
+  </ol>
+
+  {% if caption %}
+    <p{{ create_attribute({'class': [
+      base_class ~ '__caption',
+    ]}) }}>{{ caption }}</p>
+  {% endif %}
+</div>

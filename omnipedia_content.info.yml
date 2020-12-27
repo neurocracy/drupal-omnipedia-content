@@ -19,4 +19,7 @@ dependencies:
 config_devel:
   install:
     - core.entity_view_mode.media.omnipedia_embedded
+    - core.entity_view_mode.media.omnipedia_embedded_group
     - core.entity_view_display.media.image.omnipedia_embedded
+    - core.entity_view_display.media.image.omnipedia_embedded_group
+    - image.style.omnipedia_embedded_group
