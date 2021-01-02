@@ -10,8 +10,16 @@
 
   margin-bottom: $omnipedia-media-outer-spacing;
 
+  @include media('<omnipedia-media-floated') {
+    .field__item {
+      // This overrides the inline max-width so that the field can expand to the
+      // available space on narrow viewports, as having a fixed max-width
+      // results in awkward spaces.
+      max-width: 100% !important;
+    }
+  }
+
   @include media('>=omnipedia-media-floated') {
-    // Alignment.
     &--align-left,
     &--align-right {
       max-width: 50%;
