@@ -14,6 +14,12 @@
   // Match Wikipedia's infobox font size.
   font-size: 88%;
 
+  // Override the smaller font size on media captions so they aren't tiny due to
+  // the above font size reduction.
+  .omnipedia-media figcaption {
+    font-size: 100%;
+  }
+
   @include media('>=omnipedia-infobox-floated') {
     float: right;
 
