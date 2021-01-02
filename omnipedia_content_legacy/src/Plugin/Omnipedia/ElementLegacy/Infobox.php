@@ -84,7 +84,7 @@ class Infobox extends OmnipediaElementLegacyBase {
     ) as $optionName => $optionValue) {
       $renderArray['#items'][] = [
         // @todo Should we use \mb_convert_case() instead?
-        'label' => \ucfirst($optionName),
+        'label' => \ucfirst(\str_replace('_', ' ', $optionName)),
         'value' => $optionValue,
       ];
     }
