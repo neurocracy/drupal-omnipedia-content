@@ -12,6 +12,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Event subscriber to add CommonMark indented content parser and renderer.
  *
+ * This adds an indented content parser and renderer that allows content that is
+ * indented to be parsed and rendered as Markdown rather than as code blocks.
+ *
  * @see \Drupal\omnipedia_content\CommonMark\Block\Element\IndentedContent
  *   Indented content CommonMark element.
  *
@@ -20,6 +23,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @see \Drupal\omnipedia_content\CommonMark\Block\Renderer\IndentedContentRenderer
  *   Indented content CommonMark renderer.
+ *
+ * @see https://github.com/thephpleague/commonmark/issues/536
+ *   CommonMark issue describing this problem and solution.
  */
 class IndentedContentEventSubscriber implements EventSubscriberInterface {
 

@@ -11,7 +11,7 @@ use League\CommonMark\Cursor;
 /**
  * Indented content CommonMark parser.
  *
- * @see \Drupal\omnipedia_content\Plugin\Markdown\CommonMark\CommonMark
+ * @see \Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\IndentedContentEventSubscriber
  *   Explains the purpose of this parser.
  */
 class IndentedContentParser implements BlockParserInterface {

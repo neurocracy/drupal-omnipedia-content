@@ -9,7 +9,7 @@ use League\CommonMark\ElementRendererInterface;
 /**
  * Indented content CommonMark renderer.
  *
- * @see \Drupal\omnipedia_content\Plugin\Markdown\CommonMark\CommonMark
+ * @see \Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\IndentedContentEventSubscriber
  *   Explains the purpose of this renderer.
  */
 class IndentedContentRenderer implements BlockRendererInterface {

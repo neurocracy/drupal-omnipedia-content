@@ -8,7 +8,7 @@ use League\CommonMark\Cursor;
 /**
  * Indented content CommonMark element.
  *
- * @see \Drupal\omnipedia_content\Plugin\Markdown\CommonMark\CommonMark
+ * @see \Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\IndentedContentEventSubscriber
  *   Explains the purpose of this element.
  */
 class IndentedContent extends AbstractBlock {
