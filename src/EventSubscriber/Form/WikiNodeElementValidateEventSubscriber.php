@@ -15,7 +15,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Event subscriber to add Omnipedia element validation to wiki node edit form.
  *
  * @todo Can this be applied to all 'processed_text' elements so that we don't
- *   have to target the body field here specifically.
+ *   have to target the body field here specifically? Alternatively, what about
+ *   using the @link https://www.drupal.org/docs/drupal-apis/entity-api/entity-validation-api/providing-a-custom-validation-constraint#add_constraint_other_entity_base_field Entity Validation API @endLink?
  *
  * @see \Drupal\filter\Element\ProcessedText
  */
