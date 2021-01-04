@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * Implements hook_markdown_extension_info_alter().
+ *
+ * This replaces the heading permalink Markdown plug-in with our own class.
+ *
+ * @see \Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension\HeadingPermalinkExtension
+ *   Our Markdown plug-in replacement class.
+ *
+ * @see \Drupal\omnipedia_content\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension
+ *   Our heading permalink CommonMark extension.
+ */
+function omnipedia_content_markdown_extension_info_alter(array &$info) {
+  $info['league/commonmark-ext-heading-permalink']['class'] =
+    'Drupal\\omnipedia_content\\Plugin\\Markdown\\CommonMark\\Extension\\HeadingPermalinkExtension';
+
+  // @todo Is this needed?
+  $info['league/commonmark-ext-heading-permalink']['installedClass'] =
+    'Drupal\\omnipedia_content\\CommonMark\\Extension\\HeadingPermalink\\HeadingPermalinkExtension';
+}
