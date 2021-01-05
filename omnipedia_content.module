@@ -3,13 +3,28 @@
 /**
  * Implements hook_markdown_extension_info_alter().
  *
- * This replaces the heading permalink Markdown plug-in with our own class.
+ * This performs the following:
+ *
+ * - Replaces the heading permalink Markdown plug-in and CommonMark extension
+ *   with our own plug-in and extension.
+ *
+ * - Replaces the 'rezozero/commonmark-ext-footnotes' extension with the
+ *   'league/commonmark-ext-footnotes' extension that ships with CommonMark
+ *   1.5+. Note that the extension name is not updated, and so will not apply
+ *   our custom class when the Markdown module switches to the
+ *   'league/commonmark-ext-footnotes' extension.
  *
  * @see \Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension\HeadingPermalinkExtension
- *   Our Markdown plug-in replacement class.
+ *   Our heading permalink Markdown plug-in class.
  *
  * @see \Drupal\omnipedia_content\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension
  *   Our heading permalink CommonMark extension.
+ *
+ * @see \Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension\FootnoteExtension
+ *   Our footnotes Markdown plug-in class.
+ *
+ * @see \League\CommonMark\Extension\Footnote\FootnoteExtension
+ *   CommonMark 1.5+ footnotes extension.
  */
 function omnipedia_content_markdown_extension_info_alter(array &$info) {
   $info['league/commonmark-ext-heading-permalink']['class'] =
@@ -18,4 +33,21 @@ function omnipedia_content_markdown_extension_info_alter(array &$info) {
   // @todo Is this needed?
   $info['league/commonmark-ext-heading-permalink']['installedClass'] =
     'Drupal\\omnipedia_content\\CommonMark\\Extension\\HeadingPermalink\\HeadingPermalinkExtension';
+
+  // Alter footnotes to use the version that now ships with CommonMark until the
+  // Markdown module releases with support for it.
+  if (isset($info['rezozero/commonmark-ext-footnotes'])) {
+    $info['rezozero/commonmark-ext-footnotes']['class'] =
+      'Drupal\\omnipedia_content\\Plugin\\Markdown\\CommonMark\\Extension\\FootnoteExtension';
+
+    $info['rezozero/commonmark-ext-footnotes']['installedClass'] =
+      'League\\CommonMark\\Extension\\Footnote\\FootnoteExtension';
+
+    $info['rezozero/commonmark-ext-footnotes']['url'] =
+      'https://commonmark.thephpleague.com/extensions/footnotes/';
+
+    // Use CommonMark's installed status.
+    $info['rezozero/commonmark-ext-footnotes']['installed'] =
+      $info['league/commonmark-ext-heading-permalink']['installed'];
+  }
 }
