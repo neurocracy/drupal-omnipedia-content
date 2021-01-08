@@ -1,0 +1,35 @@
+// -----------------------------------------------------------------------------
+//   Omnipedia - Content - References (citations, footnotes) styles
+// -----------------------------------------------------------------------------
+
+.reference {
+  // This makes room for the enlarged hitboxes, so they don't overlap any
+  // adjacent references.
+  padding: 0.2em 0.3em;
+
+  font-size: 80%;
+
+  // On the small chance that the browser wants to break to a new line right
+  // inside the reference, disallow it so things don't look awkward.
+  white-space: nowrap;
+}
+
+.reference__link,
+.references__backreference-link {
+  position: relative;
+
+  // This gives the reference link, which is normally just a number, a
+  // bigger hitbox while not interfering with the underlines in any way.
+  // This comes in handy on mobile and for people who don't have fine
+  // motor control.
+  &::before {
+    content: '';
+
+    position: absolute;
+
+    top:    -0.2em;
+    bottom: -0.2em;
+    left:   -0.3em;
+    right:  -0.3em;
+  }
+}

@@ -1,0 +1,8 @@
+component.reference:
+  css:
+    component:
+      reference.css: {}
+  js:
+    reference.js: {}
+  dependencies:
+    - ambientimpact_ux/component.content_popup
