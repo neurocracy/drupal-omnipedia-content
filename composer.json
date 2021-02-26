@@ -11,6 +11,8 @@
     }
   ],
   "require": {
+    "caxy/php-htmldiff": "^0.1.11",
+    "drupal/diff": "^1.0",
     "drupal/hook_event_dispatcher": "^2.0",
     "drupal/markdown": "^2.0",
     "league/commonmark": "^1.5",
