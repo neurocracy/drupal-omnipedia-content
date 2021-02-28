@@ -117,8 +117,9 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result. Access is granted if the provided node is a wiki node,
-   *   the wiki node has a previous revision, and $account has access to both
-   *   the provided wiki node and its previous revision.
+   *   the wiki node is not a main page, the wiki node has a previous revision,
+   *   and $account has access to both the provided wiki node and its previous
+   *   revision.
    */
   public function access(
     AccountInterface $account, NodeInterface $node
@@ -128,6 +129,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
     $previousNode = $this->getPreviousNode($node);
 
     return AccessResult::allowedIf(
+      !$node->isMainPage() &&
       $node->access('view', $account) &&
       \is_object($previousNode) &&
       $previousNode->access('view', $account)
