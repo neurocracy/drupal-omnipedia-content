@@ -55,6 +55,13 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   protected $hasCheckedPreviousNode = false;
 
   /**
+   * Base CSS class for the changes container and child elements.
+   *
+   * @var string
+   */
+  protected $changesBaseClass = 'omnipedia-changes';
+
+  /**
    * Constructs this controller; saves dependencies.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -158,6 +165,104 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
       ]),
       '#allowed_tags' => Xss::getHtmlTagList(),
     ];
+
+  }
+
+  /**
+   * Alter any added content found in the provided DOM.
+   *
+   * The following alterations are made on <ins> elements found via the
+   * 'ins.diffins' selector:
+   *
+   * - The 'diffins' class is removed from the <ins> elements and our own BEM
+   *   classes are added.
+   *
+   * @param \Symfony\Component\DomCrawler\Crawler $crawler
+   *   The Symfony DomCrawler instance to alter.
+   */
+  protected function alterAddedContent(Crawler $crawler): void {
+
+    foreach ($crawler->filter('ins.diffins') as $insElement) {
+      $insElement->setAttribute('class', \implode(' ', [
+        $this->changesBaseClass . '__diff',
+        $this->changesBaseClass . '__diff--added',
+      ]));
+    }
+
+  }
+
+  /**
+   * Alter any removed content found in the provided DOM.
+   *
+   * The following alterations are made on <del> elements found via the
+   * 'del.diffdel' selector:
+   *
+   * - The 'diffdel' class is removed from the <del> elements and our own BEM
+   *   classes are added.
+   *
+   * @param \Symfony\Component\DomCrawler\Crawler $crawler
+   *   The Symfony DomCrawler instance to alter.
+   */
+  protected function alterRemovedContent(Crawler $crawler): void {
+
+    foreach ($crawler->filter('del.diffdel') as $delElement) {
+      $delElement->setAttribute('class', \implode(' ', [
+        $this->changesBaseClass . '__diff',
+        $this->changesBaseClass . '__diff--removed',
+      ]));
+    }
+
+  }
+
+  /**
+   * Alter any changed content found in the provided DOM.
+   *
+   * The following alterations are made on <del> and <ins> elements found via
+   * the 'del.diffmod + ins.diffmod' selector:
+   *
+   * - Both the <del> and <ins> elements are wrapped in a changes container
+   *   <span> for styling.
+   *
+   * - The 'diffmod' class is removed from both the <del> and <ins> elements and
+   *   our own BEM classes are added.
+   *
+   * @param \Symfony\Component\DomCrawler\Crawler $crawler
+   *   The Symfony DomCrawler instance to alter.
+   */
+  protected function alterChangedContent(Crawler $crawler): void {
+
+    foreach ($crawler->filter('del.diffmod + ins.diffmod') as $insElement) {
+      /** @var \DOMElement|false */
+      $changedContainer = $insElement->ownerDocument->createElement('span');
+
+      if (!$changedContainer) {
+        continue;
+      }
+
+      $changedContainer->setAttribute('class', \implode(' ', [
+        $this->changesBaseClass . '__diff',
+        $this->changesBaseClass . '__diff--changed',
+      ]));
+
+      // The <del> element immediately preceding the <ins>.
+      /** @var \DOMElement */
+      $delElement = $insElement->previousSibling;
+
+      // Insert the wrapper before the <ins>.
+      $insElement->parentNode->insertBefore($changedContainer, $delElement);
+
+      $changedContainer->appendChild($delElement);
+
+      $changedContainer->appendChild($insElement);
+
+      $delElement->setAttribute(
+        'class', $this->changesBaseClass . '__diff-changed-removed'
+      );
+
+      $insElement->setAttribute(
+        'class', $this->changesBaseClass . '__diff-changed-added'
+      );
+    }
 
   }
 
@@ -270,8 +375,22 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
       $element->parentNode->removeChild($element);
     }
 
+    $this->alterChangedContent($differenceCrawler);
+
+    $this->alterAddedContent($differenceCrawler);
+
+    $this->alterRemovedContent($differenceCrawler);
+
     return [
-      '#markup'   => $differenceCrawler->html(),
+      // Note that we can't use '#type' => 'container' or some other wrapper
+      // while also setting '#printed' => true as we've told Drupal to do no
+      // further rendering.
+      //
+      // @todo Rework this as a Twig template?
+      '#markup'   => '<div class="' . $this->changesBaseClass . '">' .
+        $differenceCrawler->html() .
+      '</div>',
+
       // Since the parsed diffs have already been run through the renderer and
       // filtering system, we're setting #printed to true to avoid Drupal
       // filtering the output a second time and breaking stuff. For example,
