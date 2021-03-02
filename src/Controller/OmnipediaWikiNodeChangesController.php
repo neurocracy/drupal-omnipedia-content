@@ -396,6 +396,10 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
       // filtering the output a second time and breaking stuff. For example,
       // this would remove style attributes and strip SVG icons.
       '#printed'  => true,
+
+      '#attached'   => [
+        'library'     => ['omnipedia_content/component.changes'],
+      ],
     ];
 
   }

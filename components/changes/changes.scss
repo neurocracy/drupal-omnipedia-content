@@ -1,0 +1,188 @@
+// -----------------------------------------------------------------------------
+//   Omnipedia - Content - Wiki node changes styles
+// -----------------------------------------------------------------------------
+
+@import '../../../../ambientimpact/ambientimpact_core/stylesheets/_common.scss';
+
+///
+/// Omnipedia wiki node changes - added element background colour on light.
+///
+/// @link https://www.materialui.co/colors/light-green/400
+///
+$changes-diff-added-background-colour-on-light: #9CCC65;
+
+///
+/// Omnipedia wiki node changes - added element background colour on dark.
+///
+/// @link https://www.materialui.co/colors/light-green/900
+///
+$changes-diff-added-background-colour-on-dark: scale-color(
+  #33691E, $lightness: -10%
+);
+
+///
+/// Omnipedia wiki node changes - removed element background colour on light.
+///
+/// @link https://www.materialui.co/colors/red/200
+///
+$changes-diff-removed-background-colour-on-light: #ef9a9a;
+
+///
+/// Omnipedia wiki node changes - removed element background colour on dark.
+///
+/// @link https://www.materialui.co/colors/red/900
+///
+$changes-diff-removed-background-colour-on-dark: scale-color(
+  #b71c1c, $lightness: -20%
+);
+
+///
+/// Omnipedia wiki node changes - changed element background colour on light.
+///
+/// @link https://www.materialui.co/colors/yellow/300
+///
+$changes-diff-changed-background-colour-on-light: #FFF176;
+
+///
+/// Omnipedia wiki node changes - changed element background colour on dark.
+///
+/// @link https://www.materialui.co/colors/yellow/700
+///
+$changes-diff-changed-background-colour-on-dark: scale-color(
+  #FBC02D, $lightness: -40%
+);
+
+///
+/// Omnipedia wiki node changes - element padding.
+///
+$changes-diff-padding: 0.3em;
+
+///
+/// Stripe colour to apply to removed diffs for colour blindness on light.
+///
+$changes-diff-removed-stripe-colour-on-light: hsla(0, 0, 0, 0.10);
+
+///
+/// Stripe colour to apply to removed diffs for colour blindness on dark.
+///
+$changes-diff-removed-stripe-colour-on-dark: hsla(0, 0, 0, 0.25);
+
+///
+/// Stripe colour to apply to changed diffs for colour blindness on light.
+///
+$changes-diff-changed-stripe-colour-on-light: hsla(0, 0, 0, 0.15);
+
+///
+/// Stripe colour to apply to changed diffs for colour blindness on light.
+///
+$changes-diff-changed-stripe-colour-on-dark:
+  $changes-diff-changed-stripe-colour-on-light;
+
+.omnipedia-changes {
+  &__diff {
+    padding-left:   $changes-diff-padding;
+    padding-right:  $changes-diff-padding;
+
+    border-radius:  $material-border-radius;
+
+    // If this wraps to a new line, this property makes the horizontal padding
+    // and border radius apply to each line where they break:
+    //
+    // @see http://callmenick.com/post/multi-line-padded-text-css-box-decoration-break
+    box-decoration-break: clone;
+  }
+
+  &__diff--added {
+    // Remove the default underlines on <ins> elements.
+    text-decoration: none;
+
+    @include set-colours(
+      $background: $changes-diff-added-background-colour-on-light
+    );
+
+    @include on-dark-colour-scheme {
+      @include set-colours(
+        $background: $changes-diff-added-background-colour-on-dark
+      );
+    }
+  }
+
+  &__diff--removed {
+    text-decoration: line-through;
+
+    @include set-colours(
+      $background: $changes-diff-removed-background-colour-on-light
+    );
+
+    @include on-dark-colour-scheme {
+      @include set-colours(
+        $background: $changes-diff-removed-background-colour-on-dark
+      );
+    }
+
+    // Add a striped background gradient to make this more visible to people
+    // with certain types of colour blindness.
+    background-image: linear-gradient(
+      90deg,
+      var(--stripe-colour) 50%,
+      transparent 50%,
+      transparent
+    );
+
+    --stripe-colour: #{$changes-diff-removed-stripe-colour-on-light};
+
+    @include on-dark-colour-scheme {
+      --stripe-colour: #{$changes-diff-removed-stripe-colour-on-dark};
+    }
+
+    // This controls the size of the gradient.
+    background-size: 1em;
+  }
+
+  &__diff--changed {
+    @include set-colours(
+      $background: $changes-diff-changed-background-colour-on-light
+    );
+
+    @include on-dark-colour-scheme {
+      @include set-colours(
+        $background: $changes-diff-changed-background-colour-on-dark
+      );
+    }
+
+    --stripe-colour: #{$changes-diff-changed-stripe-colour-on-light};
+
+    @include on-dark-colour-scheme {
+      --stripe-colour: #{$changes-diff-changed-stripe-colour-on-dark};
+    }
+
+    // Add a striped background gradient to make this more visible to people
+    // with certain types of colour blindness.
+    background-image: linear-gradient(
+      -45deg,
+      var(--stripe-colour)  25%,
+      transparent           25%,
+      transparent           50%,
+      var(--stripe-colour)  50%,
+      var(--stripe-colour)  75%,
+      transparent           75%,
+      transparent
+    );
+
+    // This controls the size of the gradient.
+    background-size: 1.5em;
+
+    del {
+      opacity: 0.7;
+    }
+
+    ins {
+      text-decoration: none;
+
+      // This adds a space between the <del> and <ins> for readability.
+      &::before {
+        content: ' ';
+      }
+    }
+  }
+}
