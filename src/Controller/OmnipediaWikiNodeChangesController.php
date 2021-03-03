@@ -173,12 +173,15 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
     $previousNode = $this->getPreviousNode($node);
 
     return [
-      '#markup'       => $this->t('@title: changes since @date', [
-        '@title'  => $node->getTitle(),
-        '@date'   => $this->timeline->getDateFormatted(
-          $previousNode->getWikiNodeDate(), 'short'
-        ),
-      ]),
+      '#markup'       => $this->t(
+        '<span class="page-title__primary">@title<span class="page-title__glue">: </span></span><span class="page-title__secondary">Changes since @date</span>',
+        [
+          '@title'  => $node->getTitle(),
+          '@date'   => $this->timeline->getDateFormatted(
+            $previousNode->getWikiNodeDate(), 'short'
+          ),
+        ]
+      ),
       '#allowed_tags' => Xss::getHtmlTagList(),
     ];
 
