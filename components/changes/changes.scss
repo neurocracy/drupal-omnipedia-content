@@ -78,7 +78,8 @@ $changes-diff-changed-stripe-colour-on-light: hsla(0, 0, 0, 0.15);
 $changes-diff-changed-stripe-colour-on-dark:
   $changes-diff-changed-stripe-colour-on-light;
 
-.omnipedia-changes {
+.omnipedia-changes,
+.omnipedia-changes-help {
   &__diff {
     padding-left:   $changes-diff-padding;
     padding-right:  $changes-diff-padding;
@@ -183,6 +184,43 @@ $changes-diff-changed-stripe-colour-on-dark:
       &::before {
         content: ' ';
       }
+    }
+  }
+}
+
+// The changes help block contents.
+.omnipedia-changes-help {
+  &__description,
+  .item-list {
+    // This allows the entire legend to be laid out inline after the end of the
+    // description, which cuts down on vertical space it uses.
+    display: inline;
+  }
+
+  // The legend is laid out as inline-flex so that it can be placed right after
+  // the end of the description. Because we're using flexbox, the legend will
+  // always be placed on its own line if it can't fit in the remaining space
+  // after the text, and will never be split into two or more lines unless
+  // the width of the entire line it occupies becomes less wide than the legend
+  // itself. Basically, this will only wrap within itself as a last resort.
+  &__legend {
+    display: inline-flex;
+
+    flex-wrap: wrap;
+
+    // Gap property supported for flexbox in Chromium 84 (July 2020) and Firefox
+    // 63 (October 2018). Safari does not yet support it in their stable release
+    // (14, released September 2020), but is coming in the next version:
+    //
+    // @see https://caniuse.com/flexbox-gap
+    gap: 0.5em;
+
+    .item-list & { // Specificity.
+      margin-bottom: 0;
+    }
+
+    .item-list &-item { // Specificity.
+      margin-bottom: 0;
     }
   }
 }
