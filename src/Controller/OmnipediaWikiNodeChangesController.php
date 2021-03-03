@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
+use Drupal\omnipedia_core\Service\TimelineInterface;
 use HtmlDiffAdvancedInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DomCrawler\Crawler;
@@ -39,6 +40,13 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    * @var \Drupal\Core\Render\RendererInterface
    */
   protected $renderer;
+
+  /**
+   * The Omnipedia timeline service.
+   *
+   * @var \Drupal\omnipedia_core\Service\TimelineInterface
+   */
+  protected $timeline;
 
   /**
    * The previous revision of this wiki node, if any, or null otherwise.
@@ -72,15 +80,20 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The Drupal renderer service.
+   *
+   * @param \Drupal\omnipedia_core\Service\TimelineInterface $timeline
+   *   The Omnipedia timeline service.
    */
   public function __construct(
     EntityTypeManagerInterface  $entityTypeManager,
     HtmlDiffAdvancedInterface   $htmlDiff,
-    RendererInterface           $renderer
+    RendererInterface           $renderer,
+    TimelineInterface           $timeline
   ) {
     $this->entityTypeManager  = $entityTypeManager;
     $this->htmlDiff           = $htmlDiff;
     $this->renderer           = $renderer;
+    $this->timeline           = $timeline;
   }
 
   /**
@@ -90,7 +103,8 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('diff.html_diff'),
-      $container->get('renderer')
+      $container->get('renderer'),
+      $container->get('omnipedia.timeline')
     );
   }
 
@@ -161,7 +175,9 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
     return [
       '#markup'       => $this->t('@title: changes since @date', [
         '@title'  => $node->getTitle(),
-        '@date'   => $previousNode->getWikiNodeDate(),
+        '@date'   => $this->timeline->getDateFormatted(
+          $previousNode->getWikiNodeDate(), 'short'
+        ),
       ]),
       '#allowed_tags' => Xss::getHtmlTagList(),
     ];
