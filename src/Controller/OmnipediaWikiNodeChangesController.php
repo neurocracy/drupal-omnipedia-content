@@ -188,6 +188,52 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   }
 
   /**
+   * Alter any changed links found in the provided DOM.
+   *
+   * Any links that are marked as changed due to having different href
+   * attributes have the old revision removed and the current revision not
+   * marked by removing the <ins> element and placing the link back in its
+   * place. This is done because there's no benefit from highlighting the
+   * change, as this is expected and would just add noise.
+   *
+   * @param \Symfony\Component\DomCrawler\Crawler $crawler
+   *   The Symfony DomCrawler instance to alter.
+   *
+   * @todo Check if links whose href attributes changed are both internal wiki
+   *   node paths before removing the changed status?
+   */
+  protected function alterChangedLinks(Crawler $crawler): void {
+
+    foreach (
+      $crawler->filter('del.diffa.diffhref + ins.diffa.diffhref') as $insElement
+    ) {
+      // Remove the preceding <del> element containing the previous date's wiki
+      // page link.
+      $insElement->parentNode->removeChild($insElement->previousSibling);
+
+      // This essentially unwraps the <ins> element, moving all child elements
+      // just before it in the order they appear. This ensures that if there are
+      // any elements or nodes other than the expected <a>, they're preserved.
+      //
+      // @see https://stackoverflow.com/questions/11651365/how-to-insert-node-in-hierarchy-of-dom-between-one-node-and-its-child-nodes/11651813#11651813
+      for($i = 0; $insElement->childNodes->length > 0; $i++) {
+        $insElement->parentNode->insertBefore(
+          // Note that we always specify index "0" as we're basically removing
+          // the first child each time, similar to \array_shift(), and the child
+          // list updates each time we do this, akin to removing the bottom most
+          // card in a deck of cards on each iteration.
+          $insElement->childNodes->item(0),
+          $insElement
+        );
+      }
+
+      // Remove the now-empty <ins>.
+      $insElement->parentNode->removeChild($insElement);
+    }
+
+  }
+
+  /**
    * Alter any added content found in the provided DOM.
    *
    * The following alterations are made on <ins> elements found via the
@@ -295,20 +341,11 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    * - The node title is removed from the output, as we already have the page
    *   title.
    *
-   * - Any links that are marked as changed due to having different href
-   *   attributes have the old revision removed and the current revision not
-   *   marked by removing the <ins> element and placing the link back in its
-   *   place. This is done because there's no benefit from highlighting the
-   *   change, as this is expected and would just add noise.
-   *
    * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
    *   A node object.
    *
    * @return array
    *   A render array containing the changes content for this request.
-   *
-   * @todo Check if links whose href attributes changed are both internal wiki
-   *   node paths before removing the changed status?
    */
   public function view(NodeInterface $node) {
     /** \Drupal\omnipedia_core\Entity\NodeInterface|null */
@@ -365,34 +402,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
       $element->parentNode->removeChild($element);
     }
 
-    /** @var \Symfony\Component\DomCrawler\Crawler */
-    $changedHrefLinksCrawler = $differenceCrawler
-      ->filter('del.diffa.diffhref + ins.diffa.diffhref');
-
-    foreach ($changedHrefLinksCrawler as $element) {
-      // Remove the preceding <del> element containing the previous date's wiki
-      // page link.
-      $element->parentNode->removeChild($element->previousSibling);
-
-      // This essentially unwraps the <ins> element, moving all child elements
-      // just before it in the order they appear. This ensures that if there are
-      // any elements or nodes other than the expected <a>, they're preserved.
-      //
-      // @see https://stackoverflow.com/questions/11651365/how-to-insert-node-in-hierarchy-of-dom-between-one-node-and-its-child-nodes/11651813#11651813
-      for($i = 0; $element->childNodes->length > 0; $i++) {
-        $element->parentNode->insertBefore(
-          // Note that we always specify index "0" as we're basically removing
-          // the first child each time, similar to \array_shift(), and the child
-          // list updates each time we do this, akin to removing the bottom most
-          // card in a deck of cards on each iteration.
-          $element->childNodes->item(0),
-          $element
-        );
-      }
-
-      // Remove the now-empty <ins>.
-      $element->parentNode->removeChild($element);
-    }
+    $this->alterChangedLinks($differenceCrawler);
 
     $this->alterChangedContent($differenceCrawler);
 
