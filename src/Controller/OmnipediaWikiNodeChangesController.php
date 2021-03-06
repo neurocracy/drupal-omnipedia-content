@@ -401,13 +401,10 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
       '</div>'
     ))->filter('#omnipedia-changes-root');
 
-    /** @var \Symfony\Component\DomCrawler\Crawler */
-    $nodeTitleCrawler = $differenceCrawler->filter('.node__title');
-
     // Removes the node title element that Drupal generates.
     //
     // @todo Can this be handled in a node entity view mode instead?
-    foreach ($nodeTitleCrawler as $element) {
+    foreach ($differenceCrawler->filter('.node__title') as $element) {
       $element->parentNode->removeChild($element);
     }
 
