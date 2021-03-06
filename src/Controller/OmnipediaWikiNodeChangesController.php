@@ -346,8 +346,17 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    *
    * @return array
    *   A render array containing the changes content for this request.
+   *
+   * @see $this->alterChangedLinks()
+   *
+   * @see $this->alterChangedContent()
+   *
+   * @see $this->alterAddedContent()
+   *
+   * @see $this->alterRemovedContent()
    */
   public function view(NodeInterface $node) {
+
     /** \Drupal\omnipedia_core\Entity\NodeInterface|null */
     $previousNode = $this->getPreviousNode($node);
 
