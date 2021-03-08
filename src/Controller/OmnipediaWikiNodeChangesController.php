@@ -389,6 +389,9 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    * - The node title is removed from the output, as we already have the page
    *   title.
    *
+   * - Additional alterations by various methods linked and described in this
+   *   method's @see blocks.
+   *
    * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
    *   A node object.
    *
@@ -396,10 +399,14 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    *   A render array containing the changes content for this request.
    *
    * @see $this->alterChangedContent()
+   *   Invoked to alter content that has changed, i.e. which has both removed
+   *   and added content.
    *
    * @see $this->alterAddedContent()
+   *   Invoked to alter content that was added.
    *
    * @see $this->alterRemovedContent()
+   *   Invoked to alter content that was removed.
    */
   public function view(NodeInterface $node) {
 
