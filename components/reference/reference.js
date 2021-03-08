@@ -75,6 +75,8 @@ AmbientImpact.addComponent('OmnipediaReference', function(
             'strong',
             'em',
             'sup',
+            'ins',
+            'del',
           ].join(','));
 
           // If one of the above containers contains the trigger, insert the
