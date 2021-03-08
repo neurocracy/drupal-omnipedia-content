@@ -83,6 +83,8 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    *
    * @param \Drupal\omnipedia_core\Service\TimelineInterface $timeline
    *   The Omnipedia timeline service.
+   *
+   * @see $this->alterHtmlDiffConfig()
    */
   public function __construct(
     EntityTypeManagerInterface  $entityTypeManager,
@@ -94,6 +96,8 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
     $this->htmlDiff           = $htmlDiff;
     $this->renderer           = $renderer;
     $this->timeline           = $timeline;
+
+    $this->alterHtmlDiffConfig();
   }
 
   /**
@@ -106,6 +110,43 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
       $container->get('renderer'),
       $container->get('omnipedia.timeline')
     );
+  }
+
+  /**
+   * Alter the HTML diff configuration used for diffing.
+   *
+   * The following changes are made:
+   *
+   * - Disables the use of HTML Purifier to avoid having to wade through that
+   *   configuration nightmare to whitelist attributes (e.g. style) and elements
+   *   (such as SVG icons). Drupal's render and filtering systems should take
+   *   care of any security stuff for us as we render before passing the markup
+   *   to the HTML diff service. This config option requires @link
+   *   https://github.com/caxy/php-htmldiff/releases/tag/v0.1.11
+   *   caxy/php-htmldiff >= 0.1.11 @endLink which has been specified in this
+   *   module's composer.json.
+   *
+   * - Disables special handling of <a> elements diffing, which would highlight
+   *   changed href attributes. The only instance where this currently happens
+   *   without the link text changing is when an internal wiki link changes to
+   *   point to the new date's revision, which would be irrelevant to highlight.
+   */
+  protected function alterHtmlDiffConfig(): void {
+
+    /** @var \Caxy\HtmlDiff\HtmlDiffConfig */
+    $htmlDiffConfig = $this->htmlDiff->getConfig();
+
+    $htmlDiffConfig->setPurifierEnabled(false);
+
+    /** @var array */
+    $isolatedDiffElements = $htmlDiffConfig->getIsolatedDiffTags();
+
+    if (isset($isolatedDiffElements['a'])) {
+      unset($isolatedDiffElements['a']);
+    }
+
+    $htmlDiffConfig->setIsolatedDiffTags($isolatedDiffElements);
+
   }
 
   /**
@@ -348,12 +389,6 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    * - The node title is removed from the output, as we already have the page
    *   title.
    *
-   * Additionally, this disables special handling of the diffing of <a>
-   * elements, which would diff changed href attributes, as the only instance
-   * where this currently happens without the link text changing is when an
-   * internal wiki link changes to point to the new date's revision, which would
-   * be irrelevant to highlight.
-   *
    * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
    *   A node object.
    *
@@ -381,28 +416,6 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
 
     /** @var array */
     $currentRenderArray = $viewBuilder->view($node, 'full');
-
-    /** @var \Caxy\HtmlDiff\HtmlDiffConfig */
-    $htmlDiffConfig = $this->htmlDiff->getConfig();
-
-    // Disable the use of HTML Purifier to avoid having to wade through that
-    // configuration nightmare to whitelist attributes (e.g. style) and elements
-    // (such as SVG icons). Drupal's render and filtering systems should take
-    // care of any security stuff for us as we render before passing the markup
-    // to the HTML diff service. This config option requires caxy/php-htmldiff
-    // >= 0.1.11 which has been specified in this module's composer.json.
-    //
-    // @see https://github.com/caxy/php-htmldiff/releases/tag/v0.1.11
-    $htmlDiffConfig->setPurifierEnabled(false);
-
-    /** @var array */
-    $isolatedDiffElements = $htmlDiffConfig->getIsolatedDiffTags();
-
-    if (isset($isolatedDiffElements['a'])) {
-      unset($isolatedDiffElements['a']);
-    }
-
-    $htmlDiffConfig->setIsolatedDiffTags($isolatedDiffElements);
 
     $this->htmlDiff->setOldHtml($this->renderer->render($previousRenderArray));
     $this->htmlDiff->setNewHtml($this->renderer->render($currentRenderArray));
