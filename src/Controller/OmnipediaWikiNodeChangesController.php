@@ -190,6 +190,11 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   /**
    * Alter any changed links found in the provided DOM.
    *
+   * Note that this method is left in the code in case we later need to
+   * conditionally remove href highlghting, but is no longer used as we
+   * disable the special handling for <a> elements in the view() method to
+   * reduce the amount of DOM alteration we have to do.
+   *
    * Any links that are marked as changed due to having different href
    * attributes have the old revision removed and the current revision not
    * marked by removing the <ins> element and placing the link back in its
@@ -201,6 +206,8 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    *
    * @todo Check if links whose href attributes changed are both internal wiki
    *   node paths before removing the changed status?
+   *
+   * @see $this->view()
    */
   protected function alterChangedLinks(Crawler $crawler): void {
 
@@ -341,13 +348,17 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    * - The node title is removed from the output, as we already have the page
    *   title.
    *
+   * Additionally, this disables special handling of the diffing of <a>
+   * elements, which would diff changed href attributes, as the only instance
+   * where this currently happens without the link text changing is when an
+   * internal wiki link changes to point to the new date's revision, which would
+   * be irrelevant to highlight.
+   *
    * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
    *   A node object.
    *
    * @return array
    *   A render array containing the changes content for this request.
-   *
-   * @see $this->alterChangedLinks()
    *
    * @see $this->alterChangedContent()
    *
@@ -371,6 +382,9 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
     /** @var array */
     $currentRenderArray = $viewBuilder->view($node, 'full');
 
+    /** @var \Caxy\HtmlDiff\HtmlDiffConfig */
+    $htmlDiffConfig = $this->htmlDiff->getConfig();
+
     // Disable the use of HTML Purifier to avoid having to wade through that
     // configuration nightmare to whitelist attributes (e.g. style) and elements
     // (such as SVG icons). Drupal's render and filtering systems should take
@@ -379,7 +393,16 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
     // >= 0.1.11 which has been specified in this module's composer.json.
     //
     // @see https://github.com/caxy/php-htmldiff/releases/tag/v0.1.11
-    $this->htmlDiff->getConfig()->setPurifierEnabled(false);
+    $htmlDiffConfig->setPurifierEnabled(false);
+
+    /** @var array */
+    $isolatedDiffElements = $htmlDiffConfig->getIsolatedDiffTags();
+
+    if (isset($isolatedDiffElements['a'])) {
+      unset($isolatedDiffElements['a']);
+    }
+
+    $htmlDiffConfig->setIsolatedDiffTags($isolatedDiffElements);
 
     $this->htmlDiff->setOldHtml($this->renderer->render($previousRenderArray));
     $this->htmlDiff->setNewHtml($this->renderer->render($currentRenderArray));
@@ -407,8 +430,6 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
     foreach ($differenceCrawler->filter('.node__title') as $element) {
       $element->parentNode->removeChild($element);
     }
-
-    $this->alterChangedLinks($differenceCrawler);
 
     $this->alterChangedContent($differenceCrawler);
 
