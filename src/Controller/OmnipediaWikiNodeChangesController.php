@@ -82,7 +82,9 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
       $node->access('view', $account) &&
       \is_object($previousNode) &&
       $previousNode->access('view', $account)
-    );
+    )
+    ->addCacheableDependency($node)
+    ->cachePerUser();
 
   }
 
