@@ -18,6 +18,14 @@ services:
     arguments:
       - '@string_translation'
 
+  # The Omnipedia wiki node changes service.
+  omnipedia.wiki_node_changes:
+    class: Drupal\omnipedia_content\Service\WikiNodeChanges
+    arguments:
+      - '@entity_type.manager'
+      - '@diff.html_diff'
+      - '@renderer'
+
   # Event subscriber to add Omnipedia element validation to wiki node edit form.
   omnipedia_content.form_wiki_node_element_validate_event_subscriber:
     class: Drupal\omnipedia_content\EventSubscriber\Form\WikiNodeElementValidateEventSubscriber
