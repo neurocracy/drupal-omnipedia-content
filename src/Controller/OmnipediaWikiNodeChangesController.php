@@ -95,7 +95,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    * @return array
    *   A render array containing the changes title for this request.
    */
-  public function title(NodeInterface $node) {
+  public function title(NodeInterface $node): array {
 
     /** \Drupal\omnipedia_core\Entity\NodeInterface|null */
     $previousNode = $node->getPreviousWikiNodeRevision();
@@ -124,7 +124,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    * @return array
    *   A render array containing the changes content for this request.
    */
-  public function view(NodeInterface $node) {
+  public function view(NodeInterface $node): array {
     return $this->wikiNodeChanges->build($node);
   }
 
