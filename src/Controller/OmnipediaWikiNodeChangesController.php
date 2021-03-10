@@ -49,20 +49,6 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   protected $timeline;
 
   /**
-   * The previous revision of this wiki node, if any, or null otherwise.
-   *
-   * @var \Drupal\omnipedia_core\Entity\NodeInterface|null
-   */
-  protected $previousNode = null;
-
-  /**
-   * Whether we've checked for a previous wiki node revision this request.
-   *
-   * @var boolean
-   */
-  protected $hasCheckedPreviousNode = false;
-
-  /**
    * Base CSS class for the changes container and child elements.
    *
    * @var string
@@ -150,28 +136,6 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   }
 
   /**
-   * Get the previous revision of the provided node, if it's a wiki node.
-   *
-   * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
-   *   A node object.
-   *
-   * @return \Drupal\omnipedia_core\Entity\NodeInterface|null
-   *   The previous revision of a wiki node, or null if there is no previous
-   *   revision or the provided node is not a wiki node.
-   */
-  protected function getPreviousNode(NodeInterface $node): ?NodeInterface {
-
-    if ($this->hasCheckedPreviousNode === false) {
-      $this->previousNode = $node->getPreviousWikiNodeRevision();
-
-      $this->hasCheckedPreviousNode = true;
-    }
-
-    return $this->previousNode;
-
-  }
-
-  /**
    * Checks access for the request.
    *
    * @param \Drupal\Core\Session\AccountInterface $account
@@ -188,7 +152,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   ): AccessResultInterface {
 
     /** \Drupal\omnipedia_core\Entity\NodeInterface|null */
-    $previousNode = $this->getPreviousNode($node);
+    $previousNode = $node->getPreviousWikiNodeRevision();
 
     return AccessResult::allowedIf(
       !$node->isMainPage() &&
@@ -211,7 +175,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   public function title(NodeInterface $node) {
 
     /** \Drupal\omnipedia_core\Entity\NodeInterface|null */
-    $previousNode = $this->getPreviousNode($node);
+    $previousNode = $node->getPreviousWikiNodeRevision();
 
     return [
       '#markup'       => $this->t(
@@ -411,7 +375,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   public function view(NodeInterface $node) {
 
     /** \Drupal\omnipedia_core\Entity\NodeInterface|null */
-    $previousNode = $this->getPreviousNode($node);
+    $previousNode = $node->getPreviousWikiNodeRevision();
 
     /** @var \Drupal\Core\Entity\EntityViewBuilderInterface */
     $viewBuilder = $this->entityTypeManager->getViewBuilder(
