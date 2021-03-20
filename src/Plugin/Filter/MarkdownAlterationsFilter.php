@@ -33,20 +33,15 @@ use Symfony\Component\DomCrawler\Crawler;
 class MarkdownAlterationsFilter extends FilterBase {
 
   /**
-   * {@inheritdoc}
+   * Alter references.
+   *
+   * @param \Symfony\Component\DomCrawler\Crawler $crawler
+   *   The Symfony DomCrawler instance to alter.
    */
-  public function process($text, $langCode) {
-    /** @var \Symfony\Component\DomCrawler\Crawler */
-    $rootCrawler = new Crawler(
-      // The <div> is to prevent the PHP DOM automatically wrapping any
-      // top-level text content in a <p> element.
-      '<div id="omnipedia-markdown-alterations-filter-root">' .
-        (string) $text .
-      '</div>'
-    );
+  protected function alterReferences(Crawler $crawler): void {
 
     /** @var \Symfony\Component\DomCrawler\Crawler */
-    $referenceSupCrawler = $rootCrawler
+    $referenceSupCrawler = $crawler
       ->filter('.reference__link')
       ->evaluate('./ancestor::sup');
 
@@ -57,7 +52,7 @@ class MarkdownAlterationsFilter extends FilterBase {
     // Try to find the first heading preceding the .references container at the
     // end of the document.
     /** @var array */
-    $referencesHeadingResult = $rootCrawler
+    $referencesHeadingResult = $crawler
       ->filter('.references')
       // This selects the nearest preceding heading, regardless of what heading
       // level it is. This assumes that that's the References heading.
@@ -97,7 +92,7 @@ class MarkdownAlterationsFilter extends FilterBase {
 
       // Try and find the corresponding link in the table of contents.
       /** @var \DOMElement|null */
-      $tableOfContentsLink = $rootCrawler
+      $tableOfContentsLink = $crawler
         ->filter('.table-of-contents a[href="#' . $permalinkId . '"]')
         ->getNode(0);
 
@@ -108,11 +103,32 @@ class MarkdownAlterationsFilter extends FilterBase {
       $tableOfContentsLink->nodeValue = $permalinkName;
     }
 
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * @see $this->alterReferences()
+   */
+  public function process($text, $langCode) {
+
+    /** @var \Symfony\Component\DomCrawler\Crawler */
+    $crawler = new Crawler(
+      // The <div> is to prevent the PHP DOM automatically wrapping any
+      // top-level text content in a <p> element.
+      '<div id="omnipedia-markdown-alterations-filter-root">' .
+        (string) $text .
+      '</div>'
+    );
+
+    $this->alterReferences($crawler);
+
     return new FilterProcessResult(
-      $rootCrawler->filter(
+      $crawler->filter(
         '#omnipedia-markdown-alterations-filter-root'
       )->html()
     );
+
   }
 
 }
