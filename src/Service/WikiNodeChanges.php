@@ -225,18 +225,28 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
   /**
    * Alter any added content found in the provided DOM.
    *
-   * The following alterations are made on <ins> elements found via the
-   * 'ins.diffins' selector:
+   * The following alterations are made:
    *
-   * - The 'diffins' class is removed from the <ins> elements and our own BEM
-   *   classes are added.
+   * - The default classes are removed from <ins> elements and our own BEM
+   *   classes are added. This handles diffed list items as well as standalone
+   *   <ins> elements.
    *
    * @param \Symfony\Component\DomCrawler\Crawler $crawler
    *   The Symfony DomCrawler instance to alter.
+   *
+   * @todo Should the list item <ins> selectors attempt to avoid potential
+   *   nesting?
    */
   protected function alterAddedContent(Crawler $crawler): void {
 
-    foreach ($crawler->filter('ins.diffins') as $insElement) {
+    /** @var string */
+    $changedInsClass = $this->getDiffChangedAddedElementClass();
+
+    foreach ($crawler->filter(\implode(',', [
+      'ins.diffins',
+      '.diff-list > .replacement ins:not(.' . $changedInsClass . ')',
+      '.diff-list > .new ins:not(.' . $changedInsClass . ')',
+    ])) as $insElement) {
       $insElement->setAttribute('class', \implode(' ', [
         $this->getDiffElementClass(),
         $this->getDiffAddedModifierClass(),
@@ -248,18 +258,27 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
   /**
    * Alter any removed content found in the provided DOM.
    *
-   * The following alterations are made on <del> elements found via the
-   * 'del.diffdel' selector:
+   * The following alterations are made:
    *
-   * - The 'diffdel' class is removed from the <del> elements and our own BEM
-   *   classes are added.
+   * - The default classes are removed from <del> elements and our own BEM
+   *   classes are added. This handles diffed list items as well as standalone
+   *   <del> elements.
    *
    * @param \Symfony\Component\DomCrawler\Crawler $crawler
    *   The Symfony DomCrawler instance to alter.
+   *
+   * @todo Should the list item <ins> selectors attempt to avoid potential
+   *   nesting?
    */
   protected function alterRemovedContent(Crawler $crawler): void {
 
-    foreach ($crawler->filter('del.diffdel') as $delElement) {
+    /** @var string */
+    $changedDelClass = $this->getDiffChangedRemovedElementClass();
+
+    foreach ($crawler->filter(\implode(',', [
+      'del.diffdel',
+      '.diff-list > .removed del:not(.' . $changedDelClass . ')',
+    ])) as $delElement) {
       $delElement->setAttribute('class', \implode(' ', [
         $this->getDiffElementClass(),
         $this->getDiffRemovedModifierClass(),
