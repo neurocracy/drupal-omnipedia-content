@@ -66,7 +66,16 @@ AmbientImpact.addComponent('OmnipediaReference', function(
            * elements that the tooltip may be placed inside of, by placing the
            * tooltip just after these elements.
            *
+           * Note that 'ins' and 'del' are not currently in the list as they
+           * would always match before the infobox or media selectors due to
+           * being closest in the tree. If these are needed in the future,
+           * jQuery.parents() may be a better option.
+           *
            * @type {jQuery}
+           *
+           * @see https://api.jquery.com/parents/
+           *
+           * @see https://api.jquery.com/closest/
            */
           var $container = $trigger.closest([
             '.omnipedia-infobox',
@@ -75,8 +84,6 @@ AmbientImpact.addComponent('OmnipediaReference', function(
             'strong',
             'em',
             'sup',
-            'ins',
-            'del',
           ].join(','));
 
           // If one of the above containers contains the trigger, insert the
