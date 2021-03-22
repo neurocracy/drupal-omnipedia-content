@@ -173,18 +173,18 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
   protected function alterHtmlDiffConfig(): void {
 
     /** @var \Caxy\HtmlDiff\HtmlDiffConfig */
-    $htmlDiffConfig = $this->htmlDiff->getConfig();
+    $config = $this->htmlDiff->getConfig();
 
-    $htmlDiffConfig->setPurifierEnabled(false);
+    $config->setPurifierEnabled(false);
 
     /** @var array */
-    $isolatedDiffElements = $htmlDiffConfig->getIsolatedDiffTags();
+    $isolatedDiffElements = $config->getIsolatedDiffTags();
 
     if (isset($isolatedDiffElements['a'])) {
       unset($isolatedDiffElements['a']);
     }
 
-    $htmlDiffConfig->setIsolatedDiffTags($isolatedDiffElements);
+    $config->setIsolatedDiffTags($isolatedDiffElements);
 
   }
 
