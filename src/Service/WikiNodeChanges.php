@@ -4,6 +4,7 @@ namespace Drupal\omnipedia_content\Service;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Template\Attribute;
 use Drupal\omnipedia_content\Service\WikiNodeChangesInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 use HtmlDiffAdvancedInterface;
@@ -130,6 +131,24 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
    */
   protected function getDiffChangedRemovedElementClass(): string {
     return $this->getDiffElementClass() . '-changed-removed';
+  }
+
+  /**
+   * Get the BEM class for link elements.
+   *
+   * @return string
+   */
+  protected function getDiffLinkElementClass(): string {
+    return $this->getDiffElementClass() . '-link';
+  }
+
+  /**
+   * Get the BEM modifier class for changed link elements.
+   *
+   * @return string
+   */
+  protected function getDiffLinkChangedModifierClass(): string {
+    return $this->getDiffLinkElementClass() . '--changed';
   }
 
   /**
@@ -338,6 +357,39 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
   }
 
   /**
+   * Alter any links found in the provided DOM.
+   *
+   * This removes the .diffmod class from links and adds our own BEM classes.
+   *
+   * @param \Symfony\Component\DomCrawler\Crawler $crawler
+   *   The Symfony DomCrawler instance to alter.
+   */
+  protected function alterLinks(Crawler $crawler): void {
+
+    foreach ($crawler->filter('a.diffmod') as $linkElement) {
+
+      // Parse any existing class attribute and create a new Attributes object
+      // to make class manipulation easier.
+      /** @var \Drupal\Core\Template\Attribute */
+      $attributes = new Attribute([
+        'class' => \preg_split(
+          '/\s+/' , \trim($linkElement->getAttribute('class'))
+        ),
+      ]);
+
+      $attributes->removeClass('diffmod');
+
+      $attributes->addClass($this->getDiffLinkElementClass());
+      $attributes->addClass($this->getDiffLinkChangedModifierClass());
+
+      $linkElement->setAttribute(
+        'class', \implode(' ', $attributes->getClass()->value())
+      );
+    }
+
+  }
+
+  /**
    * {@inheritdoc}
    *
    * @see $this->alterChangedContent()
@@ -349,6 +401,9 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
    *
    * @see $this->alterRemovedContent()
    *   Invoked to alter content that was removed.
+   *
+   * @see $this->alterLinks()
+   *   Invoked to alter links.
    */
   public function build(NodeInterface $node): array {
 
@@ -404,6 +459,8 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
     $this->alterAddedContent($differenceCrawler);
 
     $this->alterRemovedContent($differenceCrawler);
+
+    $this->alterLinks($differenceCrawler);
 
     return [
       // Note that we can't use '#type' => 'container' or some other wrapper
