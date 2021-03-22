@@ -170,7 +170,7 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
   }
 
   /**
-   * Alter any changed links found in the provided DOM.
+   * Alter any links with changed href attributes found in the provided DOM.
    *
    * Note that this method is left in the code in case we later need to
    * conditionally remove href highlghting, but is no longer used as we
@@ -188,10 +188,8 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
    *
    * @todo Check if links whose href attributes changed are both internal wiki
    *   node paths before removing the changed status?
-   *
-   * @see $this->view()
    */
-  protected function alterChangedLinks(Crawler $crawler): void {
+  protected function alterChangedLinkHrefs(Crawler $crawler): void {
 
     foreach (
       $crawler->filter('del.diffa.diffhref + ins.diffa.diffhref') as $insElement
