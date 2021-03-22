@@ -79,6 +79,60 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
   }
 
   /**
+   * Get the BEM class for all diff elements.
+   *
+   * @return string
+   */
+  protected function getDiffElementClass(): string {
+    return self::CHANGES_BASE_CLASS . '__diff';
+  }
+
+  /**
+   * Get the BEM modifier class for added diff elements.
+   *
+   * @return string
+   */
+  protected function getDiffAddedModifierClass(): string {
+    return $this->getDiffElementClass() . '--added';
+  }
+
+  /**
+   * Get the BEM modifier class for removed diff elements.
+   *
+   * @return string
+   */
+  protected function getDiffRemovedModifierClass(): string {
+    return $this->getDiffElementClass() . '--removed';
+  }
+
+  /**
+   * Get the BEM modifier class for changed (added and removed) diff elements.
+   *
+   * @return string
+   */
+  protected function getDiffChangedModifierClass(): string {
+    return $this->getDiffElementClass() . '--changed';
+  }
+
+  /**
+   * Get the BEM class for added elements in changed content.
+   *
+   * @return string
+   */
+  protected function getDiffChangedAddedElementClass(): string {
+    return $this->getDiffElementClass() . '-changed-added';
+  }
+
+  /**
+   * Get the BEM class for added elements in changed content.
+   *
+   * @return string
+   */
+  protected function getDiffChangedRemovedElementClass(): string {
+    return $this->getDiffElementClass() . '-changed-removed';
+  }
+
+  /**
    * Alter the HTML diff configuration used for diffing.
    *
    * The following changes are made:
@@ -184,8 +238,8 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
 
     foreach ($crawler->filter('ins.diffins') as $insElement) {
       $insElement->setAttribute('class', \implode(' ', [
-        self::CHANGES_BASE_CLASS . '__diff',
-        self::CHANGES_BASE_CLASS . '__diff--added',
+        $this->getDiffElementClass(),
+        $this->getDiffAddedModifierClass(),
       ]));
     }
 
@@ -207,8 +261,8 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
 
     foreach ($crawler->filter('del.diffdel') as $delElement) {
       $delElement->setAttribute('class', \implode(' ', [
-        self::CHANGES_BASE_CLASS . '__diff',
-        self::CHANGES_BASE_CLASS . '__diff--removed',
+        $this->getDiffElementClass(),
+        $this->getDiffRemovedModifierClass(),
       ]));
     }
 
@@ -240,8 +294,8 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
       }
 
       $changedContainer->setAttribute('class', \implode(' ', [
-        self::CHANGES_BASE_CLASS . '__diff',
-        self::CHANGES_BASE_CLASS . '__diff--changed',
+        $this->getDiffElementClass(),
+        $this->getDiffChangedModifierClass(),
       ]));
 
       // The <del> element immediately preceding the <ins>.
@@ -256,11 +310,11 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
       $changedContainer->appendChild($insElement);
 
       $delElement->setAttribute(
-        'class', self::CHANGES_BASE_CLASS . '__diff-changed-removed'
+        'class', $this->getDiffChangedRemovedElementClass()
       );
 
       $insElement->setAttribute(
-        'class', self::CHANGES_BASE_CLASS . '__diff-changed-added'
+        'class', $this->getDiffChangedAddedElementClass()
       );
     }
 
@@ -340,7 +394,7 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
       // further rendering.
       //
       // @todo Rework this as a Twig template?
-      '#markup'   => '<div class="' . self::CHANGES_BASE_CLASS . '">' .
+      '#markup'   => '<div class="' . $this->getChangesBaseClass() . '">' .
         $differenceCrawler->html() .
       '</div>',
 
