@@ -462,7 +462,8 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
 
     $this->alterLinks($differenceCrawler);
 
-    return [
+    /** @var array */
+    $renderArray = [
       // Note that we can't use '#type' => 'container' or some other wrapper
       // while also setting '#printed' => true as we've told Drupal to do no
       // further rendering.
@@ -482,6 +483,13 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
         'library'     => ['omnipedia_content/component.changes'],
       ],
     ];
+
+    // Add both the current and previous wiki nodes as cacheable dependencies of
+    // the render array.
+    $this->renderer->addCacheableDependency($renderArray, $node);
+    $this->renderer->addCacheableDependency($renderArray, $previousNode);
+
+    return $renderArray;
 
   }
 
