@@ -390,7 +390,12 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Get diff content for a wiki node.
+   *
+   * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
+   *   A wiki node object to get the diff content for.
+   *
+   * @return string
    *
    * @see $this->alterChangedContent()
    *   Invoked to alter content that has changed, i.e. which has both removed
@@ -405,16 +410,10 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
    * @see $this->alterLinks()
    *   Invoked to alter links.
    */
-  public function build(NodeInterface $node): array {
+  protected function getDiff(NodeInterface $node): string {
 
     /** \Drupal\omnipedia_core\Entity\NodeInterface|null */
     $previousNode = $node->getPreviousWikiNodeRevision();
-
-    // Bail if not a wiki node or the wiki node does not have a previous
-    // revision.
-    if (!\is_object($previousNode)) {
-      return [];
-    }
 
     /** @var \Drupal\Core\Entity\EntityViewBuilderInterface */
     $viewBuilder = $this->entityTypeManager->getViewBuilder(
@@ -462,6 +461,27 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
 
     $this->alterLinks($differenceCrawler);
 
+    return $differenceCrawler->html();
+
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * @see $this->getDiff()
+   *   Gets diff content for a wiki node.
+   */
+  public function build(NodeInterface $node): array {
+
+    /** \Drupal\omnipedia_core\Entity\NodeInterface|null */
+    $previousNode = $node->getPreviousWikiNodeRevision();
+
+    // Bail if not a wiki node or the wiki node does not have a previous
+    // revision.
+    if (!\is_object($previousNode)) {
+      return [];
+    }
+
     /** @var array */
     $renderArray = [
       // Note that we can't use '#type' => 'container' or some other wrapper
@@ -470,7 +490,7 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
       //
       // @todo Rework this as a Twig template?
       '#markup'   => '<div class="' . $this->getChangesBaseClass() . '">' .
-        $differenceCrawler->html() .
+        $this->getDiff($node) .
       '</div>',
 
       // Since the parsed diffs have already been run through the renderer and
