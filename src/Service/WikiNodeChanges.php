@@ -3,6 +3,8 @@
 namespace Drupal\omnipedia_content\Service;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\omnipedia_content\Service\WikiNodeChangesCacheInterface;
@@ -445,8 +447,35 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
     /** @var array */
     $currentRenderArray = $viewBuilder->view($node, 'full');
 
-    $this->htmlDiff->setOldHtml($this->renderer->render($previousRenderArray));
-    $this->htmlDiff->setNewHtml($this->renderer->render($currentRenderArray));
+    // We need to create a new render context to render the previous and current
+    // nodes in, so that we can capture the metadata (caching, attachments) and
+    // store it in the cached copy. This also ensures that any metadata from
+    // rendering these does not bubble up to the parent context, unless it
+    // renders the render array that we return.
+    /** @var \Drupal\Core\Render\RenderContext */
+    $renderContext = new RenderContext();
+
+    $this->htmlDiff->setOldHtml($this->renderer->executeInRenderContext(
+      $renderContext, function() use (&$previousRenderArray) {
+        return $this->renderer->render($previousRenderArray);
+      }
+    ));
+
+    $this->htmlDiff->setNewHtml($this->renderer->executeInRenderContext(
+      $renderContext, function() use (&$currentRenderArray) {
+        return $this->renderer->render($currentRenderArray);
+      }
+    ));
+
+    // Build and merge the metadata for both nodes. This allows us to store the
+    // cache metadata and attachments for both, so that they can be retrieved
+    // along with the rendered diff and passed to Drupal's render system.
+    /** @var \Drupal\Core\Render\BubbleableMetadata */
+    $bubbleableMetadata = (BubbleableMetadata::createFromRenderArray(
+      $previousRenderArray
+    ))->merge(
+      BubbleableMetadata::createFromRenderArray($currentRenderArray)
+    );
 
     // Disable PHP libxml errors because we sometimes end up with invalid
     // nesting, e.g. <figure> inside of <dl> elements.
@@ -491,6 +520,9 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
       '#printed'  => true,
     ];
 
+    // Apply the metadata to the render array.
+    $bubbleableMetadata->applyTo($renderArray);
+
     // Save the rendered diff to cache.
     $this->wikiNodeChangesCache->set($node, $renderArray);
 
@@ -530,11 +562,6 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
 
     $renderArray['#attached']['library'][] =
       'omnipedia_content/component.changes';
-
-    // Add both the current and previous wiki nodes as cacheable dependencies of
-    // the render array.
-    $this->renderer->addCacheableDependency($renderArray, $node);
-    $this->renderer->addCacheableDependency($renderArray, $previousNode);
 
     return $renderArray;
 
