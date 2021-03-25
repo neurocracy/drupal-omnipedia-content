@@ -5,6 +5,7 @@ namespace Drupal\omnipedia_content\Service;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Template\Attribute;
+use Drupal\omnipedia_content\Service\WikiNodeChangesCacheInterface;
 use Drupal\omnipedia_content\Service\WikiNodeChangesInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 use HtmlDiffAdvancedInterface;
@@ -44,6 +45,13 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
   protected $renderer;
 
   /**
+   * The Omnipedia wiki node changes cache service.
+   *
+   * @var \Drupal\omnipedia_content\Service\WikiNodeChangesCacheInterface
+   */
+  protected $wikiNodeChangesCache;
+
+  /**
    * Constructs this service object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -55,18 +63,23 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The Drupal renderer service.
    *
+   * @param \Drupal\omnipedia_content\Service\WikiNodeChangesCacheInterface $wikiNodeChangesCache
+   *   The Omnipedia wiki node changes cache service.
+   *
    * @see $this->alterHtmlDiffConfig()
    */
   public function __construct(
-    EntityTypeManagerInterface  $entityTypeManager,
-    HtmlDiffAdvancedInterface   $htmlDiff,
-    RendererInterface           $renderer
+    EntityTypeManagerInterface    $entityTypeManager,
+    HtmlDiffAdvancedInterface     $htmlDiff,
+    RendererInterface             $renderer,
+    WikiNodeChangesCacheInterface $wikiNodeChangesCache
   ) {
 
     // Save dependencies.
-    $this->entityTypeManager  = $entityTypeManager;
-    $this->htmlDiff           = $htmlDiff;
-    $this->renderer           = $renderer;
+    $this->entityTypeManager    = $entityTypeManager;
+    $this->htmlDiff             = $htmlDiff;
+    $this->renderer             = $renderer;
+    $this->wikiNodeChangesCache = $wikiNodeChangesCache;
 
     $this->alterHtmlDiffConfig();
 
@@ -395,7 +408,8 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
    * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
    *   A wiki node object to get the diff content for.
    *
-   * @return string
+   * @return array
+   *   The diff render array.
    *
    * @see $this->alterChangedContent()
    *   Invoked to alter content that has changed, i.e. which has both removed
@@ -410,7 +424,12 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
    * @see $this->alterLinks()
    *   Invoked to alter links.
    */
-  protected function getDiff(NodeInterface $node): string {
+  protected function getDiff(NodeInterface $node): array {
+
+    // Return a cached render array if one is found in the cache.
+    if ($this->wikiNodeChangesCache->isCached($node)) {
+      return $this->wikiNodeChangesCache->get($node);
+    }
 
     /** \Drupal\omnipedia_core\Entity\NodeInterface|null */
     $previousNode = $node->getPreviousWikiNodeRevision();
@@ -461,7 +480,21 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
 
     $this->alterLinks($differenceCrawler);
 
-    return $differenceCrawler->html();
+    /** @var array */
+    $renderArray = [
+      '#markup'   => $differenceCrawler->html(),
+
+      // Since the parsed diffs have already been run through the renderer and
+      // filtering system, we're setting #printed to true to avoid Drupal
+      // filtering the output a second time and breaking stuff. For example,
+      // this would remove style attributes and strip SVG icons.
+      '#printed'  => true,
+    ];
+
+    // Save the rendered diff to cache.
+    $this->wikiNodeChangesCache->set($node, $renderArray);
+
+    return $renderArray;
 
   }
 
@@ -483,26 +516,20 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
     }
 
     /** @var array */
-    $renderArray = [
+    $renderArray = $this->getDiff($node);
+
+    $renderArray['#markup'] =
       // Note that we can't use '#type' => 'container' or some other wrapper
       // while also setting '#printed' => true as we've told Drupal to do no
       // further rendering.
       //
       // @todo Rework this as a Twig template?
-      '#markup'   => '<div class="' . $this->getChangesBaseClass() . '">' .
-        $this->getDiff($node) .
-      '</div>',
+      '<div class="' . $this->getChangesBaseClass() . '">' .
+        $renderArray['#markup'] .
+      '</div>';
 
-      // Since the parsed diffs have already been run through the renderer and
-      // filtering system, we're setting #printed to true to avoid Drupal
-      // filtering the output a second time and breaking stuff. For example,
-      // this would remove style attributes and strip SVG icons.
-      '#printed'  => true,
-
-      '#attached'   => [
-        'library'     => ['omnipedia_content/component.changes'],
-      ],
-    ];
+    $renderArray['#attached']['library'][] =
+      'omnipedia_content/component.changes';
 
     // Add both the current and previous wiki nodes as cacheable dependencies of
     // the render array.

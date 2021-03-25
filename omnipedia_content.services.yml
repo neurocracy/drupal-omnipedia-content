@@ -33,6 +33,7 @@ services:
       - '@entity_type.manager'
       - '@diff.html_diff'
       - '@renderer'
+      - '@omnipedia.wiki_node_changes_cache'
 
   # The Omnipedia wiki node changes cache service.
   omnipedia.wiki_node_changes_cache:
