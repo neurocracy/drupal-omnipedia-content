@@ -48,7 +48,6 @@ services:
   omnipedia.wiki_node_changes_cache:
     class: Drupal\omnipedia_content\Service\WikiNodeChangesCache
     arguments:
-      - '@cache_contexts_manager'
       - '@cache.omnipedia_wiki_node_changes'
       - '@omnipedia.wiki_node_changes_info'
 
