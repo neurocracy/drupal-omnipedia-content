@@ -35,12 +35,22 @@ services:
       - '@renderer'
       - '@omnipedia.wiki_node_changes_cache'
 
+  # The Omnipedia wiki node changes info service.
+  omnipedia.wiki_node_changes_info:
+    class: Drupal\omnipedia_content\Service\WikiNodeChangesInfo
+    arguments:
+      - '@cache_contexts_manager'
+      - '@cache.default'
+      - '@entity_type.manager'
+      - '@user_permissions_hash_generator'
+
   # The Omnipedia wiki node changes cache service.
   omnipedia.wiki_node_changes_cache:
     class: Drupal\omnipedia_content\Service\WikiNodeChangesCache
     arguments:
       - '@cache_contexts_manager'
       - '@cache.omnipedia_wiki_node_changes'
+      - '@omnipedia.wiki_node_changes_info'
 
   # Event subscriber to add Omnipedia element validation to wiki node edit form.
   omnipedia_content.form_wiki_node_element_validate_event_subscriber:
