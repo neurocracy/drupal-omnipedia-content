@@ -24,8 +24,8 @@ interface WikiNodeChangesInfoInterface {
    * avoiding caching more variations than we expect to need for the sake of
    * performance.
    *
-   * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
-   *   The wiki node to get changes cache IDs for.
+   * @param string $nid
+   *   The wiki node ID (nid) to get changes cache IDs for.
    *
    * @return array
    *   An array of cache IDs.
@@ -33,7 +33,7 @@ interface WikiNodeChangesInfoInterface {
    * @see \Drupal\Core\Render\RenderCache::createCacheID()
    *   Drupal core render cache ID generation for reference.
    */
-  public function getCacheIds(NodeInterface $node): array;
+  public function getCacheIds(string $nid): array;
 
   /**
    * Get a cache ID for a provided wiki node's changes for the current user.
@@ -46,8 +46,8 @@ interface WikiNodeChangesInfoInterface {
    * (e.g. contextual links) or create security issues, and avoiding caching
    * more variations than we expect to need for the sake of performance.
    *
-   * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
-   *   The wiki node to get a changes cache ID for.
+   * @param string $nid
+   *   The wiki node ID (nid) to get a changes cache ID for.
    *
    * @return string
    *   The cache ID for the current user.
@@ -57,6 +57,6 @@ interface WikiNodeChangesInfoInterface {
    * @see \Drupal\Core\Render\RenderCache::createCacheID()
    *   Drupal core render cache ID generation for reference.
    */
-  public function getCacheId(NodeInterface $node): string;
+  public function getCacheId(string $nid): string;
 
 }

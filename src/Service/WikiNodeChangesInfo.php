@@ -149,7 +149,7 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
    *
    * @todo Add i18n support.
    */
-  public function getCacheIds(NodeInterface $node): array {
+  public function getCacheIds(string $nid): array {
 
     /** @var string[] */
     $permissionHashes = $this->getPermissionHashes();
@@ -170,7 +170,7 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
     // generate for the current user - instead we're building it for all
     // permission hashes currently represented by users in the site.
     foreach ($permissionHashes as $hash) {
-      $variations[] = $node->nid->getString() . ':' . \implode(
+      $variations[] = $nid . ':' . \implode(
         ':', \array_merge($cacheKeys, ['[user.permissions]=' . $hash])
       );
     }
@@ -182,7 +182,7 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCacheId(NodeInterface $node): string {
+  public function getCacheId(string $nid): string {
 
     // Build the cache keys to vary by based on these hard-coded cache contexts.
     // The cache contexts manager will automatically populate these with the
@@ -195,7 +195,7 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
       'user.permissions',
     ])->getKeys();
 
-    return $node->nid->getString() . ':' . \implode(':', $cacheKeys);
+    return $nid . ':' . \implode(':', $cacheKeys);
 
   }
 

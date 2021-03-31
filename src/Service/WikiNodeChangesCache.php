@@ -56,7 +56,7 @@ class WikiNodeChangesCache implements WikiNodeChangesCacheInterface {
    */
   public function isCached(NodeInterface $node): bool {
     return \is_object($this->changesCache->get(
-      $this->wikiNodeChangesInfo->getCacheId($node)
+      $this->wikiNodeChangesInfo->getCacheId($node->nid->getString())
     ));
   }
 
@@ -67,7 +67,7 @@ class WikiNodeChangesCache implements WikiNodeChangesCacheInterface {
 
     if ($this->isCached($node)) {
       return $this->changesCache->get(
-        $this->wikiNodeChangesInfo->getCacheId($node)
+        $this->wikiNodeChangesInfo->getCacheId($node->nid->getString())
       )->data;
     }
 
@@ -86,7 +86,7 @@ class WikiNodeChangesCache implements WikiNodeChangesCacheInterface {
     );
 
     $this->changesCache->set(
-      $this->wikiNodeChangesInfo->getCacheId($node),
+      $this->wikiNodeChangesInfo->getCacheId($node->nid->getString()),
       $renderArray,
       $bubbleableMetadata->getCacheMaxAge(),
       $bubbleableMetadata->getCacheTags()
