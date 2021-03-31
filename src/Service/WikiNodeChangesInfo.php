@@ -8,6 +8,7 @@ use Drupal\Core\Cache\Context\CacheContextsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\PermissionsHashGeneratorInterface;
 use Drupal\omnipedia_content\Service\WikiNodeChangesInfoInterface;
+use Drupal\omnipedia_core\Entity\Node;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 
 /**
@@ -36,6 +37,13 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
   protected $defaultCache;
+
+  /**
+   * The Drupal node entity storage.
+   *
+   * @var \Drupal\node\NodeStorageInterface
+   */
+  protected $nodeStorage;
 
   /**
    * The Drupal user permissions hash generator.
@@ -84,6 +92,7 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
     $this->cacheContextsManager     = $cacheContextsManager;
     $this->defaultCache             = $defaultCache;
     $this->permissionsHashGenerator = $permissionsHashGenerator;
+    $this->nodeStorage = $entityTypeManager->getStorage('node');
     $this->roleStorage = $entityTypeManager->getStorage('user_role');
     $this->userStorage = $entityTypeManager->getStorage('user');
 
@@ -176,6 +185,28 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
     }
 
     return $variations;
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAllCacheIds(): array {
+
+    // This builds and executes a \Drupal\Core\Entity\Query\QueryInterface to
+    // get all available wiki node IDs (nids).
+    /** @var array */
+    $nids = ($this->nodeStorage->getQuery())
+      ->condition('type', Node::getWikiNodeType())
+      ->execute();
+
+    $info = [];
+
+    foreach ($nids as $revisionId => $nid) {
+      $info[$nid] = $this->getCacheIds($nid);
+    }
+
+    return $info;
 
   }
 

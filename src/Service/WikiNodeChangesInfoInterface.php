@@ -37,6 +37,19 @@ interface WikiNodeChangesInfoInterface {
   public function getCacheIds(string $nid): array;
 
   /**
+   * Get all cache IDs for all wiki nodes.
+   *
+   * @return array[]
+   *   A multi-dimensional array. Keys are the node IDs (nids), each containing
+   *   an array of cache IDs for that given node in the format returned by
+   *   self::getCacheIds().
+   *
+   * @see self::getCacheIds()
+   *   Describes the details of what is returned.
+   */
+  public function getAllCacheIds(): array;
+
+  /**
    * Get a cache ID for a provided wiki node's changes for the current user.
    *
    * Note that this only generates variations based the node ID (nid), language,
