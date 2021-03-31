@@ -94,7 +94,8 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
    *
    * @return string[]
    *   An array of unique permission hash strings for all users, i.e. with all
-   *   duplicate hashes reduced to a single entry.
+   *   duplicate hashes reduced to a single entry. The keys are a comma-
+   *   separated list of roles that the hashes correspond to.
    *
    * @see \Drupal\Core\Cache\Context\AccountPermissionsCacheContext::getContext()
    *   We generate the permission hash in the exact same way as the
@@ -107,7 +108,7 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
    */
   protected function getPermissionHashes(): array {
 
-    /** @var object|null [description] */
+    /** @var object|null */
     $cached = $this->defaultCache->get(self::USER_PERMISSION_HASHES_CACHE_BIN);
 
     if (\is_object($cached)) {
@@ -121,13 +122,12 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
     $permissionHashes = [];
 
     foreach ($allUsers as $user) {
-      $permissionHashes[] = $this->permissionsHashGenerator->generate($user);
+      $permissionHashes[\implode(',', $user->getRoles())] =
+        $this->permissionsHashGenerator->generate($user);
     }
 
-    // Remove all duplicate hashes and re-index the array using \array_values(),
-    // since we don't need to store user IDs and so we might as well anonymize
-    // the stored data.
-    $permissionHashes = \array_values(\array_unique($permissionHashes));
+    // Remove all duplicate hash values.
+    $permissionHashes = \array_unique($permissionHashes);
 
     $this->defaultCache->set(
       self::USER_PERMISSION_HASHES_CACHE_BIN, $permissionHashes,
@@ -169,8 +169,8 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
     // the exact format CacheContextsManager::convertTokensToKeys() would
     // generate for the current user - instead we're building it for all
     // permission hashes currently represented by users in the site.
-    foreach ($permissionHashes as $hash) {
-      $variations[] = $nid . ':' . \implode(
+    foreach ($permissionHashes as $roles => $hash) {
+      $variations[$roles] = $nid . ':' . \implode(
         ':', \array_merge($cacheKeys, ['[user.permissions]=' . $hash])
       );
     }

@@ -27,8 +27,9 @@ interface WikiNodeChangesInfoInterface {
    * @param string $nid
    *   The wiki node ID (nid) to get changes cache IDs for.
    *
-   * @return array
-   *   An array of cache IDs.
+   * @return string[]
+   *   An array of cache IDs, keyed by a comma-separated list of the role ID
+   *   combination each corresponds to.
    *
    * @see \Drupal\Core\Render\RenderCache::createCacheID()
    *   Drupal core render cache ID generation for reference.
