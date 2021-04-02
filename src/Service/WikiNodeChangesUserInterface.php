@@ -11,6 +11,16 @@ use Drupal\user\UserInterface;
 interface WikiNodeChangesUserInterface {
 
   /**
+   * Get all unique permission hashes for all users.
+   *
+   * @return string[]
+   *   An array of unique permission hash strings for all users, i.e. with all
+   *   duplicate hashes reduced to a single entry. The keys are a comma-
+   *   separated list of roles that the hashes correspond to.
+   */
+  public function getPermissionHashes(): array;
+
+  /**
    * Get a user to render the provided wiki nodes' changes as.
    *
    * Since we need to generate multiple cache variations that vary per user

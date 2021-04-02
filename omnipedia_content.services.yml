@@ -40,9 +40,8 @@ services:
     class: Drupal\omnipedia_content\Service\WikiNodeChangesInfo
     arguments:
       - '@cache_contexts_manager'
-      - '@cache.default'
       - '@entity_type.manager'
-      - '@user_permissions_hash_generator'
+      - '@omnipedia.wiki_node_changes_user'
 
   # The Omnipedia wiki node changes cache service.
   omnipedia.wiki_node_changes_cache:
@@ -55,7 +54,9 @@ services:
   omnipedia.wiki_node_changes_user:
     class: Drupal\omnipedia_content\Service\WikiNodeChangesUser
     arguments:
+      - '@cache.default'
       - '@entity_type.manager'
+      - '@user_permissions_hash_generator'
 
   # Event subscriber to add Omnipedia element validation to wiki node edit form.
   omnipedia_content.form_wiki_node_element_validate_event_subscriber:

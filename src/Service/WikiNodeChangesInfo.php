@@ -6,8 +6,8 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\Context\CacheContextsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Session\PermissionsHashGeneratorInterface;
 use Drupal\omnipedia_content\Service\WikiNodeChangesInfoInterface;
+use Drupal\omnipedia_content\Service\WikiNodeChangesUserInterface;
 use Drupal\omnipedia_core\Entity\Node;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 
@@ -17,14 +17,6 @@ use Drupal\omnipedia_core\Entity\NodeInterface;
 class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
 
   /**
-   * The cache bin name where user permission hashes are stored.
-   *
-   * @var string
-   */
-  protected const USER_PERMISSION_HASHES_CACHE_BIN =
-    'omnipedia_content_changes_user_permission_hashes';
-
-  /**
    * The Drupal cache contexts manager.
    *
    * @var \Drupal\Core\Cache\Context\CacheContextsManager
@@ -32,25 +24,11 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
   protected $cacheContextsManager;
 
   /**
-   * The default Drupal cache bin.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $defaultCache;
-
-  /**
    * The Drupal node entity storage.
    *
    * @var \Drupal\node\NodeStorageInterface
    */
   protected $nodeStorage;
-
-  /**
-   * The Drupal user permissions hash generator.
-   *
-   * @var \Drupal\Core\Session\PermissionsHashGeneratorInterface
-   */
-  protected $permissionsHashGenerator;
 
   /**
    * The Drupal user role entity storage.
@@ -67,89 +45,36 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
   protected $userStorage;
 
   /**
+   * The Omnipedia wiki node changes user service.
+   *
+   * @var \Drupal\omnipedia_content\Service\WikiNodeChangesUserInterface
+   */
+  protected $wikiNodeChangesUser;
+
+  /**
    * Constructs this service object.
    *
    * @param \Drupal\Core\Cache\Context\CacheContextsManager $cacheContextsManager
    *   The Drupal cache contexts manager.
    *
-   * @param \Drupal\Core\Cache\CacheBackendInterface $defaultCache
-   *   The default Drupal cache bin.
-   *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The Drupal entity type manager.
    *
-   * @param \Drupal\Core\Session\PermissionsHashGeneratorInterface $permissionsHashGenerator
-   *   The Drupal user permissions hash generator.
+   * @param \Drupal\omnipedia_content\Service\WikiNodeChangesUserInterface $wikiNodeChangesUser
+   *   The Omnipedia wiki node changes user service.
    */
   public function __construct(
-    CacheContextsManager              $cacheContextsManager,
-    CacheBackendInterface             $defaultCache,
-    EntityTypeManagerInterface        $entityTypeManager,
-    PermissionsHashGeneratorInterface $permissionsHashGenerator
+    CacheContextsManager          $cacheContextsManager,
+    EntityTypeManagerInterface    $entityTypeManager,
+    WikiNodeChangesUserInterface  $wikiNodeChangesUser
   ) {
 
     // Save dependencies.
-    $this->cacheContextsManager     = $cacheContextsManager;
-    $this->defaultCache             = $defaultCache;
-    $this->permissionsHashGenerator = $permissionsHashGenerator;
-    $this->nodeStorage = $entityTypeManager->getStorage('node');
-    $this->roleStorage = $entityTypeManager->getStorage('user_role');
-    $this->userStorage = $entityTypeManager->getStorage('user');
-
-  }
-
-  /**
-   * Get all unique permission hashes for all users.
-   *
-   * @return string[]
-   *   An array of unique permission hash strings for all users, i.e. with all
-   *   duplicate hashes reduced to a single entry. The keys are a comma-
-   *   separated list of roles that the hashes correspond to.
-   *
-   * @see \Drupal\Core\Cache\Context\AccountPermissionsCacheContext::getContext()
-   *   We generate the permission hash in the exact same way as the
-   *   'user.permissions' cache context, but without having to pass it every
-   *   single user.
-   *
-   * @todo Determine how well this scales, and if starts to have a noticeable
-   *   performance impact, implement a system that only generates this when a
-   *   user is added/edited/deleted, one user at a time.
-   */
-  protected function getPermissionHashes(): array {
-
-    /** @var object|null */
-    $cached = $this->defaultCache->get(self::USER_PERMISSION_HASHES_CACHE_BIN);
-
-    if (\is_object($cached)) {
-      return $cached->data;
-    }
-
-    /** @var \Drupal\user\UserInterface[] */
-    $allUsers = $this->userStorage->loadMultiple();
-
-    /** @var string[] */
-    $permissionHashes = [];
-
-    foreach ($allUsers as $user) {
-      $permissionHashes[\implode(',', $user->getRoles())] =
-        $this->permissionsHashGenerator->generate($user);
-    }
-
-    // Remove all duplicate hash values.
-    $permissionHashes = \array_unique($permissionHashes);
-
-    $this->defaultCache->set(
-      self::USER_PERMISSION_HASHES_CACHE_BIN, $permissionHashes,
-      Cache::PERMANENT,
-      Cache::mergeTags(
-        // Invalidated whenever any role is added/updated/deleted.
-        $this->roleStorage->getEntityType()->getListCacheTags(),
-        // Invalidated whenever any user is added/updated/deleted.
-        $this->userStorage->getEntityType()->getListCacheTags()
-      )
-    );
-
-    return $permissionHashes;
+    $this->cacheContextsManager = $cacheContextsManager;
+    $this->nodeStorage          = $entityTypeManager->getStorage('node');
+    $this->roleStorage          = $entityTypeManager->getStorage('user_role');
+    $this->userStorage          = $entityTypeManager->getStorage('user');
+    $this->wikiNodeChangesUser  = $wikiNodeChangesUser;
 
   }
 
@@ -161,7 +86,7 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
   public function getCacheIds(string $nid): array {
 
     /** @var string[] */
-    $permissionHashes = $this->getPermissionHashes();
+    $permissionHashes = $this->wikiNodeChangesUser->getPermissionHashes();
 
     // These are hard-coded for now. We only render on one theme, and currently
     // only have content in English.
