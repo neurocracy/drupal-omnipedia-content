@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\omnipedia_content\Plugin\warmer;
+namespace Drupal\omnipedia_content_changes\Plugin\warmer;
 
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Core\Form\SubformStateInterface;
@@ -8,9 +8,9 @@ use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\node\NodeStorageInterface;
-use Drupal\omnipedia_content\Service\WikiNodeChangesInfoInterface;
-use Drupal\omnipedia_content\Service\WikiNodeChangesInterface;
-use Drupal\omnipedia_content\Service\WikiNodeChangesUserInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesUserInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 use Drupal\user\RoleStorageInterface;
 use Drupal\user\UserInterface;
@@ -44,7 +44,7 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
    *
    * @var string[]
    *
-   * @see \Drupal\omnipedia_content\Service\WikiNodeChangesInfoInterface::getAllCacheIds()
+   * @see \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface::getAllCacheIds()
    *   Built from the return value of this, but with the array structure
    *   flattened - instead of keying by node ID (nid), we key by node ID and
    *   roles, to allow for easy counting of progress.
@@ -96,21 +96,21 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
   /**
    * The Omnipedia wiki node changes info service.
    *
-   * @var \Drupal\omnipedia_content\Service\WikiNodeChangesInfoInterface
+   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface
    */
   protected $wikiNodeChangesInfo;
 
   /**
    * The Omnipedia wiki node changes service.
    *
-   * @var \Drupal\omnipedia_content\Service\WikiNodeChangesInterface
+   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface
    */
   protected $wikiNodeChanges;
 
   /**
    * The Omnipedia wiki node changes user service.
    *
-   * @var \Drupal\omnipedia_content\Service\WikiNodeChangesUserInterface
+   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesUserInterface
    */
   protected $wikiNodeChangesUser;
 
@@ -131,7 +131,7 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
     );
 
     $instance->setLoggerChannel(
-      $container->get('logger.factory')->get('omnipedia_content')
+      $container->get('logger.factory')->get('omnipedia_content_changes')
     );
 
     $instance->setNodeStorage(
@@ -216,7 +216,7 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
   /**
    * Injects the Omnipedia wiki node changes service.
    *
-   * @param \Drupal\omnipedia_content\Service\WikiNodeChangesInterface $wikiNodeChanges
+   * @param \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface $wikiNodeChanges
    *   The Omnipedia wiki node changes service.
    */
   public function setWikiNodeChanges(
@@ -228,7 +228,7 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
   /**
    * Injects the Omnipedia wiki node changes info service.
    *
-   * @param \Drupal\omnipedia_content\Service\WikiNodeChangesInfoInterface $wikiNodeChangesInfo
+   * @param \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface $wikiNodeChangesInfo
    *   The Omnipedia wiki node changes info service.
    */
   public function setWikiNodeChangesInfo(
@@ -240,7 +240,7 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
   /**
    * Injects the Omnipedia wiki node changes user service.
    *
-   * @param \Drupal\omnipedia_content\Service\WikiNodeChangesUserInterface $wikiNodeChangesUser
+   * @param \Drupal\omnipedia_content_changes\Service\WikiNodeChangesUserInterface $wikiNodeChangesUser
    *   The Omnipedia wiki node changes user service.
    */
   public function setWikiNodeChangesUser(

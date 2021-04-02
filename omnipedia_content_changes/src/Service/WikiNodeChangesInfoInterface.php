@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\omnipedia_content\Service;
+namespace Drupal\omnipedia_content_changes\Service;
 
 use Drupal\omnipedia_core\Entity\NodeInterface;
 

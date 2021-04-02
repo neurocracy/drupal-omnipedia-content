@@ -1,13 +1,13 @@
 <?php
 
-namespace Drupal\omnipedia_content\Service;
+namespace Drupal\omnipedia_content_changes\Service;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\Context\CacheContextsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\omnipedia_content\Service\WikiNodeChangesInfoInterface;
-use Drupal\omnipedia_content\Service\WikiNodeChangesUserInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesUserInterface;
 use Drupal\omnipedia_core\Entity\Node;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 
@@ -47,7 +47,7 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
   /**
    * The Omnipedia wiki node changes user service.
    *
-   * @var \Drupal\omnipedia_content\Service\WikiNodeChangesUserInterface
+   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesUserInterface
    */
   protected $wikiNodeChangesUser;
 
@@ -60,7 +60,7 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The Drupal entity type manager.
    *
-   * @param \Drupal\omnipedia_content\Service\WikiNodeChangesUserInterface $wikiNodeChangesUser
+   * @param \Drupal\omnipedia_content_changes\Service\WikiNodeChangesUserInterface $wikiNodeChangesUser
    *   The Omnipedia wiki node changes user service.
    */
   public function __construct(

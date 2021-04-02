@@ -1,14 +1,14 @@
 <?php
 
-namespace Drupal\omnipedia_content\Service;
+namespace Drupal\omnipedia_content_changes\Service;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Template\Attribute;
-use Drupal\omnipedia_content\Service\WikiNodeChangesCacheInterface;
-use Drupal\omnipedia_content\Service\WikiNodeChangesInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesCacheInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 use HtmlDiffAdvancedInterface;
 use Symfony\Component\DomCrawler\Crawler;
@@ -49,7 +49,7 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
   /**
    * The Omnipedia wiki node changes cache service.
    *
-   * @var \Drupal\omnipedia_content\Service\WikiNodeChangesCacheInterface
+   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesCacheInterface
    */
   protected $wikiNodeChangesCache;
 
@@ -65,7 +65,7 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The Drupal renderer service.
    *
-   * @param \Drupal\omnipedia_content\Service\WikiNodeChangesCacheInterface $wikiNodeChangesCache
+   * @param \Drupal\omnipedia_content_changes\Service\WikiNodeChangesCacheInterface $wikiNodeChangesCache
    *   The Omnipedia wiki node changes cache service.
    *
    * @see $this->alterHtmlDiffConfig()
@@ -561,7 +561,7 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
       '</div>';
 
     $renderArray['#attached']['library'][] =
-      'omnipedia_content/component.changes';
+      'omnipedia_content_changes/component.changes';
 
     return $renderArray;
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\omnipedia_content\Service;
+namespace Drupal\omnipedia_content_changes\Service;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\PermissionsHashGeneratorInterface;
-use Drupal\omnipedia_content\Service\WikiNodeChangesUserInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesUserInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 use Drupal\user\UserInterface;
 

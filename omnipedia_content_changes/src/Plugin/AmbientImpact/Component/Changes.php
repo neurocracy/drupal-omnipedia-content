@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\omnipedia_content\Plugin\AmbientImpact\Component;
+namespace Drupal\omnipedia_content_changes\Plugin\AmbientImpact\Component;
 
 use Drupal\ambientimpact_core\ComponentBase;
 

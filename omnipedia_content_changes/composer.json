@@ -1,6 +1,6 @@
 {
-  "name": "drupal/omnipedia_content",
-  "description": "Omnipedia - Content",
+  "name": "drupal/omnipedia_content_changes",
+  "description": "Omnipedia - Content changes",
   "type": "project",
   "license": "GPL-2.0-or-later",
   "authors": [
@@ -11,9 +11,10 @@
     }
   ],
   "require": {
-    "drupal/hook_event_dispatcher": "^2.0",
-    "drupal/markdown": "^2.0",
-    "league/commonmark": "^1.5",
+    "caxy/php-htmldiff": "^0.1.11",
+    "drupal/diff": "^1.0",
+    "drupal/queue_ui": "^2.2",
+    "drupal/warmer": "^2.0",
     "symfony/dom-crawler": "^3.4",
     "symfony/css-selector": "^3.4"
   },

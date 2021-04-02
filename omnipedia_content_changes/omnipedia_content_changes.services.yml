@@ -1,0 +1,41 @@
+services:
+
+  # The Omnipedia wiki node changes cache bin.
+  cache.omnipedia_wiki_node_changes:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: [omnipedia_wiki_node_changes]
+
+  # The Omnipedia wiki node changes service.
+  omnipedia.wiki_node_changes:
+    class: Drupal\omnipedia_content_changes\Service\WikiNodeChanges
+    arguments:
+      - '@entity_type.manager'
+      - '@diff.html_diff'
+      - '@renderer'
+      - '@omnipedia.wiki_node_changes_cache'
+
+  # The Omnipedia wiki node changes cache service.
+  omnipedia.wiki_node_changes_cache:
+    class: Drupal\omnipedia_content_changes\Service\WikiNodeChangesCache
+    arguments:
+      - '@cache.omnipedia_wiki_node_changes'
+      - '@omnipedia.wiki_node_changes_info'
+
+  # The Omnipedia wiki node changes info service.
+  omnipedia.wiki_node_changes_info:
+    class: Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfo
+    arguments:
+      - '@cache_contexts_manager'
+      - '@entity_type.manager'
+      - '@omnipedia.wiki_node_changes_user'
+
+  # The Omnipedia wiki node changes user service.
+  omnipedia.wiki_node_changes_user:
+    class: Drupal\omnipedia_content_changes\Service\WikiNodeChangesUser
+    arguments:
+      - '@cache.default'
+      - '@entity_type.manager'
+      - '@user_permissions_hash_generator'

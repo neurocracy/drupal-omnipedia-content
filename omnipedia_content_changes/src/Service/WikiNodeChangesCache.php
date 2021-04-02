@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\omnipedia_content\Service;
+namespace Drupal\omnipedia_content_changes\Service;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\omnipedia_content\Service\WikiNodeChangesInfoInterface;
-use Drupal\omnipedia_content\Service\WikiNodeChangesCacheInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesCacheInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 
 /**
@@ -27,7 +27,7 @@ class WikiNodeChangesCache implements WikiNodeChangesCacheInterface {
   /**
    * The Omnipedia wiki node changes info service.
    *
-   * @var \Drupal\omnipedia_content\Service\WikiNodeChangesInfoInterface
+   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface
    */
   protected $wikiNodeChangesInfo;
 
@@ -37,7 +37,7 @@ class WikiNodeChangesCache implements WikiNodeChangesCacheInterface {
    * @param \Drupal\Core\Cache\CacheBackendInterface $changesCache
    *   The Omnipedia wiki node changes cache bin.
    *
-   * @param \Drupal\omnipedia_content\Service\WikiNodeChangesInfoInterface $wikiNodeChangesInfo
+   * @param \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface $wikiNodeChangesInfo
    *   The Omnipedia wiki node changes info service.
    */
   public function __construct(

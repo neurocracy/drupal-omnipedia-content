@@ -1,13 +1,13 @@
 <?php
 
-namespace Drupal\omnipedia_content\Controller;
+namespace Drupal\omnipedia_content_changes\Controller;
 
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\omnipedia_content\Service\WikiNodeChangesInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 use Drupal\omnipedia_core\Service\TimelineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -27,7 +27,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   /**
    * The Omnipedia wiki node changes service.
    *
-   * @var \Drupal\omnipedia_content\Service\WikiNodeChangesInterface
+   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface
    */
   protected $wikiNodeChanges;
 
@@ -37,7 +37,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    * @param \Drupal\omnipedia_core\Service\TimelineInterface $timeline
    *   The Omnipedia timeline service.
    *
-   * @param $wikiNodeChanges \Drupal\omnipedia_content\Service\WikiNodeChangesInterface
+   * @param $wikiNodeChanges \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface
    *   The Omnipedia wiki node changes service.
    */
   public function __construct(
