@@ -5,9 +5,9 @@ namespace Drupal\omnipedia_content_changes\Service;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 
 /**
- * The Omnipedia wiki node changes service interface.
+ * The Omnipedia wiki node changes builder service interface.
  */
-interface WikiNodeChangesInterface {
+interface WikiNodeChangesBuilderInterface {
 
   /**
    * Build changes content for a wiki node.

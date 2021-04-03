@@ -7,7 +7,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilderInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 use Drupal\omnipedia_core\Service\TimelineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -25,11 +25,11 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   protected $timeline;
 
   /**
-   * The Omnipedia wiki node changes service.
+   * The Omnipedia wiki node changes builder service.
    *
-   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface
+   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilderInterface
    */
-  protected $wikiNodeChanges;
+  protected $wikiNodeChangesBuilder;
 
   /**
    * Constructs this controller; saves dependencies.
@@ -37,15 +37,15 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    * @param \Drupal\omnipedia_core\Service\TimelineInterface $timeline
    *   The Omnipedia timeline service.
    *
-   * @param $wikiNodeChanges \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface
-   *   The Omnipedia wiki node changes service.
+   * @param $wikiNodeChangesBuilder \Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilderInterface
+   *   The Omnipedia wiki node changes builder service.
    */
   public function __construct(
-    TimelineInterface         $timeline,
-    WikiNodeChangesInterface  $wikiNodeChanges
+    TimelineInterface               $timeline,
+    WikiNodeChangesBuilderInterface $wikiNodeChangesBuilder
   ) {
-    $this->timeline         = $timeline;
-    $this->wikiNodeChanges  = $wikiNodeChanges;
+    $this->timeline               = $timeline;
+    $this->wikiNodeChangesBuilder = $wikiNodeChangesBuilder;
   }
 
   /**
@@ -54,7 +54,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('omnipedia.timeline'),
-      $container->get('omnipedia.wiki_node_changes')
+      $container->get('omnipedia.wiki_node_changes_builder')
     );
   }
 
@@ -127,7 +127,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    *   A render array containing the changes content for this request.
    */
   public function view(NodeInterface $node): array {
-    return $this->wikiNodeChanges->build($node);
+    return $this->wikiNodeChangesBuilder->build($node);
   }
 
 }

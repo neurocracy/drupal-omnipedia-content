@@ -8,9 +8,9 @@ services:
     factory: cache_factory:get
     arguments: [omnipedia_wiki_node_changes]
 
-  # The Omnipedia wiki node changes service.
-  omnipedia.wiki_node_changes:
-    class: Drupal\omnipedia_content_changes\Service\WikiNodeChanges
+  # The Omnipedia wiki node changes builder service.
+  omnipedia.wiki_node_changes_builder:
+    class: Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilder
     arguments:
       - '@entity_type.manager'
       - '@event_dispatcher'

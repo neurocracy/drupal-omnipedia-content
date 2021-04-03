@@ -8,8 +8,8 @@ use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\omnipedia_content_changes\Event\OmnipediaContentChangesEventInterface;
 use Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilderInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesCacheInterface;
-use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface;
 use Drupal\omnipedia_content_changes\WikiNodeChangesCssClassesInterface;
 use Drupal\omnipedia_content_changes\WikiNodeChangesCssClassesTrait;
 use Drupal\omnipedia_core\Entity\NodeInterface;
@@ -18,9 +18,9 @@ use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * The Omnipedia wiki node changes service.
+ * The Omnipedia wiki node changes builder service.
  */
-class WikiNodeChanges implements WikiNodeChangesInterface, WikiNodeChangesCssClassesInterface {
+class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNodeChangesCssClassesInterface {
 
   use WikiNodeChangesCssClassesTrait;
 

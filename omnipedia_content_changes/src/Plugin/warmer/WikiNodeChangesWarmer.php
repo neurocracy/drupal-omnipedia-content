@@ -8,8 +8,8 @@ use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\node\NodeStorageInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilderInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface;
-use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesUserInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 use Drupal\user\RoleStorageInterface;
@@ -101,11 +101,11 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
   protected $wikiNodeChangesInfo;
 
   /**
-   * The Omnipedia wiki node changes service.
+   * The Omnipedia wiki node changes builder service.
    *
-   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface
+   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilderInterface
    */
-  protected $wikiNodeChanges;
+  protected $wikiNodeChangesBuilder;
 
   /**
    * The Omnipedia wiki node changes user service.
@@ -146,8 +146,8 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
       $container->get('entity_type.manager')->getStorage('user')
     );
 
-    $instance->setWikiNodeChanges(
-      $container->get('omnipedia.wiki_node_changes')
+    $instance->setWikiNodeChangesBuilder(
+      $container->get('omnipedia.wiki_node_changes_builder')
     );
 
     $instance->setWikiNodeChangesInfo(
@@ -214,15 +214,15 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
   }
 
   /**
-   * Injects the Omnipedia wiki node changes service.
+   * Injects the Omnipedia wiki node changes builder service.
    *
-   * @param \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface $wikiNodeChanges
-   *   The Omnipedia wiki node changes service.
+   * @param \Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilderInterface $wikiNodeChangesBuilder
+   *   The Omnipedia wiki node changes builder service.
    */
-  public function setWikiNodeChanges(
-    WikiNodeChangesInterface $wikiNodeChanges
+  public function setWikiNodeChangesBuilder(
+    WikiNodeChangesBuilderInterface $wikiNodeChangesBuilder
   ): void {
-    $this->wikiNodeChanges = $wikiNodeChanges;
+    $this->wikiNodeChangesBuilder = $wikiNodeChangesBuilder;
   }
 
   /**
@@ -324,7 +324,7 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
       // cache it if it isn't already cached, or will return it from cache.
       try {
 
-        $renderArray = $this->wikiNodeChanges->build($item['node']);
+        $renderArray = $this->wikiNodeChangesBuilder->build($item['node']);
 
       } catch (PluginException $exception) {
 
