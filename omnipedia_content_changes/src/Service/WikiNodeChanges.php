@@ -9,6 +9,8 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesCacheInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface;
+use Drupal\omnipedia_content_changes\WikiNodeChangesCssClassesInterface;
+use Drupal\omnipedia_content_changes\WikiNodeChangesCssClassesTrait;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 use HtmlDiffAdvancedInterface;
 use Symfony\Component\DomCrawler\Crawler;
@@ -16,14 +18,9 @@ use Symfony\Component\DomCrawler\Crawler;
 /**
  * The Omnipedia wiki node changes service.
  */
-class WikiNodeChanges implements WikiNodeChangesInterface {
+class WikiNodeChanges implements WikiNodeChangesInterface, WikiNodeChangesCssClassesInterface {
 
-  /**
-   * Base CSS class for the changes container and child elements.
-   *
-   * @var string
-   */
-  protected const CHANGES_BASE_CLASS = 'omnipedia-changes';
+  use WikiNodeChangesCssClassesTrait;
 
   /**
    * The Drupal entity type manager.
@@ -85,85 +82,6 @@ class WikiNodeChanges implements WikiNodeChangesInterface {
 
     $this->alterHtmlDiffConfig();
 
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getChangesBaseClass(): string {
-    return self::CHANGES_BASE_CLASS;
-  }
-
-  /**
-   * Get the BEM class for all diff elements.
-   *
-   * @return string
-   */
-  protected function getDiffElementClass(): string {
-    return self::CHANGES_BASE_CLASS . '__diff';
-  }
-
-  /**
-   * Get the BEM modifier class for added diff elements.
-   *
-   * @return string
-   */
-  protected function getDiffAddedModifierClass(): string {
-    return $this->getDiffElementClass() . '--added';
-  }
-
-  /**
-   * Get the BEM modifier class for removed diff elements.
-   *
-   * @return string
-   */
-  protected function getDiffRemovedModifierClass(): string {
-    return $this->getDiffElementClass() . '--removed';
-  }
-
-  /**
-   * Get the BEM modifier class for changed (added and removed) diff elements.
-   *
-   * @return string
-   */
-  protected function getDiffChangedModifierClass(): string {
-    return $this->getDiffElementClass() . '--changed';
-  }
-
-  /**
-   * Get the BEM class for added elements in changed content.
-   *
-   * @return string
-   */
-  protected function getDiffChangedAddedElementClass(): string {
-    return $this->getDiffElementClass() . '-changed-added';
-  }
-
-  /**
-   * Get the BEM class for added elements in changed content.
-   *
-   * @return string
-   */
-  protected function getDiffChangedRemovedElementClass(): string {
-    return $this->getDiffElementClass() . '-changed-removed';
-  }
-
-  /**
-   * Get the BEM class for link elements.
-   *
-   * @return string
-   */
-  protected function getDiffLinkElementClass(): string {
-    return $this->getDiffElementClass() . '-link';
-  }
-
-  /**
-   * Get the BEM modifier class for changed link elements.
-   *
-   * @return string
-   */
-  protected function getDiffLinkChangedModifierClass(): string {
-    return $this->getDiffLinkElementClass() . '--changed';
   }
 
   /**

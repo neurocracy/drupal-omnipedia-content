@@ -10,13 +10,6 @@ use Drupal\omnipedia_core\Entity\NodeInterface;
 interface WikiNodeChangesInterface {
 
   /**
-   * Get the base class used to generate HTML/CSS BEM classes.
-   *
-   * @return string
-   */
-  public function getChangesBaseClass(): string;
-
-  /**
    * Build changes content for a wiki node.
    *
    * This renders the current revision node and the previous revision node,
