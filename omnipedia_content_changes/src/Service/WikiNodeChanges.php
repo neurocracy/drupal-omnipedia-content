@@ -6,7 +6,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\Template\Attribute;
+use Drupal\omnipedia_content_changes\Event\OmnipediaContentChangesEventInterface;
+use Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesCacheInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInterface;
 use Drupal\omnipedia_content_changes\WikiNodeChangesCssClassesInterface;
@@ -14,6 +15,7 @@ use Drupal\omnipedia_content_changes\WikiNodeChangesCssClassesTrait;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 use HtmlDiffAdvancedInterface;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * The Omnipedia wiki node changes service.
@@ -28,6 +30,13 @@ class WikiNodeChanges implements WikiNodeChangesInterface, WikiNodeChangesCssCla
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
+
+  /**
+   * The Symfony event dispatcher service.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
 
   /**
    * The HTML diff service provided by the Diff module.
@@ -56,6 +65,9 @@ class WikiNodeChanges implements WikiNodeChangesInterface, WikiNodeChangesCssCla
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The Drupal entity type manager.
    *
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+   *   The Symfony event dispatcher service.
+   *
    * @param \HtmlDiffAdvancedInterface $htmlDiff
    *   The HTML diff service provided by the Diff module.
    *
@@ -69,6 +81,7 @@ class WikiNodeChanges implements WikiNodeChangesInterface, WikiNodeChangesCssCla
    */
   public function __construct(
     EntityTypeManagerInterface    $entityTypeManager,
+    EventDispatcherInterface      $eventDispatcher,
     HtmlDiffAdvancedInterface     $htmlDiff,
     RendererInterface             $renderer,
     WikiNodeChangesCacheInterface $wikiNodeChangesCache
@@ -76,6 +89,7 @@ class WikiNodeChanges implements WikiNodeChangesInterface, WikiNodeChangesCssCla
 
     // Save dependencies.
     $this->entityTypeManager    = $entityTypeManager;
+    $this->eventDispatcher      = $eventDispatcher;
     $this->htmlDiff             = $htmlDiff;
     $this->renderer             = $renderer;
     $this->wikiNodeChangesCache = $wikiNodeChangesCache;
@@ -122,207 +136,6 @@ class WikiNodeChanges implements WikiNodeChangesInterface, WikiNodeChangesCssCla
   }
 
   /**
-   * Alter any links with changed href attributes found in the provided DOM.
-   *
-   * Note that this method is left in the code in case we later need to
-   * conditionally remove href highlghting, but is no longer used as we
-   * disable the special handling for <a> elements in the view() method to
-   * reduce the amount of DOM alteration we have to do.
-   *
-   * Any links that are marked as changed due to having different href
-   * attributes have the old revision removed and the current revision not
-   * marked by removing the <ins> element and placing the link back in its
-   * place. This is done because there's no benefit from highlighting the
-   * change, as this is expected and would just add noise.
-   *
-   * @param \Symfony\Component\DomCrawler\Crawler $crawler
-   *   The Symfony DomCrawler instance to alter.
-   *
-   * @todo Check if links whose href attributes changed are both internal wiki
-   *   node paths before removing the changed status?
-   */
-  protected function alterChangedLinkHrefs(Crawler $crawler): void {
-
-    foreach (
-      $crawler->filter('del.diffa.diffhref + ins.diffa.diffhref') as $insElement
-    ) {
-      // Remove the preceding <del> element containing the previous date's wiki
-      // page link.
-      $insElement->parentNode->removeChild($insElement->previousSibling);
-
-      // This essentially unwraps the <ins> element, moving all child elements
-      // just before it in the order they appear. This ensures that if there are
-      // any elements or nodes other than the expected <a>, they're preserved.
-      //
-      // @see https://stackoverflow.com/questions/11651365/how-to-insert-node-in-hierarchy-of-dom-between-one-node-and-its-child-nodes/11651813#11651813
-      for($i = 0; $insElement->childNodes->length > 0; $i++) {
-        $insElement->parentNode->insertBefore(
-          // Note that we always specify index "0" as we're basically removing
-          // the first child each time, similar to \array_shift(), and the child
-          // list updates each time we do this, akin to removing the bottom most
-          // card in a deck of cards on each iteration.
-          $insElement->childNodes->item(0),
-          $insElement
-        );
-      }
-
-      // Remove the now-empty <ins>.
-      $insElement->parentNode->removeChild($insElement);
-    }
-
-  }
-
-  /**
-   * Alter any added content found in the provided DOM.
-   *
-   * The following alterations are made:
-   *
-   * - The default classes are removed from <ins> elements and our own BEM
-   *   classes are added. This handles diffed list items as well as standalone
-   *   <ins> elements.
-   *
-   * @param \Symfony\Component\DomCrawler\Crawler $crawler
-   *   The Symfony DomCrawler instance to alter.
-   *
-   * @todo Should the list item <ins> selectors attempt to avoid potential
-   *   nesting?
-   */
-  protected function alterAddedContent(Crawler $crawler): void {
-
-    /** @var string */
-    $changedInsClass = $this->getDiffChangedAddedElementClass();
-
-    foreach ($crawler->filter(\implode(',', [
-      'ins.diffins',
-      '.diff-list > .replacement ins:not(.' . $changedInsClass . ')',
-      '.diff-list > .new ins:not(.' . $changedInsClass . ')',
-    ])) as $insElement) {
-      $insElement->setAttribute('class', \implode(' ', [
-        $this->getDiffElementClass(),
-        $this->getDiffAddedModifierClass(),
-      ]));
-    }
-
-  }
-
-  /**
-   * Alter any removed content found in the provided DOM.
-   *
-   * The following alterations are made:
-   *
-   * - The default classes are removed from <del> elements and our own BEM
-   *   classes are added. This handles diffed list items as well as standalone
-   *   <del> elements.
-   *
-   * @param \Symfony\Component\DomCrawler\Crawler $crawler
-   *   The Symfony DomCrawler instance to alter.
-   *
-   * @todo Should the list item <ins> selectors attempt to avoid potential
-   *   nesting?
-   */
-  protected function alterRemovedContent(Crawler $crawler): void {
-
-    /** @var string */
-    $changedDelClass = $this->getDiffChangedRemovedElementClass();
-
-    foreach ($crawler->filter(\implode(',', [
-      'del.diffdel',
-      '.diff-list > .removed del:not(.' . $changedDelClass . ')',
-    ])) as $delElement) {
-      $delElement->setAttribute('class', \implode(' ', [
-        $this->getDiffElementClass(),
-        $this->getDiffRemovedModifierClass(),
-      ]));
-    }
-
-  }
-
-  /**
-   * Alter any changed content found in the provided DOM.
-   *
-   * The following alterations are made on <del> and <ins> elements found via
-   * the 'del.diffmod + ins.diffmod' selector:
-   *
-   * - Both the <del> and <ins> elements are wrapped in a changes container
-   *   <span> for styling.
-   *
-   * - The 'diffmod' class is removed from both the <del> and <ins> elements and
-   *   our own BEM classes are added.
-   *
-   * @param \Symfony\Component\DomCrawler\Crawler $crawler
-   *   The Symfony DomCrawler instance to alter.
-   */
-  protected function alterChangedContent(Crawler $crawler): void {
-
-    foreach ($crawler->filter('del.diffmod + ins.diffmod') as $insElement) {
-      /** @var \DOMElement|false */
-      $changedContainer = $insElement->ownerDocument->createElement('span');
-
-      if (!$changedContainer) {
-        continue;
-      }
-
-      $changedContainer->setAttribute('class', \implode(' ', [
-        $this->getDiffElementClass(),
-        $this->getDiffChangedModifierClass(),
-      ]));
-
-      // The <del> element immediately preceding the <ins>.
-      /** @var \DOMElement */
-      $delElement = $insElement->previousSibling;
-
-      // Insert the wrapper before the <ins>.
-      $insElement->parentNode->insertBefore($changedContainer, $delElement);
-
-      $changedContainer->appendChild($delElement);
-
-      $changedContainer->appendChild($insElement);
-
-      $delElement->setAttribute(
-        'class', $this->getDiffChangedRemovedElementClass()
-      );
-
-      $insElement->setAttribute(
-        'class', $this->getDiffChangedAddedElementClass()
-      );
-    }
-
-  }
-
-  /**
-   * Alter any links found in the provided DOM.
-   *
-   * This removes the .diffmod class from links and adds our own BEM classes.
-   *
-   * @param \Symfony\Component\DomCrawler\Crawler $crawler
-   *   The Symfony DomCrawler instance to alter.
-   */
-  protected function alterLinks(Crawler $crawler): void {
-
-    foreach ($crawler->filter('a.diffmod') as $linkElement) {
-
-      // Parse any existing class attribute and create a new Attributes object
-      // to make class manipulation easier.
-      /** @var \Drupal\Core\Template\Attribute */
-      $attributes = new Attribute([
-        'class' => \preg_split(
-          '/\s+/' , \trim($linkElement->getAttribute('class'))
-        ),
-      ]);
-
-      $attributes->removeClass('diffmod');
-
-      $attributes->addClass($this->getDiffLinkElementClass());
-      $attributes->addClass($this->getDiffLinkChangedModifierClass());
-
-      $linkElement->setAttribute(
-        'class', \implode(' ', $attributes->getClass()->value())
-      );
-    }
-
-  }
-
-  /**
    * Get diff content for a wiki node.
    *
    * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
@@ -330,19 +143,6 @@ class WikiNodeChanges implements WikiNodeChangesInterface, WikiNodeChangesCssCla
    *
    * @return array
    *   The diff render array.
-   *
-   * @see $this->alterChangedContent()
-   *   Invoked to alter content that has changed, i.e. which has both removed
-   *   and added content.
-   *
-   * @see $this->alterAddedContent()
-   *   Invoked to alter content that was added.
-   *
-   * @see $this->alterRemovedContent()
-   *   Invoked to alter content that was removed.
-   *
-   * @see $this->alterLinks()
-   *   Invoked to alter links.
    */
   protected function getDiff(NodeInterface $node): array {
 
@@ -419,13 +219,16 @@ class WikiNodeChanges implements WikiNodeChangesInterface, WikiNodeChangesCssCla
       $element->parentNode->removeChild($element);
     }
 
-    $this->alterChangedContent($differenceCrawler);
+    /** @var \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent */
+    $event = new DiffPostBuildEvent($differenceCrawler);
 
-    $this->alterAddedContent($differenceCrawler);
+    // Dispatch the event with the event object.
+    $this->eventDispatcher->dispatch(
+      OmnipediaContentChangesEventInterface::DIFF_POST_BUILD, $event
+    );
 
-    $this->alterRemovedContent($differenceCrawler);
-
-    $this->alterLinks($differenceCrawler);
+    /** @var \Symfony\Component\DomCrawler\Crawler */
+    $differenceCrawler = $event->getCrawler();
 
     /** @var array */
     $renderArray = [

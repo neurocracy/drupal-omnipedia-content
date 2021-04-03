@@ -13,6 +13,7 @@ services:
     class: Drupal\omnipedia_content_changes\Service\WikiNodeChanges
     arguments:
       - '@entity_type.manager'
+      - '@event_dispatcher'
       - '@diff.html_diff'
       - '@renderer'
       - '@omnipedia.wiki_node_changes_cache'
@@ -39,3 +40,28 @@ services:
       - '@cache.default'
       - '@entity_type.manager'
       - '@user_permissions_hash_generator'
+
+  # Event subscriber to alter any changed wiki node changes diff content.
+  omnipedia_content_changes.diff_alter_changed_content_event_subscriber:
+    class: Drupal\omnipedia_content_changes\EventSubscriber\Omnipedia\Changes\DiffAlterChangedContentEventSubscriber
+    tags:
+      - { name: 'event_subscriber', priority: -20 }
+
+  # Event subscriber to alter any added wiki node changes diff content.
+  omnipedia_content_changes.diff_alter_added_content_event_subscriber:
+    class: Drupal\omnipedia_content_changes\EventSubscriber\Omnipedia\Changes\DiffAlterAddedContentEventSubscriber
+    tags:
+      - { name: 'event_subscriber', priority: -15 }
+
+  # Event subscriber to alter any removed wiki node changes diff content.
+  omnipedia_content_changes.diff_alter_removed_content_event_subscriber:
+    class: Drupal\omnipedia_content_changes\EventSubscriber\Omnipedia\Changes\DiffAlterRemovedContentEventSubscriber
+    tags:
+      - { name: 'event_subscriber', priority: -10 }
+
+  # Event subscriber to alter any links in the wiki node changes diff content.
+  omnipedia_content_changes.diff_alter_links_event_subscriber:
+    class: Drupal\omnipedia_content_changes\EventSubscriber\Omnipedia\Changes\DiffAlterLinksEventSubscriber
+    tags:
+      - { name: 'event_subscriber', priority: -5 }
+
