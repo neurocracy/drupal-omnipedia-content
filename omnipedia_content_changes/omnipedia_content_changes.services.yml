@@ -23,6 +23,7 @@ services:
     class: Drupal\omnipedia_content_changes\Service\WikiNodeChangesCache
     arguments:
       - '@cache.omnipedia_wiki_node_changes'
+      - '@cache_tags.invalidator'
       - '@omnipedia.wiki_node_changes_info'
 
   # The Omnipedia wiki node changes info service.
