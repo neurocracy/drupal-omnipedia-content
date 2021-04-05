@@ -11,6 +11,19 @@ use Drupal\user\UserInterface;
 interface WikiNodeChangesUserInterface {
 
   /**
+   * Get the permissions hash for a provided user or the current user.
+   *
+   * @param \Drupal\user\UserInterface|null $user
+   *   Either a loaded user entity, or null to indicate the current user.
+   *
+   * @return string
+   *   The permissions hash for the user.
+   *
+   * @see \Drupal\Core\Session\PermissionsHashGeneratorInterface::generate()
+   */
+  public function getPermissionHash(?UserInterface $user = null): string;
+
+  /**
    * Get all unique permission hashes for all users.
    *
    * @return string[]

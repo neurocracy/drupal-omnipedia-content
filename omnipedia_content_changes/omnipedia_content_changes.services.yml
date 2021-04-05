@@ -37,6 +37,7 @@ services:
   omnipedia.wiki_node_changes_user:
     class: Drupal\omnipedia_content_changes\Service\WikiNodeChangesUser
     arguments:
+      - '@current_user'
       - '@cache.default'
       - '@entity_type.manager'
       - '@user_permissions_hash_generator'

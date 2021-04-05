@@ -5,6 +5,7 @@ namespace Drupal\omnipedia_content_changes\Service;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\PermissionsHashGeneratorInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesUserInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
@@ -29,6 +30,13 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
   protected $defaultCache;
+
+  /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
 
   /**
    * All user role entities, keyed by role ID (rid).
@@ -64,6 +72,9 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
    * @param \Drupal\Core\Cache\CacheBackendInterface $defaultCache
    *   The default Drupal cache bin.
    *
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
+   *   The current user.
+   *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The Drupal entity type manager.
    *
@@ -71,12 +82,14 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
    *   The Drupal user permissions hash generator.
    */
   public function __construct(
+    AccountInterface                  $currentUser,
     CacheBackendInterface             $defaultCache,
     EntityTypeManagerInterface        $entityTypeManager,
     PermissionsHashGeneratorInterface $permissionsHashGenerator
   ) {
 
     // Save dependencies.
+    $this->currentUser              = $currentUser;
     $this->defaultCache             = $defaultCache;
     $this->permissionsHashGenerator = $permissionsHashGenerator;
     $this->roleStorage = $entityTypeManager->getStorage('user_role');
@@ -130,6 +143,19 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
     );
 
     return $permissionHashes;
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPermissionHash(?UserInterface $user = null): string {
+
+    if (!\is_object($user)) {
+      $user = $this->currentUser;
+    }
+
+    return $this->permissionsHashGenerator->generate($user);
 
   }
 
