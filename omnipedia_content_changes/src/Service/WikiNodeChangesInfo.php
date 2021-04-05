@@ -155,4 +155,35 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
 
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getPlaceholderCacheTag(string $nid): string {
+
+    return \implode(':', [
+      'omnipedia_wiki_node_changes_placeholder',
+      $nid,
+      $this->wikiNodeChangesUser->getPermissionHash(),
+    ]);
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPlaceholderCacheMetadata(string $nid): array {
+
+    return [
+      // These are the same contexts as the built diffs.
+      'contexts' => [
+        'languages:language_interface',
+        'theme',
+        'user.permissions',
+      ],
+      'max-age'  => Cache::PERMANENT,
+      'tags'     => [$this->getPlaceholderCacheTag($nid)],
+    ];
+
+  }
+
 }

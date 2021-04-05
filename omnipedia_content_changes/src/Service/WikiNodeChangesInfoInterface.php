@@ -73,4 +73,30 @@ interface WikiNodeChangesInfoInterface {
    */
   public function getCacheId(string $nid): string;
 
+  /**
+   * Get the placeholder content cache tag for a provided node ID (nid).
+   *
+   * Note that this is for the current user.
+   *
+   * @param string $nid
+   *   The wiki node ID (nid) to get the placeholder content cache tag for.
+   *
+   * @return string
+   *   The cache tag for the current user.
+   */
+  public function getPlaceholderCacheTag(string $nid): string;
+
+  /**
+   * Get the placeholder content cache metadata for a provide node ID (nid).
+   *
+   * Note that this is for the current user.
+   *
+   * @param string $nid
+   *   The wiki node ID (nid) to get the placeholder content cache metadata for.
+   *
+   * @return array
+   *   A cache metadata array, suitable for use as #cache in render arrays.
+   */
+  public function getPlaceholderCacheMetadata(string $nid): array;
+
 }
