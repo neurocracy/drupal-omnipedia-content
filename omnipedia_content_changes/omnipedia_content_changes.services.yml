@@ -16,7 +16,9 @@ services:
       - '@event_dispatcher'
       - '@diff.html_diff'
       - '@renderer'
+      - '@string_translation'
       - '@omnipedia.wiki_node_changes_cache'
+      - '@omnipedia.wiki_node_changes_info'
 
   # The Omnipedia wiki node changes cache service.
   omnipedia.wiki_node_changes_cache:

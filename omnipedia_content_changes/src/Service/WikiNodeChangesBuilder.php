@@ -6,10 +6,13 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\omnipedia_content_changes\Event\OmnipediaContentChangesEventInterface;
 use Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilderInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesCacheInterface;
+use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface;
 use Drupal\omnipedia_content_changes\WikiNodeChangesCssClassesInterface;
 use Drupal\omnipedia_content_changes\WikiNodeChangesCssClassesTrait;
 use Drupal\omnipedia_core\Entity\NodeInterface;
@@ -22,6 +25,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNodeChangesCssClassesInterface {
 
+  use StringTranslationTrait;
   use WikiNodeChangesCssClassesTrait;
 
   /**
@@ -60,6 +64,13 @@ class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNod
   protected $wikiNodeChangesCache;
 
   /**
+   * The Omnipedia wiki node changes info service.
+   *
+   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface
+   */
+  protected $wikiNodeChangesInfo;
+
+  /**
    * Constructs this service object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -74,8 +85,14 @@ class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNod
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The Drupal renderer service.
    *
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
+   *   The Drupal string translation service.
+   *
    * @param \Drupal\omnipedia_content_changes\Service\WikiNodeChangesCacheInterface $wikiNodeChangesCache
    *   The Omnipedia wiki node changes cache service.
+   *
+   * @param \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface $wikiNodeChangesInfo
+   *   The Omnipedia wiki node changes info service.
    *
    * @see $this->alterHtmlDiffConfig()
    */
@@ -84,7 +101,9 @@ class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNod
     EventDispatcherInterface      $eventDispatcher,
     HtmlDiffAdvancedInterface     $htmlDiff,
     RendererInterface             $renderer,
-    WikiNodeChangesCacheInterface $wikiNodeChangesCache
+    TranslationInterface          $stringTranslation,
+    WikiNodeChangesCacheInterface $wikiNodeChangesCache,
+    WikiNodeChangesInfoInterface  $wikiNodeChangesInfo
   ) {
 
     // Save dependencies.
@@ -92,7 +111,9 @@ class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNod
     $this->eventDispatcher      = $eventDispatcher;
     $this->htmlDiff             = $htmlDiff;
     $this->renderer             = $renderer;
+    $this->stringTranslation    = $stringTranslation;
     $this->wikiNodeChangesCache = $wikiNodeChangesCache;
+    $this->wikiNodeChangesInfo  = $wikiNodeChangesInfo;
 
     $this->alterHtmlDiffConfig();
 
@@ -285,6 +306,22 @@ class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNod
       'omnipedia_content_changes/component.changes';
 
     return $renderArray;
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildPlaceholder(NodeInterface $node): array {
+
+    return [
+      '#markup' => $this->t(
+        'The changes for this date are still being built. Please check back in a few minutes.'
+      ),
+      '#cache'  => $this->wikiNodeChangesInfo->getPlaceholderCacheMetadata(
+        $node->nid->getString()
+      ),
+    ];
 
   }
 

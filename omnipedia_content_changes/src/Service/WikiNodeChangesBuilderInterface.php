@@ -28,4 +28,18 @@ interface WikiNodeChangesBuilderInterface {
    */
   public function build(NodeInterface $node): array;
 
+  /**
+   * Build placeholder content for a wiki node.
+   *
+   * This returns a render array with placeholder content and cache metadata
+   * that's invalidated as soon as this wiki node's changes are built.
+   *
+   * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
+   *   A node object.
+   *
+   * @return array
+   *   A render array with placeholder content.
+   */
+  public function buildPlaceholder(NodeInterface $node): array;
+
 }
