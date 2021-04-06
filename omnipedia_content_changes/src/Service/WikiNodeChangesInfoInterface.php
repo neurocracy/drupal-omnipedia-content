@@ -39,6 +39,10 @@ interface WikiNodeChangesInfoInterface {
   /**
    * Get all cache IDs for all wiki nodes.
    *
+   * Note that this bypasses access so all wiki node are listed, so code that
+   * calls this is responsible for not exposing content the current user does
+   * not have access to.
+   *
    * @return array[]
    *   A multi-dimensional array. Keys are the node IDs (nids), each containing
    *   an array of cache IDs for that given node in the format returned by

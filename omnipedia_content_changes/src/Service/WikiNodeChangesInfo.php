@@ -123,6 +123,9 @@ class WikiNodeChangesInfo implements WikiNodeChangesInfoInterface {
     /** @var array */
     $nids = ($this->nodeStorage->getQuery())
       ->condition('type', Node::getWikiNodeType())
+      // Disable access checking so that this works as expected when invoked via
+      // Drush at the commandline.
+      ->accessCheck(false)
       ->execute();
 
     $info = [];
