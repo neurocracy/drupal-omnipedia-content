@@ -10,6 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\omnipedia_content_changes\Event\OmnipediaContentChangesEventInterface;
 use Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent;
+use Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostRenderPreBuildEvent;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilderInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesCacheInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface;
@@ -194,17 +195,33 @@ class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNod
     /** @var \Drupal\Core\Render\RenderContext */
     $renderContext = new RenderContext();
 
-    $this->htmlDiff->setOldHtml($this->renderer->executeInRenderContext(
+    /** @var string */
+    $previousRendered = (string) $this->renderer->executeInRenderContext(
       $renderContext, function() use (&$previousRenderArray) {
         return $this->renderer->render($previousRenderArray);
       }
-    ));
+    );
 
-    $this->htmlDiff->setNewHtml($this->renderer->executeInRenderContext(
+    /** @var string */
+    $currentRendered = (string) $this->renderer->executeInRenderContext(
       $renderContext, function() use (&$currentRenderArray) {
         return $this->renderer->render($currentRenderArray);
       }
-    ));
+    );
+
+    /** @var \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostRenderPreBuildEvent */
+    $postRenderEvent = new DiffPostRenderPreBuildEvent(
+      $node, $previousNode, $currentRendered, $previousRendered
+    );
+
+    // Dispatch the event with the event object.
+    $this->eventDispatcher->dispatch(
+      OmnipediaContentChangesEventInterface::DIFF_POST_RENDER_PRE_BUILD,
+      $postRenderEvent
+    );
+
+    $this->htmlDiff->setOldHtml($postRenderEvent->getPreviousRendered());
+    $this->htmlDiff->setNewHtml($postRenderEvent->getCurrentRendered());
 
     // Build and merge the metadata for both nodes. This allows us to store the
     // cache metadata and attachments for both, so that they can be retrieved
@@ -241,15 +258,15 @@ class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNod
     }
 
     /** @var \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent */
-    $event = new DiffPostBuildEvent($differenceCrawler);
+    $postBuildEvent = new DiffPostBuildEvent($differenceCrawler);
 
     // Dispatch the event with the event object.
     $this->eventDispatcher->dispatch(
-      OmnipediaContentChangesEventInterface::DIFF_POST_BUILD, $event
+      OmnipediaContentChangesEventInterface::DIFF_POST_BUILD, $postBuildEvent
     );
 
     /** @var \Symfony\Component\DomCrawler\Crawler */
-    $differenceCrawler = $event->getCrawler();
+    $differenceCrawler = $postBuildEvent->getCrawler();
 
     /** @var array */
     $renderArray = [
