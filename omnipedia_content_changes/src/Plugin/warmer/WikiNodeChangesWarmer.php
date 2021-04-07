@@ -66,7 +66,7 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
   protected $accountSwitcher;
 
   /**
-   * The logger channel to send notices or errors to.
+   * Our logger channel.
    *
    * @var \Psr\Log\LoggerInterface
    */
@@ -94,18 +94,18 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
   protected $userStorage;
 
   /**
-   * The Omnipedia wiki node changes info service.
-   *
-   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface
-   */
-  protected $wikiNodeChangesInfo;
-
-  /**
    * The Omnipedia wiki node changes builder service.
    *
    * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilderInterface
    */
   protected $wikiNodeChangesBuilder;
+
+  /**
+   * The Omnipedia wiki node changes info service.
+   *
+   * @var \Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface
+   */
+  protected $wikiNodeChangesInfo;
 
   /**
    * The Omnipedia wiki node changes user service.
