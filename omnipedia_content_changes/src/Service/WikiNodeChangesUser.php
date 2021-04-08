@@ -164,18 +164,34 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
   /**
    * Get all roles.
    *
-   * This returns all user role entities.
+   * This returns all custom role entities, i.e. all but the 'anonymous' and
+   * 'authenticated' roles as they're not actually stored in the user roles
+   * data but inferred from the presence of a user's uid being greater than
+   * zero, and as such would prevent a query matching any users with no custom
+   * roles.
    *
    * @return \Drupal\user\RoleInterface[]
-   *   All role entities.
+   *   All role entities, minus the 'anonymous' and 'authenticated' roles.
    *
    * @see $this->allRoles
    */
   protected function getAllRoles(): array {
 
     if (!isset($this->allRoles)) {
+
       /** @var \Drupal\user\RoleInterface[] */
       $this->allRoles = $this->roleStorage->loadMultiple();
+
+      // Remove the 'anonymous' and 'authenticated' roles.
+      foreach ([
+        AccountInterface::ANONYMOUS_ROLE,
+        AccountInterface::AUTHENTICATED_ROLE,
+      ] as $removeRole) {
+        if (isset($this->allRoles[$removeRole])) {
+          unset($this->allRoles[$removeRole]);
+        }
+      }
+
     }
 
     return $this->allRoles;
