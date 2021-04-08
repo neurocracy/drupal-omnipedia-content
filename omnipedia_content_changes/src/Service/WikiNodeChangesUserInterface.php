@@ -64,8 +64,6 @@ interface WikiNodeChangesUserInterface {
    * @return \Drupal\user\UserInterface|null
    *   Either a loaded user entity, or null if one can't be found that has only
    *   the provided $roles and has access to view both $node and $previousNode.
-   *
-   * @todo This needs tests to verify that it continues to work as expected!
    */
   public function getUserToRenderAs(
     array $roles, NodeInterface $node, NodeInterface $previousNode

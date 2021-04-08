@@ -219,6 +219,9 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
    * @todo Determine if caching this is a good idea, or if Drupal's existing
    *   entity caching is fast enough to make that not worth the effort.
    *
+   * @todo This needs tests to verify that it continues to work as expected,
+   *   especially due to the potential security issues.
+   *
    * @see https://drupal.stackexchange.com/questions/11175/get-all-users-with-specific-roles-using-entityfieldquery
    *   Drupal 7 question and answer on this problem.
    *
