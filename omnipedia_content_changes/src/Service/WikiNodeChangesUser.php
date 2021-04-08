@@ -42,6 +42,8 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
    * All user role entities, keyed by role ID (rid).
    *
    * @var \Drupal\user\RoleInterface[]
+   *
+   * @see $this->getAllRoles()
    */
   protected $allRoles;
 
@@ -160,19 +162,35 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Get all roles.
+   *
+   * This returns all user role entities.
+   *
+   * @return \Drupal\user\RoleInterface[]
+   *   All role entities.
+   *
+   * @see $this->allRoles
    */
-  public function getUserToRenderAs(
-    array $roles, NodeInterface $node, NodeInterface $previousNode
-  ): ?UserInterface {
+  protected function getAllRoles(): array {
 
     if (!isset($this->allRoles)) {
       /** @var \Drupal\user\RoleInterface[] */
       $this->allRoles = $this->roleStorage->loadMultiple();
     }
 
+    return $this->allRoles;
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getUserToRenderAs(
+    array $roles, NodeInterface $node, NodeInterface $previousNode
+  ): ?UserInterface {
+
     /** @var array */
-    $excludeRoles = \array_diff(\array_keys($this->allRoles), $roles);
+    $excludeRoles = \array_diff(\array_keys($this->getAllRoles()), $roles);
 
     // This builds and executes a \Drupal\Core\Entity\Query\QueryInterface to
     // get all active users that have the provided roles and not the excluded
