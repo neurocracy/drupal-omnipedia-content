@@ -200,33 +200,86 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * Note that this doesn't necessarily use the most scalable method for
+   * filtering users that only have the exact roles requested, as that's more
+   * difficult than one might assume given how user roles assignments are
+   * stored. The following have been attempted without success:
+   *
+   * - Looping through the provided roles and setting each one as query
+   *   condition, i.e. @code $query->condition('roles', $role, '=') @endcode
+   *
+   * - Creating an OR or AND condition group and performing the above, i.e.
+   *   @code $query->orConditionGroup() @endcode or
+   *   @code $query->andConditionGroup() @endcode
+   *
+   * @todo Look at the Views user role filter SQL when choosing "Is all of" and
+   *   setting multiple roles as a possible solution.
+   *
+   * @todo Determine if caching this is a good idea, or if Drupal's existing
+   *   entity caching is fast enough to make that not worth the effort.
+   *
+   * @see https://drupal.stackexchange.com/questions/11175/get-all-users-with-specific-roles-using-entityfieldquery
+   *   Drupal 7 question and answer on this problem.
+   *
+   * @see https://stackoverflow.com/questions/28939367/check-if-a-column-contains-all-the-values-of-another-column-mysql
    */
   public function getUserToRenderAs(
     array $roles, NodeInterface $node, NodeInterface $previousNode
   ): ?UserInterface {
 
-    /** @var array */
-    $excludeRoles = \array_diff(\array_keys($this->getAllRoles()), $roles);
+    /** @var \Drupal\Core\Entity\Query\QueryInterface */
+    $query = ($this->userStorage->getQuery())
+      ->condition('status', 1);
 
-    // This builds and executes a \Drupal\Core\Entity\Query\QueryInterface to
-    // get all active users that have the provided roles and not the excluded
-    // roles.
-    /** @var array */
-    $uids = ($this->userStorage->getQuery())
-      ->condition('status', 1)
-      ->condition('roles', $roles, 'IN')
-      ->condition('roles', $excludeRoles, 'NOT IN')
-      ->execute();
+    // If the provided roles are empty or the only role is 'authenticated, we
+    // need to search for a user with only the 'authenticated' role and no
+    // others, but we can't use the same conditions as when the user has one or
+    // more custom roles, because that query will never match, so instead we set
+    // the condition that the user does not have a roles entry.
+    if (
+      empty($roles) ||
+      count($roles) === 1 &&
+      \in_array(AccountInterface::AUTHENTICATED_ROLE, $roles)
+    ) {
 
-    if (empty($uids)) {
-      return null;
+      $query->notExists('roles');
+
+    // Otherwise, if the provided roles are not empty, add conditions both to
+    // find a user with any of the provided roles and none of the remaining
+    // roles, i.e. the inverse.
+    } else {
+
+      $query
+        // This only searches for users that have at least one of the provided
+        // roles. We filter out users not having all the roles after loading
+        // each one to test for that.
+        ->condition('roles', $roles, 'IN')
+        // This works as expected to exclude users that don't have any of the
+        // excluded roles.
+        ->condition(
+          'roles',
+          \array_diff(\array_keys($this->getAllRoles()), $roles),
+          'NOT IN'
+        );
+
     }
 
-    foreach ($uids as $uid) {
+    foreach ($query->execute() as $uid) {
 
       /** @var \Drupal\user\UserInterface */
       $user = $this->userStorage->load($uid);
 
+      // Loop through the required roles and skip this user if they don't have
+      // all of them. This is not
+      foreach ($roles as $role) {
+        if (!$user->hasRole($role)) {
+          continue 2;
+        }
+      }
+
+      // Return the first user found that has access to both the current and
+      // previous wiki nodes.
       if (
         $node->access('view', $user) &&
         $previousNode->access('view', $user)
@@ -236,6 +289,7 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
 
     }
 
+    // If no user was found and returned, return null to indicate that.
     return null;
 
   }
