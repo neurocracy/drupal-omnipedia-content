@@ -222,6 +222,9 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
    * @todo This needs tests to verify that it continues to work as expected,
    *   especially due to the potential security issues.
    *
+   * @see https://drupal.stackexchange.com/questions/226396/perform-a-query-with-an-entity-field-condition-with-multiple-values/226410#226410
+   *   Potential solution for matching all provided roles.
+   *
    * @see https://drupal.stackexchange.com/questions/11175/get-all-users-with-specific-roles-using-entityfieldquery
    *   Drupal 7 question and answer on this problem.
    *
