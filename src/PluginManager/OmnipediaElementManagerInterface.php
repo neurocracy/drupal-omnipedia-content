@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\omnipedia_content;
+namespace Drupal\omnipedia_content\PluginManager;
 
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Render\RendererInterface;
@@ -70,7 +70,7 @@ interface OmnipediaElementManagerInterface {
    * @return array
    *   An array of element errors.
    *
-   * @see \Drupal\omnipedia_content\OmnipediaElementManager::elementErrors
+   * @see \Drupal\omnipedia_content\PluginManager\OmnipediaElementManager::elementErrors
    *   Describes the error structure.
    */
   public function getElementErrors(): array;
@@ -81,7 +81,7 @@ interface OmnipediaElementManagerInterface {
    * @return array
    *   An array of element errors.
    *
-   * @see \Drupal\omnipedia_content\OmnipediaElementManager::elementErrors
+   * @see \Drupal\omnipedia_content\PluginManager\OmnipediaElementManager::elementErrors
    *   Describes the error structure.
    */
   public function getElementFormValidationErrors(): array;

@@ -5,7 +5,7 @@ namespace Drupal\omnipedia_content_legacy\Plugin\Filter;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
-use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManagerInterface;
+use Drupal\omnipedia_content_legacy\PluginManager\OmnipediaElementLegacyManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,7 +22,7 @@ class MustacheToHtmlFilter extends FilterBase implements ContainerFactoryPluginI
   /**
    * The OmnipediaElementLegacy plug-in manager.
    *
-   * @var \Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManagerInterface
+   * @var \Drupal\omnipedia_content_legacy\PluginManager\OmnipediaElementLegacyManagerInterface
    */
   protected $elementLegacyManager;
 
@@ -39,7 +39,7 @@ class MustacheToHtmlFilter extends FilterBase implements ContainerFactoryPluginI
    *   The plug-in implementation definition. PluginBase defines this as mixed,
    *   but we should always have an array so the type is set.
    *
-   * @param \Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManagerInterface $elementLegacyManager
+   * @param \Drupal\omnipedia_content_legacy\PluginManager\OmnipediaElementLegacyManagerInterface $elementLegacyManager
    *   The OmnipediaElementLegacy plug-in manager.
    */
   public function __construct(

@@ -6,8 +6,8 @@ use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Template\Attribute;
-use Drupal\omnipedia_content\OmnipediaElementBase;
-use Drupal\omnipedia_content\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

@@ -2,7 +2,7 @@ services:
 
   # The OmnipediaElement plug-in manager.
   plugin.manager.omnipedia_element:
-    class: Drupal\omnipedia_content\OmnipediaElementManager
+    class: Drupal\omnipedia_content\PluginManager\OmnipediaElementManager
     parent: default_plugin_manager
     calls:
       -

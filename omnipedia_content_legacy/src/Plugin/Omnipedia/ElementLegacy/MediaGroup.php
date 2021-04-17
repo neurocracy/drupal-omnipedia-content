@@ -3,7 +3,7 @@
 namespace Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy;
 
 use Drupal\Core\Template\Attribute;
-use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyBase;
+use Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy\OmnipediaElementLegacyBase;
 
 /**
  * Media group legacy element.
@@ -61,7 +61,7 @@ class MediaGroup extends OmnipediaElementLegacyBase {
         ];
       }
 
-      /** @var \Drupal\omnipedia_content_legacy\OmnipediaElementLegacyInterface */
+      /** @var \Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy\OmnipediaElementLegacyInterface */
       $mediaInstance = $this->legacyElementManager->createInstance('media', [
         'content' => $mediaOptions,
       ]);

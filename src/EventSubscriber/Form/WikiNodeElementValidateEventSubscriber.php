@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\core_event_dispatcher\Event\Form\FormIdAlterEvent;
 use Drupal\hook_event_dispatcher\HookEventDispatcherInterface;
-use Drupal\omnipedia_content\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
 use Drupal\omnipedia_core\Entity\Node;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -30,7 +30,7 @@ class WikiNodeElementValidateEventSubscriber implements EventSubscriberInterface
   /**
    * The OmnipediaElement plug-in manager.
    *
-   * @var \Drupal\omnipedia_content\OmnipediaElementManagerInterface
+   * @var \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface
    */
   protected $elementManager;
 
@@ -44,7 +44,7 @@ class WikiNodeElementValidateEventSubscriber implements EventSubscriberInterface
   /**
    * Event subscriber constructor; saves dependencies.
    *
-   * @param \Drupal\omnipedia_content\OmnipediaElementManagerInterface $elementManager
+   * @param \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface $elementManager
    *   The OmnipediaElement plug-in manager.
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
@@ -98,10 +98,10 @@ class WikiNodeElementValidateEventSubscriber implements EventSubscriberInterface
    * @see \Drupal\omnipedia_content\Plugin\Filter\OmnipediaElementFilter
    *   Filter plug-in that passes off element rendering to the element manager.
    *
-   * @see \Drupal\omnipedia_content\OmnipediaElementManagerInterface::convertElements()
+   * @see \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface::convertElements()
    *   Renders any elements found in the passed filter input.
    *
-   * @see \Drupal\omnipedia_content\OmnipediaElementManagerInterface::getElementFormValidationErrors()
+   * @see \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface::getElementFormValidationErrors()
    *   Returns any element errors for output in form validation.
    */
   public function validateBodyElement(

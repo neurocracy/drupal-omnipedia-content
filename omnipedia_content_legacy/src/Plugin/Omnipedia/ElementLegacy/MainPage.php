@@ -2,7 +2,7 @@
 
 namespace Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy;
 
-use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyBase;
+use Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy\OmnipediaElementLegacyBase;
 
 /**
  * Main page legacy element.

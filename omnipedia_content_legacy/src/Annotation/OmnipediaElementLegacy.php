@@ -11,7 +11,7 @@ use Drupal\Component\Annotation\Plugin;
  * corresponding OmnipediaElement plug-in and also that of the legacy tag it
  * must process.
  *
- * @see \Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManagerInterface
+ * @see \Drupal\omnipedia_content_legacy\PluginManager\OmnipediaElementLegacyManagerInterface
  *
  * @see plugin_api
  *

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\omnipedia_content_legacy;
+namespace Drupal\omnipedia_content_legacy\PluginManager;
 
 use Drupal\Core\Render\RendererInterface;
 

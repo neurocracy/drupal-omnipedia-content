@@ -5,7 +5,7 @@ namespace Drupal\omnipedia_content\EventSubscriber\Theme;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\hook_event_dispatcher\HookEventDispatcherInterface;
 use Drupal\core_event_dispatcher\Event\Theme\ThemeEvent;
-use Drupal\omnipedia_content\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -23,7 +23,7 @@ class ThemeOmnipediaElementEventSubscriber implements EventSubscriberInterface {
   /**
    * The OmnipediaElement plug-in manager.
    *
-   * @var \Drupal\omnipedia_content\OmnipediaElementManagerInterface
+   * @var \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface
    */
   protected $elementManager;
 
@@ -33,7 +33,7 @@ class ThemeOmnipediaElementEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   The Drupal module handler service.
    *
-   * @param \Drupal\omnipedia_content\OmnipediaElementManagerInterface $elementManager
+   * @param \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface $elementManager
    *   The OmnipediaElement plug-in manager.
    */
   public function __construct(

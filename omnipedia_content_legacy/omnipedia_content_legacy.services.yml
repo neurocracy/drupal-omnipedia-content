@@ -2,7 +2,7 @@ services:
 
   # The OmnipediaElementLegacy plug-in manager.
   plugin.manager.omnipedia_element_legacy:
-    class: Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManager
+    class: Drupal\omnipedia_content_legacy\PluginManager\OmnipediaElementLegacyManager
     parent: default_plugin_manager
     calls:
       -

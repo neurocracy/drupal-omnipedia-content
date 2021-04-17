@@ -3,8 +3,8 @@
 namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
 use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\omnipedia_content\OmnipediaElementBase;
-use Drupal\omnipedia_content\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementBase;
 use Drupal\omnipedia_core\Service\TimelineInterface;
 use Drupal\omnipedia_core\Service\WikiNodeRevisionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;

@@ -1,14 +1,14 @@
 <?php
 
-namespace Drupal\omnipedia_content;
+namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\omnipedia_content\OmnipediaElementInterface;
-use Drupal\omnipedia_content\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementInterface;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -22,7 +22,7 @@ abstract class OmnipediaElementBase extends PluginBase implements ContainerFacto
   /**
    * The OmnipediaElement plug-in manager.
    *
-   * @var \Drupal\omnipedia_content\OmnipediaElementManagerInterface
+   * @var \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface
    */
   protected $elementManager;
 
@@ -53,7 +53,7 @@ abstract class OmnipediaElementBase extends PluginBase implements ContainerFacto
    *   The plug-in implementation definition. PluginBase defines this as mixed,
    *   but we should always have an array so the type is specified.
    *
-   * @param \Drupal\omnipedia_content\OmnipediaElementManagerInterface $elementManager
+   * @param \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface $elementManager
    *   The OmnipediaElement plug-in manager.
    *
    * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation

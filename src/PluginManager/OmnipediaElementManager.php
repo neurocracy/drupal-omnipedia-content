@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\omnipedia_content;
+namespace Drupal\omnipedia_content\PluginManager;
 
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -11,8 +11,8 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\omnipedia_content\Annotation\OmnipediaElement as OmnipediaElementAnnotation;
-use Drupal\omnipedia_content\OmnipediaElementInterface;
-use Drupal\omnipedia_content\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -257,7 +257,7 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
         /** @var \Symfony\Component\DomCrawler\Crawler */
         $elementCrawler = new Crawler($element);
 
-        /** @var \Drupal\omnipedia_content\OmnipediaElementInterface */
+        /** @var \Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementInterface */
         $instance = $this->createInstance($pluginID, [
           'elements' => $elementCrawler,
         ]);

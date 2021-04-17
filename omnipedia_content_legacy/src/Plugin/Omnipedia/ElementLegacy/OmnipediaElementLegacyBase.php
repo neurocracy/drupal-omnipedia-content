@@ -1,13 +1,13 @@
 <?php
 
-namespace Drupal\omnipedia_content_legacy;
+namespace Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyInterface;
-use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManagerInterface;
+use Drupal\omnipedia_content_legacy\PluginManager\OmnipediaElementLegacyManagerInterface;
+use Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy\OmnipediaElementLegacyInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,7 +20,7 @@ abstract class OmnipediaElementLegacyBase extends PluginBase implements Containe
   /**
    * The OmnipediaElementLegacy plug-in manager.
    *
-   * @var \Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManagerInterface
+   * @var \Drupal\omnipedia_content_legacy\PluginManager\OmnipediaElementLegacyManagerInterface
    */
   protected $legacyElementManager;
 
@@ -44,7 +44,7 @@ abstract class OmnipediaElementLegacyBase extends PluginBase implements Containe
    *   The plug-in implementation definition. PluginBase defines this as mixed,
    *   but we should always have an array so the type is specified.
    *
-   * @param \Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManagerInterface $legacyElementManager
+   * @param \Drupal\omnipedia_content_legacy\PluginManager\OmnipediaElementLegacyManagerInterface $legacyElementManager
    *   The OmnipediaElement plug-in manager.
    *
    * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation

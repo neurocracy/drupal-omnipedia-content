@@ -2,7 +2,7 @@
 
 namespace Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy;
 
-use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyBase;
+use Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy\OmnipediaElementLegacyBase;
 
 /**
  * Infobox legacy element.
@@ -66,7 +66,7 @@ class Infobox extends OmnipediaElementLegacyBase {
         $mediaOptions['caption'] = $this->options['caption'];
       }
 
-      /** @var \Drupal\omnipedia_content_legacy\OmnipediaElementLegacyInterface */
+      /** @var \Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy\OmnipediaElementLegacyInterface */
       $mediaInstance = $this->legacyElementManager->createInstance('media', [
         'content' => $mediaOptions,
       ]);

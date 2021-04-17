@@ -3,7 +3,7 @@
 namespace Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy;
 
 use Drupal\Core\Template\Attribute;
-use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyBase;
+use Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy\OmnipediaElementLegacyBase;
 
 /**
  * Media legacy element.

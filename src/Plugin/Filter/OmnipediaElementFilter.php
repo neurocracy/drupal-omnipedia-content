@@ -5,7 +5,7 @@ namespace Drupal\omnipedia_content\Plugin\Filter;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
-use Drupal\omnipedia_content\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,7 +22,7 @@ class OmnipediaElementFilter extends FilterBase implements ContainerFactoryPlugi
   /**
    * The OmnipediaElement plug-in manager.
    *
-   * @var \Drupal\omnipedia_content\OmnipediaElementManagerInterface
+   * @var \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface
    */
   protected $elementManager;
 
@@ -39,7 +39,7 @@ class OmnipediaElementFilter extends FilterBase implements ContainerFactoryPlugi
    *   The plug-in implementation definition. PluginBase defines this as mixed,
    *   but we should always have an array so the type is set.
    *
-   * @param \Drupal\omnipedia_content\OmnipediaElementManagerInterface $elementManager
+   * @param \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface $elementManager
    *   The OmnipediaElement plug-in manager.
    */
   public function __construct(

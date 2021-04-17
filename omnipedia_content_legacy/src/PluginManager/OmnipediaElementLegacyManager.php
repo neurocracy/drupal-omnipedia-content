@@ -1,14 +1,14 @@
 <?php
 
-namespace Drupal\omnipedia_content_legacy;
+namespace Drupal\omnipedia_content_legacy\PluginManager;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\omnipedia_content_legacy\Annotation\OmnipediaElementLegacy as OmnipediaElementLegacyAnnotation;
-use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyInterface;
-use Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManagerInterface;
+use Drupal\omnipedia_content_legacy\PluginManager\OmnipediaElementLegacyManagerInterface;
+use Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy\OmnipediaElementLegacyInterface;
 use Mustache_Engine;
 use Mustache_LambdaHelper;
 use Mustache_Logger_StreamLogger;
@@ -111,7 +111,7 @@ class OmnipediaElementLegacyManager extends DefaultPluginManager implements Omni
     /** @var array */
     $variables = [];
 
-    /** @var \Drupal\omnipedia_content_legacy\OmnipediaElementLegacyManagerInterface */
+    /** @var \Drupal\omnipedia_content_legacy\PluginManager\OmnipediaElementLegacyManagerInterface */
     $manager = $this;
 
     /** @var \Drupal\Core\Render\RendererInterface */
@@ -125,7 +125,7 @@ class OmnipediaElementLegacyManager extends DefaultPluginManager implements Omni
       $variables[$id] = function(
         string $content, Mustache_LambdaHelper $helper
       ) use ($manager, $definition, $renderer) {
-        /** @var \Drupal\omnipedia_content_legacy\OmnipediaElementLegacyInterface */
+        /** @var \Drupal\omnipedia_content_legacy\Plugin\Omnipedia\ElementLegacy\OmnipediaElementLegacyInterface */
         $instance = $manager->createInstance($definition['id'], [
           'content' => $content,
         ]);

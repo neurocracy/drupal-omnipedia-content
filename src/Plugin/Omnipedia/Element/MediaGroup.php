@@ -2,7 +2,7 @@
 
 namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
-use Drupal\omnipedia_content\OmnipediaElementBase;
+use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementBase;
 
 /**
  * Media group element.
