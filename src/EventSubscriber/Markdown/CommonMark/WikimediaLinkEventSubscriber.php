@@ -4,8 +4,8 @@ namespace Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark;
 
 use Drupal\ambientimpact_markdown\AmbientImpactMarkdownEventInterface;
 use Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent;
+use Drupal\omnipedia_content\Event\Omnipedia\OmnipediaContentEventInterface;
 use Drupal\omnipedia_content\Event\Omnipedia\WikimediaLinkBuildEvent;
-use Drupal\omnipedia_content\OmnipediaContentEventInterface;
 use Drupal\omnipedia_content\Service\WikimediaLinkInterface;
 use League\CommonMark\Inline\Element\Link;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

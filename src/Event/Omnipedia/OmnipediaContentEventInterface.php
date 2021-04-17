@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\omnipedia_content;
+namespace Drupal\omnipedia_content\Event\Omnipedia;
 
 /**
  * Interface OmnipediaContentEventInterface.
