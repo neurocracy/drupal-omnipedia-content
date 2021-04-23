@@ -31,6 +31,14 @@ services:
     tags:
       - { name: 'event_subscriber' }
 
+  # Event subscriber to enable and output CommonMark abbreviations.
+  omnipedia_content.markdown_commonmark_abbreviation_event_subscriber:
+    class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\AbbreviationEventSubscriber
+    arguments:
+      - '@omnipedia.abbreviation'
+    tags:
+      - { name: 'event_subscriber' }
+
   # Event subscriber to add CommonMark indented content parser and renderer.
   omnipedia_content.markdown_commonmark_indented_content_event_subscriber:
     class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\IndentedContentEventSubscriber
