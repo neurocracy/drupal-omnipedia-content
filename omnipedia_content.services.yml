@@ -12,6 +12,10 @@ services:
           - '@renderer'
           - '@string_translation'
 
+  # The Omnipedia abbreviation service.
+  omnipedia.abbreviation:
+    class: Drupal\omnipedia_content\Service\Abbreviation
+
   # The Omnipedia Wikimedia link service.
   omnipedia.wikimedia_link:
     class: Drupal\omnipedia_content\Service\WikimediaLink
