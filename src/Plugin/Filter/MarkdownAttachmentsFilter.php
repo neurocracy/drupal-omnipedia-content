@@ -30,6 +30,12 @@ class MarkdownAttachmentsFilter extends FilterBase {
 
     foreach ([
       [
+        'selector'    => 'abbr',
+        'attachments' => [
+          'library' => ['ambientimpact_ux/component.abbr'],
+        ],
+      ],
+      [
         'selector'    => '.references',
         'attachments' => [
           'library' => ['omnipedia_content/component.reference'],
