@@ -10,6 +10,14 @@ services:
         -
           - '@renderer'
 
+  # Event subscriber to add legacy footer abbreviations to CommonMark.
+  omnipedia_content_legacy.markdown_commonmark_abbreviation_footer_event_subscriber:
+    class: Drupal\omnipedia_content_legacy\EventSubscriber\Markdown\CommonMark\AbbreviationFooterEventSubscriber
+    arguments:
+      - '@omnipedia.abbreviation'
+    tags:
+      - { name: 'event_subscriber' }
+
   # OmnipediaElementLegacy hook_theme() event subscriber.
   omnipedia_content_legacy.theme_omnipedia_element_legacy_event_subscriber:
     class: Drupal\omnipedia_content_legacy\EventSubscriber\Theme\ThemeOmnipediaElementLegacyEventSubscriber
