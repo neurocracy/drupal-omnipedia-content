@@ -62,10 +62,24 @@ class Abbreviation implements AbbreviationInterface {
       }
 
       foreach ($matches[0] as $match) {
-        $returnMatches[$match[1]] = [
+
+        /** @var integer */
+        $offset = $match[1];
+
+        // Heuristic: ignore abbreviations if they're the only text inside of
+        // parentheses, e.g '(HTML)', as this is almost always immediately after
+        // the full description has been spelled out.
+        if (
+          $offset > 0 && \mb_substr($text, $offset - 1, 1) === '(' &&
+          \mb_substr($text, $offset + \mb_strlen($abbreviation), 1) === ')'
+        ) {
+          continue;
+        }
+
+        $returnMatches[$offset] = [
           'abbreviation'  => $abbreviation,
           'description'   => $description,
-          'offset'        => $match[1],
+          'offset'        => $offset,
         ];
       }
 
