@@ -2,12 +2,22 @@
 
 namespace Drupal\omnipedia_content\Service;
 
+use Drupal\omnipedia_content\Event\Omnipedia\AbbreviationsBuildEvent;
+use Drupal\omnipedia_content\Event\Omnipedia\OmnipediaContentEventInterface;
 use Drupal\omnipedia_content\Service\AbbreviationInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * The Omnipedia abbreviation service.
  */
 class Abbreviation implements AbbreviationInterface {
+
+  /**
+   * The Symfony event dispatcher service.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
 
   /**
    * A basic regular expression to match terms with.
@@ -29,6 +39,23 @@ class Abbreviation implements AbbreviationInterface {
   protected $abbreviations = [];
 
   /**
+   * Whether the abbreviations build event has been dispatched this request.
+   *
+   * @var boolean
+   */
+  protected $abbreviationsBuildEventDispatched = false;
+
+  /**
+   * Constructs this service object; saves dependencies.
+   *
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+   *   The Symfony event dispatcher service.
+   */
+  public function __construct(EventDispatcherInterface $eventDispatcher) {
+    $this->eventDispatcher = $eventDispatcher;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function addAbbreviation(
@@ -41,7 +68,33 @@ class Abbreviation implements AbbreviationInterface {
    * {@inheritdoc}
    */
   public function getAbbreviations(): array {
+
+    // Return here if we've already dispatched the build event this request.
+    if ($this->abbreviationsBuildEventDispatched === true) {
+      return $this->abbreviations;
+    }
+
+    // Return here if there are no listeners to the build event.
+    if (!$this->eventDispatcher->hasListeners(
+      OmnipediaContentEventInterface::ABBREVIATIONS_BUILD
+    )) {
+      return $this->abbreviations;
+    }
+
+    /** @var \Drupal\omnipedia_content\Event\Omnipedia\AbbreviationsBuildEvent */
+    $buildEvent = new AbbreviationsBuildEvent($this->abbreviations);
+
+    $this->eventDispatcher->dispatch(
+      OmnipediaContentEventInterface::ABBREVIATIONS_BUILD,
+      $buildEvent
+    );
+
+    $this->abbreviations = $buildEvent->getAbbreviations();
+
+    $this->abbreviationsBuildEventDispatched = true;
+
     return $this->abbreviations;
+
   }
 
   /**
@@ -52,7 +105,7 @@ class Abbreviation implements AbbreviationInterface {
     /** @var array[] */
     $returnMatches = [];
 
-    foreach ($this->abbreviations as $abbreviation => $description) {
+    foreach ($this->getAbbreviations() as $abbreviation => $description) {
 
       if (!\preg_match_all(
         \str_replace('%ABBR%', \preg_quote($abbreviation), self::REGEX),
