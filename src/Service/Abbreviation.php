@@ -23,13 +23,13 @@ class Abbreviation implements AbbreviationInterface {
    * A basic regular expression to match terms with.
    *
    * This attempts to match the term only when it's surrounded by non-word
-   * characters or white-space, and allowing for variations in suffixes such as
-   * 's', 'es', and 'ing'.
+   * characters, white-space, is at the start and/or end of a string, and
+   * allowing for variations in suffixes such as 's', 'es', and 'ing'.
    *
    * Note that '%ABBR%' in this pattern is replaced with the actual abbreviation
    * before matching.
    */
-  protected const REGEX = '/(?<=\s|\W)%ABBR%(?=s|es|ing|\s|\W)/';
+  protected const REGEX = '/(?<=^|\s|\W)%ABBR%(?=s|es|ing|\s|\W|$)/';
 
   /**
    * Abbreviations for the current request.
