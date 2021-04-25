@@ -90,6 +90,30 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
         continue;
       }
 
+
+      /** @var boolean */
+      $isInAbbreviation = false;
+
+      /** @var \League\CommonMark\Node\Node|null */
+      $testNode = $originalNode;
+
+      // Loop through descendents, stopping when this returns null because we've
+      // hit the root element.
+      while ($testNode = $testNode->parent()) {
+        if (!($testNode instanceof Abbreviation)) {
+          continue;
+        }
+
+        $isInAbbreviation = true;
+
+        break;
+      }
+
+      // Skip this text node if it's already inside of an Abbreviation element.
+      if ($isInAbbreviation === true) {
+        continue;
+      }
+
       /** @var string */
       $originalContent = $originalNode->getContent();
 
