@@ -21,7 +21,7 @@ class AbbreviationFooterParser implements BlockParserInterface {
    *
    * @see https://michelf.ca/projects/php-markdown/extra/#abbr
    */
-  protected const REGEX = '/^\*\[([^\]]+)\]:\s*(\w+[\s\w]+?)\s*$/';
+  protected const REGEX = '/^\*\[([^\]]+)\]:\s*(.+?)\s*$/';
 
   /**
    * The Omnipedia abbreviation service.
