@@ -114,8 +114,11 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
 
     foreach ($matches as $match) {
 
-      // Attempt to save any text after the abbreviation.
-      $trailing = \mb_substr(
+      // Attempt to save any text after the abbreviation. Note the use of
+      // \mb_strcut() rather than \mb_substr(), as the offsets are in bytes and
+      // not characters. If a string contains multi-byte characters, using
+      // \mb_substr() would cause unexpected results.
+      $trailing = \mb_strcut(
         $content,
         $match['offset'] + \mb_strlen($match['abbreviation'])
       );
