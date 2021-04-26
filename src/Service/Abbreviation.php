@@ -29,7 +29,7 @@ class Abbreviation implements AbbreviationInterface {
    * Note that '%ABBR%' in this pattern is replaced with the actual abbreviation
    * before matching.
    */
-  protected const REGEX = '/(?<=^|\s|\W)%ABBR%(?=s|es|ing|\s|\W|$)/';
+  protected const REGEX = '/(?<=^|\s|\W)%ABBR%(?:s|es|ing)?(?=\s|\W|$)/';
 
   /**
    * Abbreviations for the current request.
