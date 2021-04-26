@@ -65,10 +65,100 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * DocumentParsedEvent callback.
+   * Alter a provided Text node if it contains one or more abbreviations.
    *
    * This finds CommonMark Text nodes containing available abbreviations, and
    * splits them into Text and Abbreviation elements as needed.
+   *
+   * @param \League\CommonMark\Inline\Element\Text $textNode
+   *   The CommonMark Text node to scan for abbreviations.
+   */
+  protected function alterTextNode(Text $textNode): void {
+
+    /** @var boolean */
+    $isInAbbreviation = false;
+
+    /** @var \League\CommonMark\Node\Node|null */
+    $testNode = $textNode;
+
+    // Loop through descendents, stopping when this returns null because we've
+    // hit the root element.
+    while ($testNode = $testNode->parent()) {
+      if (!($testNode instanceof Abbreviation)) {
+        continue;
+      }
+
+      $isInAbbreviation = true;
+
+      break;
+    }
+
+    // Skip this text node if it's already inside of an Abbreviation element.
+    if ($isInAbbreviation === true) {
+      return;
+    }
+
+    /** @var string */
+    $content = $textNode->getContent();
+
+    // Get all matches and reverse their order so that we start from the end of
+    // the string content, working towards the start.
+    $matches = \array_reverse($this->abbreviation->match($content));
+
+    if (empty($matches)) {
+      return;
+    }
+
+    /** @var \League\CommonMark\Node\Node[] */
+    $newNodes = [];
+
+    foreach ($matches as $match) {
+
+      // Attempt to save any text after the abbreviation.
+      $trailing = \mb_substr(
+        $content,
+        $match['offset'] + \mb_strlen($match['abbreviation'])
+      );
+
+      // Save any found text after the abbreviation as a Text node.
+      if (\mb_strlen($trailing) > 0) {
+        $newNodes[] = new Text($trailing);
+      }
+
+      // Now for the abbreviation.
+      $newNodes[] = new Abbreviation(
+        $match['abbreviation'], $match['description']
+      );
+
+      // Remove the abbreviation and trailing content from the original text.
+      $content = \mb_substr($content, 0,
+        \mb_strlen($content) - \mb_strlen($trailing) -
+          \mb_strlen($match['abbreviation'])
+      );
+
+    }
+
+    // If there's any text content remaining after the above, insert it as a
+    // Text node.
+    if (\mb_strlen($content) > 0) {
+      $newNodes[] = new Text($content);
+    }
+
+    // Insert each new node directly after the original node. Since we're
+    // working with the new nodes in reverse order, we can just keep inserting
+    // directly after the original node and they'll end up in the correct
+    // order.
+    foreach ($newNodes as $newNode) {
+      $textNode->insertAfter($newNode);
+    }
+
+    // Finally, remove the original node.
+    $textNode->detach();
+
+  }
+
+  /**
+   * DocumentParsedEvent callback.
    *
    * @param \Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent $event
    *   The event object.
@@ -84,93 +174,11 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
     while ($event = $walker->next()) {
 
       /** @var \League\CommonMark\Node\Node */
-      $originalNode = $event->getNode();
+      $node = $event->getNode();
 
-      if (!($originalNode instanceof Text) || !$event->isEntering()) {
-        continue;
+      if ($node instanceof Text && $event->isEntering()) {
+        $this->alterTextNode($node);
       }
-
-
-      /** @var boolean */
-      $isInAbbreviation = false;
-
-      /** @var \League\CommonMark\Node\Node|null */
-      $testNode = $originalNode;
-
-      // Loop through descendents, stopping when this returns null because we've
-      // hit the root element.
-      while ($testNode = $testNode->parent()) {
-        if (!($testNode instanceof Abbreviation)) {
-          continue;
-        }
-
-        $isInAbbreviation = true;
-
-        break;
-      }
-
-      // Skip this text node if it's already inside of an Abbreviation element.
-      if ($isInAbbreviation === true) {
-        continue;
-      }
-
-      /** @var string */
-      $originalContent = $originalNode->getContent();
-
-      // Get all matches and reverse their order so that we start from the end
-      // of the string content, working towards the start.
-      $matches = \array_reverse($this->abbreviation->match($originalContent));
-
-      if (empty($matches)) {
-        continue;
-      }
-
-      /** @var \League\CommonMark\Node\Node[] */
-      $newNodes = [];
-
-      foreach ($matches as $match) {
-
-        // Attempt to save any text after the abbreviation.
-        $trailing = \mb_substr(
-          $originalContent,
-          $match['offset'] + \mb_strlen($match['abbreviation'])
-        );
-
-        // Save any found text after the abbreviation as a Text node.
-        if (\mb_strlen($trailing) > 0) {
-          $newNodes[] = new Text($trailing);
-        }
-
-        // Now for the abbreviation.
-        $newNodes[] = new Abbreviation(
-          $match['abbreviation'], $match['description']
-        );
-
-        // Remove the abbreviation and trailing content from the original text.
-        $originalContent = \mb_substr(
-          $originalContent, 0,
-          \mb_strlen($originalContent) - \mb_strlen($trailing) -
-            \mb_strlen($match['abbreviation'])
-        );
-
-      }
-
-      // If there's any text content remaining after the above, insert it as a
-      // Text node.
-      if (\mb_strlen($originalContent) > 0) {
-        $newNodes[] = new Text($originalContent);
-      }
-
-      // Insert each new node directly after the original node. Since we're
-      // working with the new nodes in reverse order, we can just keep inserting
-      // directly after the original node and they'll end up in the correct
-      // order.
-      foreach ($newNodes as $newNode) {
-        $originalNode->insertAfter($newNode);
-      }
-
-      // Finally, remove the original node.
-      $originalNode->detach();
 
     }
 
