@@ -161,6 +161,34 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
+   * Alter a provided Abbreviation node.
+   *
+   * If the provided Abbreviation has a description of "none" (case
+   * insensitive), it will be replaced with a Text node containing the
+   * abbreviated term. This allows content editors to disable abbreviation
+   * matching on case-by-case basis.
+   *
+   * @param \Eightfold\CommonMarkAbbreviations\Abbreviation $abbreviation
+   *   The Abbreviation node to potentially alter.
+   */
+  protected function alterAbbreviationNode(
+    Abbreviation $abbreviation
+  ): void {
+
+    // Skip all abbreviations that don't have a description of 'none'.
+    if (\mb_strtolower($abbreviation->getTitle()) !== 'none') {
+      return;
+    }
+
+    $textNode = new Text($abbreviation->getAbbreviation());
+
+    $abbreviation->insertAfter($textNode);
+
+    $abbreviation->detach();
+
+  }
+
+  /**
    * DocumentParsedEvent callback.
    *
    * @param \Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent $event
@@ -181,6 +209,25 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
 
       if ($node instanceof Text && $event->isEntering()) {
         $this->alterTextNode($node);
+      }
+
+    }
+
+    // @todo Determine if the below can be merged into the above loop for
+    //   potentially better performance. Currently, doing so results in the
+    //   removal of all non-inline abbreviations, i.e. those that would be
+    //   matched via $this->alterTextNode().
+
+    /** @var \League\CommonMark\Node\NodeWalker */
+    $walker = $document->walker();
+
+    while ($event = $walker->next()) {
+
+      /** @var \League\CommonMark\Node\Node */
+      $node = $event->getNode();
+
+      if ($node instanceof Abbreviation && $event->isEntering()) {
+        $this->alterAbbreviationNode($node);
       }
 
     }
