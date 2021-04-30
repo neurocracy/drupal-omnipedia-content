@@ -9,6 +9,7 @@ use Drupal\omnipedia_content\Service\AbbreviationInterface;
 use Eightfold\CommonMarkAbbreviations\Abbreviation;
 use Eightfold\CommonMarkAbbreviations\AbbreviationExtension;
 use League\CommonMark\Inline\Element\Text;
+use League\CommonMark\Node\Node;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -158,15 +159,204 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
     // Finally, remove the original node.
     $textNode->detach();
 
+    // Run the alter over all the abbreviations we just added, as they won't
+    // get picked up by the CommonMark node walker loop.
+    foreach ($newNodes as $newNode) {
+
+      if (!($newNode instanceof Abbreviation)) {
+        continue;
+      }
+
+      $this->alterAbbreviationNode($newNode);
+
+    }
+
+  }
+
+  /**
+   * Determine if an abbreviation is marked as 'none'.
+   *
+   * @param \Eightfold\CommonMarkAbbreviations\Abbreviation $abbreviation
+   *   The Abbreviation node to check.
+   *
+   * @return boolean
+   */
+  protected function isAbbreviationNone(
+    Abbreviation $abbreviation
+  ): bool {
+    return \mb_strtolower($abbreviation->getTitle()) === 'none';
+  }
+
+  /**
+   * Determine if a provided CommonMark Node is an open parenthesis.
+   *
+   * @param \League\CommonMark\Node\Node $node
+   *   The node object to check.
+   *
+   * @return boolean
+   *   True if the last text content character is '(', false otherwise.
+   */
+  protected function isOpenParenthesis(Node $node): bool {
+    return \method_exists($node, 'getContent') &&
+      \mb_substr($node->getContent(), -1) === '(';
+  }
+
+  /**
+   * Determine if a provided CommonMark Node is a close parenthesis.
+   *
+   * @param \League\CommonMark\Node\Node $node
+   *   The node object to check.
+   *
+   * @return boolean
+   *   True if the first text content character is ')', false otherwise.
+   */
+  protected function isCloseParenthesis(Node $node): bool {
+    return \method_exists($node, 'getContent') &&
+      \mb_substr($node->getContent(), 0, 1) === ')';
+  }
+
+  /**
+   * Find an adjacent Text node given a starting node.
+   *
+   * This searches for an adjacent Text node using the following logic and
+   * returning the first one that matches:
+   *
+   * 1. Checks if the immediate sibling in $direction is a Text node.
+   *
+   * 2. Checks if the immediate sibling in $direction has children, and checks
+   *    down that tree for a first or last child (depending on $direction) for a
+   *    Text node.
+   *
+   * 3. Repeats 2. for each ancestor's sibling, starting with the parent and
+   *    going up the tree one by one.
+   *
+   * @param \League\CommonMark\Node\Node $startNode
+   *   The Node to check relative to.
+   *
+   * @param string $direction
+   *   Must be one of 'next' or 'previous'.
+   *
+   * @return \League\CommonMark\Inline\Element\Text|null
+   *   A Text node if it can be found, or null if one can't be found.
+   *
+   * @throws \InvalidArgumentException
+   *   If $direction is not one of the expected values.
+   */
+  protected function findAjacentTextNode(
+    Node $startNode, string $direction
+  ): ?Text {
+
+    if (!\in_array($direction, ['next', 'previous'])) {
+      throw new \InvalidArgumentException(
+        '$direction must be one of \'next\' or \'previous\'; was: \'' . $direction . '\''
+      );
+    }
+
+    // The child method that we have to use on a node depends on the $direction
+    // that we're told to search in.
+    if ($direction === 'next') {
+      $childMethod = 'firstChild';
+    } else {
+      $childMethod = 'lastChild';
+    }
+
+    // Check if there's an immediate sibling Text node and return that if found.
+
+    /** @var \League\CommonMark\Node\Node|null */
+    $sibling = $startNode->$direction();
+
+    if (\is_object($sibling) && $sibling instanceof Text) {
+      return $sibling;
+    }
+
+    // If there's no sibling Text node, go up the tree and check each ancestor
+    // if it has an adjacent node in the requested direction.
+
+    /** @var \League\CommonMark\Node\Node|null */
+    $ancestor = $startNode;
+
+    // Note that this must be a do...while loop so that we also check
+    // $startNode's sibling tree.
+    do {
+
+      /** @var \League\CommonMark\Node\Node|null */
+      $ancestorSibling = $ancestor->$direction();
+
+      // Skip to the next ancestor if this one doesn't have a sibling in the
+      // specified direction.
+      if (!\is_object($ancestorSibling)) {
+        continue;
+      }
+
+      // If this ancestor's sibling is a Text node, return it.
+      if ($ancestorSibling instanceof Text) {
+        return $ancestorSibling;
+      }
+
+      // If the ancestor sibling has children, go down that tree to try and find
+      // a Text node.
+
+      /** @var \League\CommonMark\Node\Node|null */
+      $child = $ancestorSibling;
+
+      while ($child = $child->$childMethod()) {
+
+        if ($child instanceof Text) {
+          return $child;
+        }
+
+      }
+
+    } while ($ancestor = $ancestor->parent());
+
+    return null;
+
+  }
+
+  /**
+   * Determine if an abbreviation is enclosed in parentheses.
+   *
+   * This allows us to ignore abbreviations if they're the only text inside of
+   * parentheses, e.g '(HTML)', as this is almost always immediately after the
+   * full description has been spelled out.
+   *
+   * While a crude version of this could simply check within a text node if the
+   * preceding and following characters are open and close parentheses, this
+   * would not catch instances where the parentheses are in different but
+   * adjacent text node.
+   *
+   * @param \Eightfold\CommonMarkAbbreviations\Abbreviation $abbreviation
+   *   The Abbreviation node to check.
+   *
+   * @return boolean
+   */
+  protected function isAbbreviationParenthesized(
+    Abbreviation $abbreviation
+  ): bool {
+
+    /** @var \League\CommonMark\Inline\Element\Text|null */
+    $previousTextNode = $this->findAjacentTextNode($abbreviation, 'previous');
+
+    /** @var \League\CommonMark\Inline\Element\Text|null */
+    $nextTextNode = $this->findAjacentTextNode($abbreviation, 'next');
+
+    if (!\is_object($previousTextNode) || !\is_object($nextTextNode)) {
+      return false;
+    }
+
+    return
+      $this->isOpenParenthesis($previousTextNode) &&
+      $this->isCloseParenthesis($nextTextNode);
+
   }
 
   /**
    * Alter a provided Abbreviation node.
    *
    * If the provided Abbreviation has a description of "none" (case
-   * insensitive), it will be replaced with a Text node containing the
-   * abbreviated term. This allows content editors to disable abbreviation
-   * matching on case-by-case basis.
+   * insensitive) or is the only text inside of parentheses, it will be
+   * replaced with a Text node containing the abbreviated term. This allows
+   * content editors to disable abbreviation matching on case-by-case basis.
    *
    * @param \Eightfold\CommonMarkAbbreviations\Abbreviation $abbreviation
    *   The Abbreviation node to potentially alter.
@@ -175,8 +365,10 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
     Abbreviation $abbreviation
   ): void {
 
-    // Skip all abbreviations that don't have a description of 'none'.
-    if (\mb_strtolower($abbreviation->getTitle()) !== 'none') {
+    if (
+      !$this->isAbbreviationNone($abbreviation) &&
+      !$this->isAbbreviationParenthesized($abbreviation)
+    ) {
       return;
     }
 
