@@ -8,6 +8,7 @@ use Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent;
 use Drupal\omnipedia_content\Service\AbbreviationInterface;
 use Eightfold\CommonMarkAbbreviations\Abbreviation;
 use Eightfold\CommonMarkAbbreviations\AbbreviationExtension;
+use League\CommonMark\Inline\Element\Link;
 use League\CommonMark\Inline\Element\Text;
 use League\CommonMark\Node\Node;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -175,6 +176,9 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
 
   /**
    * Determine if an abbreviation is marked as 'none'.
+   *
+   * This allows content editors to disable abbreviation matching on a
+   * case-by-case basis.
    *
    * @param \Eightfold\CommonMarkAbbreviations\Abbreviation $abbreviation
    *   The Abbreviation node to check.
@@ -351,15 +355,56 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
+   * Determine if an abbreviation is within a Link node.
+   *
+   * We rarely have abbreviations within a link, and if it is within a link,
+   * it's likely an attached data Wikimedia link that explains the term. In any
+   * other case, it'll be an internal link that likely also explains the term.
+   * Additionally, having an abbreviation in a link isn't always visually clear,
+   * and could be missed by users.
+   *
+   * @param \Eightfold\CommonMarkAbbreviations\Abbreviation $abbreviation
+   *   The Abbreviation node to check.
+   *
+   * @return boolean
+   *   True if one of $abbreviation's ancestors is a Link node or false
+   *   otherwise.
+   */
+  protected function isAbbreviationInLink(Abbreviation $abbreviation): bool {
+
+    /** @var \League\CommonMark\Node\Node|null */
+    $ancestor = $abbreviation;
+
+    while ($ancestor = $ancestor->parent()) {
+      if ($ancestor instanceof Link) {
+        return true;
+      }
+    }
+
+    return false;
+
+  }
+
+  /**
    * Alter a provided Abbreviation node.
    *
-   * If the provided Abbreviation has a description of "none" (case
-   * insensitive) or is the only text inside of parentheses, it will be
-   * replaced with a Text node containing the abbreviated term. This allows
-   * content editors to disable abbreviation matching on case-by-case basis.
+   * This replaces Abbreviation nodes with Text nodes if they match one of the
+   * following:
+   *
+   * - If the Abbreviation has a description of "none" (case insensitive).
+   *
+   * - If the Abbreviation is the only text inside of parentheses.
+   *
+   * - If the Abbreviation is within a link.
    *
    * @param \Eightfold\CommonMarkAbbreviations\Abbreviation $abbreviation
    *   The Abbreviation node to potentially alter.
+   *
+   * @see $this->isAbbreviationNone()
+   *
+   * @see $this->isAbbreviationParenthesized()
+   *
+   * @see $this->isAbbreviationInLink()
    */
   protected function alterAbbreviationNode(
     Abbreviation $abbreviation
@@ -367,7 +412,8 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
 
     if (
       !$this->isAbbreviationNone($abbreviation) &&
-      !$this->isAbbreviationParenthesized($abbreviation)
+      !$this->isAbbreviationParenthesized($abbreviation) &&
+      !$this->isAbbreviationInLink($abbreviation)
     ) {
       return;
     }
