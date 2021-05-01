@@ -120,7 +120,15 @@ class Abbreviation implements AbbreviationInterface {
         $offset = $match[1];
 
         $returnMatches[$offset] = [
-          'abbreviation'  => $abbreviation,
+          // Important: this must be $match[0] and not $abbreviation, as the
+          // former will include any stemming/plural/etc. If $abbreviation were
+          // to be used, abbreviations with stemming would not be correctly
+          // identified as being in parentheses.
+          //
+          // @todo Can we include both and let the CommonMark event subscriber
+          //   mark up abbreviations using the non-stemmed version while testing
+          //   for parentheses using the stemmed version?
+          'abbreviation'  => $match[0],
           'description'   => $description,
           'offset'        => $offset,
         ];
