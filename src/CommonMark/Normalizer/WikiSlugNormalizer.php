@@ -25,6 +25,28 @@ class WikiSlugNormalizer implements TextNormalizerInterface {
    * {@inheritdoc}
    */
   public function normalize(string $text, $context = null): string {
+
+    // If $context is provided and has a getStringContent() method that returns
+    // a non-empty() value, replace $text with that return value. This allows us
+    // to include the plain string contents of any AbstractStringContainer, such
+    // as Abbreviation elements. By default, the CommonMark
+    // HeadingPermalinkProcessor only includes Text and Code element content.
+    //
+    // @see \League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkProcessor::getChildText()
+    //
+    // @see https://github.com/thephpleague/commonmark/issues/615
+    //   Issue opened about this.
+    //
+    // @todo Test and remove this once we start using CommonMark 2.0, as
+    //   HeadingPermalinkProcessor::getChildText() will be removed then.
+    if (
+      \is_object($context) &&
+      \method_exists($context, 'getStringContent') &&
+      !empty($context->getStringContent())
+    ) {
+      $text = $context->getStringContent();
+    }
+
     /** @var string */
     $separator = '_';
 
