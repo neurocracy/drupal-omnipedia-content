@@ -131,9 +131,9 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
       }
 
       // Now for the abbreviation.
-      $newNodes[] = new Abbreviation(
-        $match['abbreviation'], $match['description']
-      );
+      $newNodes[] = new Abbreviation($match['abbreviation'], [
+        'attributes' => ['title' => $match['description']]
+      ]);
 
       // Remove the abbreviation and trailing content from the original text.
       $content = \mb_substr($content, 0,
@@ -188,7 +188,9 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
   protected function isAbbreviationNone(
     Abbreviation $abbreviation
   ): bool {
-    return \mb_strtolower($abbreviation->getTitle()) === 'none';
+    return \mb_strtolower(
+      $abbreviation->getData('attributes', ['title' => ''])['title']
+    ) === 'none';
   }
 
   /**
@@ -418,7 +420,7 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $textNode = new Text($abbreviation->getAbbreviation());
+    $textNode = new Text($abbreviation->getContent());
 
     $abbreviation->insertAfter($textNode);
 

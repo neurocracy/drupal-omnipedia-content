@@ -17,7 +17,7 @@
     }
   },
   "require": {
-    "8fold/commonmark-abbreviations": "dev-ambientimpact-dev as ^1.0",
+    "8fold/commonmark-abbreviations": "dev-abstract-string-container as ^1.0",
     "drupal/hook_event_dispatcher": "^2.0",
     "drupal/markdown": "^2.0",
     "league/commonmark": "^1.5",
