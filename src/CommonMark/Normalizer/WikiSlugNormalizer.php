@@ -12,6 +12,8 @@ use League\CommonMark\Normalizer\TextNormalizerInterface;
  *
  * - No longer lowercased; will use capitalization as authored.
  *
+ * - Now preserves dashes (-).
+ *
  * - Switched to underscores as white-space replacement separators, from dashes.
  *
  * @see \League\CommonMark\Normalizer\SlugNormalizer
@@ -33,10 +35,11 @@ class WikiSlugNormalizer implements TextNormalizerInterface {
     // Try to replace white-space with the separator.
     $slug = \preg_replace('/\s+/u', $separator, $slug) ?? $slug;
 
-    // Try removing characters other than letters, numbers, marks, and the
-    // separator.
+    // Try removing characters other than letters, numbers, marks, dashes, and
+    // the separator.
     $slug = \preg_replace(
-      '/[^\p{L}\p{Nd}\p{Nl}\p{M}' . $separator . ']+/u', '', $slug
+      '/[^\p{L}\p{Nd}\p{Nl}\p{M}\-' . \preg_quote($separator) . ']+/u',
+      '', $slug
     ) ?? $slug;
 
     return $slug;
