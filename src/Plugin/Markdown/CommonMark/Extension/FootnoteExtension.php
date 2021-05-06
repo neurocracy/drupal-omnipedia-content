@@ -9,6 +9,7 @@ use League\CommonMark\Block\Element\Heading;
 use League\CommonMark\EnvironmentInterface;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\Footnote\FootnoteExtension as CommonMarkFootnoteExtension;
+use League\CommonMark\Extension\Footnote\Node\Footnote;
 use League\CommonMark\Extension\Footnote\Node\FootnoteContainer;
 use League\CommonMark\Extension\Footnote\Node\FootnoteRef;
 use League\CommonMark\Inline\Element\Text;
@@ -119,6 +120,47 @@ class FootnoteExtension extends MarkdownFootnoteExtension implements SettingsInt
         static::alterFootnoteContainer($document, $node);
       }
     }
+
+    /** @var \League\CommonMark\Node\NodeWalker */
+    $walker = $document->walker();
+
+    // This needs to be a separate loop from the above to avoid messing up the
+    // above callbacks.
+    while ($event = $walker->next()) {
+
+      /** @var \League\CommonMark\Node\Node */
+      $node = $event->getNode();
+
+      if ($node instanceof Footnote && $event->isEntering()) {
+        static::removeUnusedFootnotes($node);
+      }
+
+    }
+
+  }
+
+  /**
+   * Remove footnotes if they're not used in the document.
+   *
+   * When a footnote is defined but unused in the document, it seems to be left
+   * as a list item outside of the footnotes container. This detaches the
+   * provided Footnote element if none of its ancestors is a FootnoteContainer.
+   *
+   * @param \League\CommonMark\Extension\Footnote\Node\Footnote $footnote
+   */
+  protected static function removeUnusedFootnotes(Footnote $footnote): void {
+
+    /** @var \League\CommonMark\Node\Node */
+    $parent = $footnote;
+
+    while ($parent = $parent->parent()) {
+      if ($parent instanceof FootnoteContainer) {
+        return;
+      }
+    }
+
+    $footnote->detach();
+
   }
 
   /**
