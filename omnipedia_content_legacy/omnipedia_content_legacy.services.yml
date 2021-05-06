@@ -10,6 +10,9 @@ services:
         -
           - '@renderer'
 
+  omnipedia_content_legacy.markdown_preparer:
+    class: Drupal\omnipedia_content_legacy\Service\MarkdownPreparer
+
   # Event subscriber to add legacy footer abbreviations to CommonMark.
   omnipedia_content_legacy.markdown_commonmark_abbreviation_footer_event_subscriber:
     class: Drupal\omnipedia_content_legacy\EventSubscriber\Markdown\CommonMark\AbbreviationFooterEventSubscriber
