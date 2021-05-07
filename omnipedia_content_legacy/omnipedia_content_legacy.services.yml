@@ -10,6 +10,12 @@ services:
         -
           - '@renderer'
 
+  omnipedia_content_legacy.freelinking_to_markdown:
+    class: Drupal\omnipedia_content_legacy\Service\FreelinkingToMarkdown
+    arguments:
+      - '@messenger'
+      - '@string_translation'
+
   omnipedia_content_legacy.markdown_preparer:
     class: Drupal\omnipedia_content_legacy\Service\MarkdownPreparer
 
