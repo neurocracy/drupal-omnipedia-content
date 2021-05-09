@@ -23,6 +23,8 @@
 #}
 <infobox type="{{ type }}" name="{{ name }}">
 {% for item in items %}
-  <item label="{{ item.label }}">{{ item.value }}</item>
+  <item label="{{ item.label }}">
+{{ item.value }}{# No indenting to prevent Markdown issues. #}
+  </item>
 {% endfor %}
 </infobox>
