@@ -32,7 +32,7 @@ class MustacheToHtmlFilter extends FilterBase implements ContainerFactoryPluginI
    * @param array $configuration
    *   A configuration array containing information about the plug-in instance.
    *
-   * @param string $pluginID
+   * @param string $pluginId
    *   The plugin_id for the plug-in instance.
    *
    * @param array $pluginDefinition
@@ -43,10 +43,10 @@ class MustacheToHtmlFilter extends FilterBase implements ContainerFactoryPluginI
    *   The OmnipediaElementLegacy plug-in manager.
    */
   public function __construct(
-    array $configuration, string $pluginID, array $pluginDefinition,
+    array $configuration, string $pluginId, array $pluginDefinition,
     OmnipediaElementLegacyManagerInterface $elementLegacyManager
   ) {
-    parent::__construct($configuration, $pluginID, $pluginDefinition);
+    parent::__construct($configuration, $pluginId, $pluginDefinition);
 
     $this->elementLegacyManager = $elementLegacyManager;
   }
@@ -56,10 +56,10 @@ class MustacheToHtmlFilter extends FilterBase implements ContainerFactoryPluginI
    */
   public static function create(
     ContainerInterface $container,
-    array $configuration, $pluginID, $pluginDefinition
+    array $configuration, $pluginId, $pluginDefinition
   ) {
     return new static(
-      $configuration, $pluginID, $pluginDefinition,
+      $configuration, $pluginId, $pluginDefinition,
       $container->get('plugin.manager.omnipedia_element_legacy')
     );
   }

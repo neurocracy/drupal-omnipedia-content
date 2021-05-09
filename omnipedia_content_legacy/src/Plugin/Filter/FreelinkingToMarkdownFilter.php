@@ -35,7 +35,7 @@ class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactory
    * @param array $configuration
    *   A configuration array containing information about the plug-in instance.
    *
-   * @param string $pluginID
+   * @param string $pluginId
    *   The plugin_id for the plug-in instance.
    *
    * @param array $pluginDefinition
@@ -46,10 +46,10 @@ class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactory
    *   The Omnipedia legacy Freelinking links to Markdown converter service.
    */
   public function __construct(
-    array $configuration, string $pluginID, array $pluginDefinition,
+    array $configuration, string $pluginId, array $pluginDefinition,
     FreelinkingToMarkdown $freelinkingToMarkdown
   ) {
-    parent::__construct($configuration, $pluginID, $pluginDefinition);
+    parent::__construct($configuration, $pluginId, $pluginDefinition);
 
     $this->freelinkingToMarkdown = $freelinkingToMarkdown;
   }
@@ -59,10 +59,10 @@ class FreelinkingToMarkdownFilter extends FilterBase implements ContainerFactory
    */
   public static function create(
     ContainerInterface $container,
-    array $configuration, $pluginID, $pluginDefinition
+    array $configuration, $pluginId, $pluginDefinition
   ) {
     return new static(
-      $configuration, $pluginID, $pluginDefinition,
+      $configuration, $pluginId, $pluginDefinition,
       $container->get('omnipedia_content_legacy.freelinking_to_markdown')
     );
   }
