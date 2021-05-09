@@ -27,7 +27,7 @@ class MustacheToHtmlFilter extends FilterBase implements ContainerFactoryPluginI
   protected $elementLegacyManager;
 
   /**
-   * Constructs this filter object.
+   * Constructs this filter object; saves dependencies.
    *
    * @param array $configuration
    *   A configuration array containing information about the plug-in instance.
@@ -48,7 +48,6 @@ class MustacheToHtmlFilter extends FilterBase implements ContainerFactoryPluginI
   ) {
     parent::__construct($configuration, $pluginID, $pluginDefinition);
 
-    // Save dependencies.
     $this->elementLegacyManager = $elementLegacyManager;
   }
 
