@@ -39,6 +39,9 @@ class MarkdownPreparerFilter extends FilterBase implements ContainerFactoryPlugi
    * @param array $pluginDefinition
    *   The plug-in implementation definition. PluginBase defines this as mixed,
    *   but we should always have an array so the type is set.
+   *
+   * @param \Drupal\omnipedia_content_legacy\Service\MarkdownPreparer $markdownPreparer
+   *   The Omnipedia legacy Markdown preparer service.
    */
   public function __construct(
     array $configuration, string $pluginId, array $pluginDefinition,
