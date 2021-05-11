@@ -10,14 +10,8 @@
       "role": "Developer"
     }
   ],
-  "repositories": {
-    "8fold/commonmark-abbreviations": {
-      "type": "vcs",
-      "url":  "https://github.com/Ambient-Impact/commonmark-abbreviations"
-    }
-  },
   "require": {
-    "8fold/commonmark-abbreviations": "dev-abstract-string-container as ^1.0",
+    "8fold/commonmark-abbreviations": "^1.2",
     "drupal/hook_event_dispatcher": "^2.0",
     "drupal/markdown": "^2.0",
     "league/commonmark": "^1.6.1",
