@@ -1,5 +1,34 @@
 <?php
 
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_help().
+ *
+ * Displays a help message when adding new local media detailing our naming
+ * conventions. Note that is not displayed for remote video, as the title of
+ * that is pulled from the remote video title, not an uploaded file.
+ */
+function omnipedia_content_help($routeName, RouteMatchInterface $routeMatch) {
+  switch ($routeName) {
+    case 'entity.media.add_form':
+
+      /** @var string */
+      $mediaTypeId = $routeMatch->getParameter('media_type')->id();
+
+      if ($mediaTypeId === 'remote_video') {
+        return;
+      }
+
+      return '<p>' . \t(
+        'Local media names should be descriptive, meaningful, use title case, lower case file extensions, and avoid unnecessary numbers or versioning (as Drupal handles that for you). For example, "<code>Toronto_Ontario_waterfront.jpg</code>" is preferable over "<code>TOR73454.JPG</code>". This allows media names to be consistent and long-lived and thus easy to reference in wiki pages. Additionally, this mimics <a href=":wikipediaFileNames" target="_blank">the Wikipedia naming conventions</a> for users who notice the detail.',
+        [':wikipediaFileNames' => Url::fromUri('https://en.wikipedia.org/wiki/Wikipedia:File_names')->toString()]
+      ) . '</p>';
+
+  }
+}
+
 /**
  * Implements hook_markdown_extension_info_alter().
  *
