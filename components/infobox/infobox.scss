@@ -57,9 +57,9 @@
     @include use-grid {
       display: grid;
 
-      grid-column-gap:        $omnipedia-infobox-inner-spacing * 4;
-      grid-row-gap:           $omnipedia-infobox-inner-spacing * 2;
-      grid-template-columns:  1fr 2fr;
+      grid-gap: $omnipedia-infobox-inner-spacing;
+
+      grid-template-columns: 1fr 2fr;
 
       &-item-title {
         * + & {
