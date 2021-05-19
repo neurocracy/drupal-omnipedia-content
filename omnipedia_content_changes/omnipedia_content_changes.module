@@ -23,7 +23,7 @@ function omnipedia_content_changes_help(
       'description' => [
         '#type'   => 'html_tag',
         '#tag'    => 'p',
-        '#value'  => \t('This displays additions, removals, and changes to the current page compared to the previous version, using the following indicators:'),
+        '#value'  => \t('This displays additions, deletions, and changes to the current page compared to the previous version, using the following indicators:'),
         '#attributes'   => ['class' => [$baseClass . '__description']],
       ],
 
@@ -47,7 +47,7 @@ function omnipedia_content_changes_help(
           'removed' => [
             '#type'   => 'html_tag',
             '#tag'    => 'del',
-            '#value'  => \t('Removed'),
+            '#value'  => \t('Deleted'),
             '#wrapper_attributes'   => ['class' => [
               $baseClass . '__legend-item',
               $baseClass . '__legend-item--removed',
