@@ -19,6 +19,11 @@ use Symfony\Component\DomCrawler\Crawler;
  *   isn't being generated into the table of contents, resulting in an empty
  *   link.
  *
+ * - This takes the contents of any .omnipedia-media-caption-rendered element
+ *   and sets them as a 'data-photoswipe-caption' on the adjacent image field
+ *   link, if any. The plain text of the caption is used, without any HTML
+ *   elements, e.g. links or abbreviations.
+ *
  * @Filter(
  *   id           = "omnipedia_markdown_alterations",
  *   title        = @Translation("Omnipedia: Markdown output alterations"),
@@ -106,6 +111,61 @@ class MarkdownAlterationsFilter extends FilterBase {
   }
 
   /**
+   * Alter captions.
+   *
+   * This takes the contents of any .omnipedia-media-caption-rendered element
+   * and sets them as a 'data-photoswipe-caption' on the adjacent image field
+   * link, if any. The plain text of the caption is used, without any HTML
+   * elements, e.g. links or abbreviations.
+   *
+   * @param \Symfony\Component\DomCrawler\Crawler $crawler
+   *   The Symfony DomCrawler instance to alter.
+   */
+  protected function alterCaptions(Crawler $crawler): void {
+
+    /** @var \Symfony\Component\DomCrawler\Crawler */
+    $captionsCrawler = $crawler->filter('.omnipedia-media-caption-rendered');
+
+    foreach ($captionsCrawler as $caption) {
+
+      /** @var \Symfony\Component\DomCrawler\Crawler The adjacent image field,
+          if any. */
+      $fieldCrawler = (new Crawler($caption))->nextAll()
+        ->filter('.field--type-image')->first();
+
+      if (count($fieldCrawler) === 0) {
+        continue;
+      }
+
+      /** @var \Symfony\Component\DomCrawler\Crawler The image field link, if
+          any. */
+      $linkCrawler = $fieldCrawler->filter('a')->first();
+
+      if (count($linkCrawler) === 0) {
+        continue;
+      }
+
+      /** @var \DOMElement The image field link element. */
+      $link = $linkCrawler->getNode(0);
+
+      // Skip any links that already have a caption set by something else.
+      if (!empty($link->getAttribute('data-photoswipe-caption'))) {
+        continue;
+      }
+
+      // Set the caption contents as plain text, i.e. stripped of HTML elements.
+      $link->setAttribute(
+        'data-photoswipe-caption', \trim($caption->textContent)
+      );
+
+      // Finally, remove the caption element as it's served its purpose and can
+      // cause layout issues if left in.
+      $caption->parentNode->removeChild($caption);
+
+    }
+  }
+
+  /**
    * {@inheritdoc}
    *
    * @see $this->alterReferences()
@@ -122,6 +182,8 @@ class MarkdownAlterationsFilter extends FilterBase {
     );
 
     $this->alterReferences($crawler);
+
+    $this->alterCaptions($crawler);
 
     return new FilterProcessResult(
       $crawler->filter(

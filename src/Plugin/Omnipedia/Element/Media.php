@@ -201,6 +201,23 @@ class Media extends OmnipediaElementBase {
     if ($caption !== null) {
       $mediaRenderArray['#attributes']->setAttribute('data-caption', $caption);
 
+      // This creates an element containing the caption, with two new lines
+      // before and after so that Markdown is parsed and rendered. This is used
+      // by MarkdownAlterationsFilter to set the PhotoSwipe caption.
+      //
+      // @see \Drupal\omnipedia_content\Plugin\Filter\MarkdownAlterationsFilter::alterCaptions()
+      $mediaRenderArray['caption'] = [
+        '#type'       => 'html_tag',
+        '#tag'        => 'div',
+        '#attributes' => [
+          'class'   => ['omnipedia-media-caption-rendered'],
+          'hidden'  => true,
+        ],
+        'caption_content'   => [
+          '#markup'   => "\n\n" . $caption . "\n\n",
+        ],
+      ];
+
       // Save a hash of the caption to the media entity render array's cache
       // keys so that Drupal knows to cache multiple instances of this media
       // entity with different captions separately. Without this, the first time
