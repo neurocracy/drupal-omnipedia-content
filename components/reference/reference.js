@@ -59,32 +59,34 @@ AmbientImpact.addComponent('OmnipediaReference', function(
 
       aiContentPopUp.addItems($links, {tooltip: {
         insertCallback: function($tooltip, $trigger) {
+
           /**
-           * The nearest ancestor element that tooltips should be placed after.
+           * The ancestor element that tooltips should be placed after.
            *
            * This avoids issues with inheriting formatting and font size from
            * elements that the tooltip may be placed inside of, by placing the
-           * tooltip just after these elements.
+           * tooltip just after all of these elements.
            *
-           * Note that 'ins' and 'del' are not currently in the list as they
-           * would always match before the infobox or media selectors due to
-           * being closest in the tree. If these are needed in the future,
-           * jQuery.parents() may be a better option.
+           * Since jQuery().parents() can filter by a provided selector,
+           * starting from closest and going up the tree. By using
+           * jQuery().last(), we can reduce the set down to the highest level
+           * ancestor, i.e. the one that potentially contains one or more of
+           * these, i.e. multiple matching parents. For example, if an infobox
+           * contains a media element, this will choose the infobox as that's
+           * higher up the tree.
            *
            * @type {jQuery}
            *
            * @see https://api.jquery.com/parents/
-           *
-           * @see https://api.jquery.com/closest/
            */
-          var $container = $trigger.closest([
+          var $container = $trigger.parents([
             '.omnipedia-infobox',
             '.omnipedia-media-group',
             '.omnipedia-media',
             'strong',
             'em',
             'sup',
-          ].join(','));
+          ].join(',')).last();
 
           // If one of the above containers contains the trigger, insert the
           // tooltip after the container.
