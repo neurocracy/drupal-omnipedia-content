@@ -83,6 +83,10 @@ AmbientImpact.addComponent('OmnipediaReference', function(
             '.omnipedia-infobox',
             '.omnipedia-media-group',
             '.omnipedia-media',
+            // This is to fix a strange issue in Chrome that would briefly
+            // collapse space after a link when the tooltip would be inserted
+            // after it, so instead we try a containing parapgraph, if found.
+            'p',
             'strong',
             'em',
             'sup',
