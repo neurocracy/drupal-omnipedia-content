@@ -61,6 +61,12 @@ services:
     tags:
       - { name: 'event_subscriber' }
 
+  # \hook_library_info_alter() abbreviation tooltip event subscriber.
+  omnipedia_content.library_info_alter_abbreviation_tooltip_event_subscriber:
+    class: \Drupal\omnipedia_content\EventSubscriber\Theme\LibraryInfoAlterAbbreviationTooltipEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+
   # OmnipediaElement hook_theme() event subscriber.
   omnipedia_content.theme_omnipedia_element_event_subscriber:
     class: Drupal\omnipedia_content\EventSubscriber\Theme\ThemeOmnipediaElementEventSubscriber
