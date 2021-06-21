@@ -6,7 +6,10 @@
 // component, displaying the text as either a tooltip or an off-canvas panel,
 // depending on the screen width.
 
-AmbientImpact.on(['contentPopUp'], function(aiContentPopUp) {
+AmbientImpact.on(['contentPopUp', 'OmnipediaTooltip'], function(
+  aiContentPopUp,
+  OmnipediaTooltip
+) {
 AmbientImpact.addComponent('OmnipediaReference', function(
   OmnipediaReference, $
 ) {
@@ -57,54 +60,8 @@ AmbientImpact.addComponent('OmnipediaReference', function(
             .remove();
       });
 
-      aiContentPopUp.addItems($links, {tooltip: {
-        insertCallback: function($tooltip, $trigger) {
+      aiContentPopUp.addItems($links);
 
-          /**
-           * The ancestor element that tooltips should be placed after.
-           *
-           * This avoids issues with inheriting formatting and font size from
-           * elements that the tooltip may be placed inside of, by placing the
-           * tooltip just after all of these elements.
-           *
-           * Since jQuery().parents() can filter by a provided selector,
-           * starting from closest and going up the tree. By using
-           * jQuery().last(), we can reduce the set down to the highest level
-           * ancestor, i.e. the one that potentially contains one or more of
-           * these, i.e. multiple matching parents. For example, if an infobox
-           * contains a media element, this will choose the infobox as that's
-           * higher up the tree.
-           *
-           * @type {jQuery}
-           *
-           * @see https://api.jquery.com/parents/
-           */
-          var $container = $trigger.parents([
-            '.omnipedia-infobox',
-            '.omnipedia-media-group',
-            '.omnipedia-media',
-            // This is to fix a strange issue in Chrome that would briefly
-            // collapse space after a link when the tooltip would be inserted
-            // after it, so instead we try a containing parapgraph, if found.
-            'p',
-            'strong',
-            'em',
-            'sup',
-          ].join(',')).last();
-
-          // If one of the above containers contains the trigger, insert the
-          // tooltip after the container.
-          if ($container.length > 0) {
-            $tooltip.insertAfter($container);
-
-            return;
-          }
-
-          // If none of the above containers are found, just insert the tooltip
-          // after the triggering element.
-          $tooltip.insertAfter($trigger);
-        }
-      }});
     },
     function(context, settings, trigger) {
       /**

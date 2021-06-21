@@ -6,3 +6,4 @@ component.reference:
     reference.js: {}
   dependencies:
     - ambientimpact_ux/component.content_popup
+    - omnipedia_content/component.omnipedia_tooltip
