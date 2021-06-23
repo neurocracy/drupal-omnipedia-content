@@ -42,6 +42,9 @@ use Symfony\Component\DomCrawler\Crawler;
  * @see \Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension\FootnoteExtension
  *   Alters the Markdown footnotes output as much as possible in CommonMark
  *   document parsed event.
+ *
+ * @todo Split the various methods into event subscribers and add an event they
+ *   can subscribe to.
  */
 class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPluginInterface {
 
@@ -260,6 +263,8 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
    * {@inheritdoc}
    *
    * @see $this->alterReferences()
+   *
+   * @see $this->alterCaptions()
    *
    * @see $this->alterTableOfContents()
    */
