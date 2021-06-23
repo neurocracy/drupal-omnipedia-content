@@ -2,8 +2,13 @@
 
 namespace Drupal\omnipedia_content\Plugin\Filter;
 
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
+use Drupal\omnipedia_content\Utility\TableOfContentsHtmlClassesTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -24,6 +29,9 @@ use Symfony\Component\DomCrawler\Crawler;
  *   link, if any. The plain text of the caption is used, without any HTML
  *   elements, e.g. links or abbreviations.
  *
+ * - Finds any table of contents lists and wraps them in a container with a
+ *   heading.
+ *
  * @Filter(
  *   id           = "omnipedia_markdown_alterations",
  *   title        = @Translation("Omnipedia: Markdown output alterations"),
@@ -35,7 +43,49 @@ use Symfony\Component\DomCrawler\Crawler;
  *   Alters the Markdown footnotes output as much as possible in CommonMark
  *   document parsed event.
  */
-class MarkdownAlterationsFilter extends FilterBase {
+class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPluginInterface {
+
+  use StringTranslationTrait;
+
+  use TableOfContentsHtmlClassesTrait;
+
+  /**
+   * Constructs this filter object; saves dependencies.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plug-in instance.
+   *
+   * @param string $pluginId
+   *   The plugin_id for the plug-in instance.
+   *
+   * @param array $pluginDefinition
+   *   The plug-in implementation definition. PluginBase defines this as mixed,
+   *   but we should always have an array so the type is set.
+   *
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
+   *   The Drupal string translation service.
+   */
+  public function __construct(
+    array $configuration, string $pluginId, array $pluginDefinition,
+    TranslationInterface $stringTranslation
+  ) {
+    parent::__construct($configuration, $pluginId, $pluginDefinition);
+
+    $this->stringTranslation = $stringTranslation;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(
+    ContainerInterface $container,
+    array $configuration, $pluginId, $pluginDefinition
+  ) {
+    return new static(
+      $configuration, $pluginId, $pluginDefinition,
+      $container->get('string_translation')
+    );
+  }
 
   /**
    * Alter references.
@@ -166,9 +216,52 @@ class MarkdownAlterationsFilter extends FilterBase {
   }
 
   /**
+   * Alter table of contents.
+   *
+   * This finds any table of contents lists and wraps them in a container with
+   * a heading.
+   *
+   * @param \Symfony\Component\DomCrawler\Crawler $crawler
+   *   The Symfony DomCrawler instance to alter.
+   */
+  protected function alterTableOfContents(Crawler $crawler): void {
+
+    /** @var \Symfony\Component\DomCrawler\Crawler */
+    $listCrawler = $crawler->filter('.' . $this->getTableOfContentsListClass());
+
+    foreach ($listCrawler as $list) {
+
+      /** @var \DOMNode|null */
+      $container = (new Crawler(
+        '<div class="' . $this->getTableOfContentsBaseClass() . '">' .
+          '<h3 class="' . $this->getTableOfContentsHeadingClass() . '">' .
+            (string) $this->t('Table of contents') .
+          '</h3>' .
+        '</div>'
+      ))->filter(
+        '.' . $this->getTableOfContentsBaseClass()
+      )->getNode(0);
+
+      if (!($container instanceof \DOMNode)) {
+        continue;
+      }
+
+      $container = $list->parentNode->insertBefore(
+        $list->ownerDocument->importNode($container, true), $list
+      );
+
+      $container->appendChild($list);
+
+    }
+
+  }
+
+  /**
    * {@inheritdoc}
    *
    * @see $this->alterReferences()
+   *
+   * @see $this->alterTableOfContents()
    */
   public function process($text, $langCode) {
 
@@ -184,6 +277,8 @@ class MarkdownAlterationsFilter extends FilterBase {
     $this->alterReferences($crawler);
 
     $this->alterCaptions($crawler);
+
+    $this->alterTableOfContents($crawler);
 
     return new FilterProcessResult(
       $crawler->filter(

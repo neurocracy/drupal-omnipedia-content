@@ -53,6 +53,12 @@ services:
     tags:
       - { name: 'event_subscriber' }
 
+  # Event subscriber to alter CommonMark table of contents.
+  omnipedia_content.markdown_commonmark_table_of_contents_event_subscriber:
+    class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\TableOfContentsEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+
   # Event subscriber to expand Wikimedia prefixed link URLs to full URLs.
   omnipedia_content.markdown_commonmark_wikimedia_link_event_subscriber:
     class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\WikimediaLinkEventSubscriber
