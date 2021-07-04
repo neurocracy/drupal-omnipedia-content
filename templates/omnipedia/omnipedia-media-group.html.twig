@@ -36,8 +36,13 @@
   </ol>
 
   {% if caption %}
-    <p{{ create_attribute({'class': [
+    <div{{ create_attribute({'class': [
       base_class ~ '__caption',
-    ]}) }}>{{ caption }}</p>
+    ]}) }}>
+
+      {# Space before/after is required so Markdown is parsed correctly. #}
+      {{ caption }}
+
+    </div>
   {% endif %}
 </div>
