@@ -106,7 +106,14 @@ class WikimediaLink implements WikimediaLinkInterface {
     /** @var array */
     $urlSplit = \explode(':', $url, 2);
 
-    return \str_replace('_', ' ', $urlSplit[1]);
+    return $this->urlDecode(\str_replace('_', ' ', $urlSplit[1]));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function urlDecode(string $string): string {
+    return \rawurldecode($string);
   }
 
 }

@@ -65,4 +65,23 @@ interface WikimediaLinkInterface {
    */
   public function getArticleTitleFromPrefixedUrl(string $url): ?string;
 
+  /**
+   * Decode any URL-encoded characters in the provided string.
+   *
+   * This allows for attached data targets with accents to correctly match and
+   * display as authored.
+   *
+   * This is centralized here to allow for simple changes to this to be
+   * reflected elsewhere it's needed, e.g. if there turns out to be a security
+   * issue and this needs to be modified.
+   *
+   * @param string $string
+   *   The string to URL-decode. Note that this should not be a prefixed
+   *   Wikimedia URL but a string extracted from one.
+   *
+   * @return string
+   *   The $string parameter URL-decoded.
+   */
+  public function urlDecode(string $string): string;
+
 }
