@@ -2,13 +2,14 @@
 
 namespace Drupal\omnipedia_content_changes\Event\Omnipedia\Changes;
 
+use Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\AbstractDiffEvent;
+use Drupal\omnipedia_core\Entity\NodeInterface;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Omnipedia changes diff post-build event.
  */
-class DiffPostBuildEvent extends Event {
+class DiffPostBuildEvent extends AbstractDiffEvent {
 
   /**
    * A Symfony DomCrawler instance containing the diff DOM.
@@ -18,13 +19,25 @@ class DiffPostBuildEvent extends Event {
   protected $crawler;
 
   /**
-   * Constructs this event object.
+   * {@inheritdoc}
    *
    * @param \Symfony\Component\DomCrawler\Crawler $crawler
    *   A Symfony DomCrawler instance containing the diff DOM.
    */
-  public function __construct(Crawler $crawler) {
+  public function __construct(
+    NodeInterface $currentNode,
+    NodeInterface $previousNode,
+    string        $currentRendered,
+    string        $previousRendered,
+    Crawler       $crawler
+  ) {
+
+    parent::__construct(
+      $currentNode, $previousNode, $currentRendered, $previousRendered
+    );
+
     $this->setCrawler($crawler);
+
   }
 
   /**

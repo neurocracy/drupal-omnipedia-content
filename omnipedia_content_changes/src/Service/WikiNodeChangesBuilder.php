@@ -258,7 +258,10 @@ class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNod
     }
 
     /** @var \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent */
-    $postBuildEvent = new DiffPostBuildEvent($differenceCrawler);
+    $postBuildEvent = new DiffPostBuildEvent(
+      $node, $previousNode, $currentRendered, $previousRendered,
+      $differenceCrawler
+    );
 
     // Dispatch the event with the event object.
     $this->eventDispatcher->dispatch(
