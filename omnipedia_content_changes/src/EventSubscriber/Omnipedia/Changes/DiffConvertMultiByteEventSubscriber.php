@@ -32,7 +32,7 @@ class DiffConvertMultiByteEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      OmnipediaContentChangesEventInterface::DIFF_POST_RENDER_PRE_BUILD => 'onDiffPostRendePreBuild',
+      OmnipediaContentChangesEventInterface::DIFF_POST_RENDER_PRE_BUILD => 'onDiffPostRenderPreBuild',
     ];
   }
 
@@ -42,7 +42,7 @@ class DiffConvertMultiByteEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostRenderPreBuildEvent $event
    *   The event object.
    */
-  public function onDiffPostRendePreBuild(
+  public function onDiffPostRenderPreBuild(
     DiffPostRenderPreBuildEvent $event
   ): void {
 

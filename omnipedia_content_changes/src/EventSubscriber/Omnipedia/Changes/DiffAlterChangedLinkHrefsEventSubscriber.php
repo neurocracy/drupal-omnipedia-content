@@ -57,7 +57,7 @@ class DiffAlterChangedLinkHrefsEventSubscriber implements EventSubscriberInterfa
       // any elements or nodes other than the expected <a>, they're preserved.
       //
       // @see https://stackoverflow.com/questions/11651365/how-to-insert-node-in-hierarchy-of-dom-between-one-node-and-its-child-nodes/11651813#11651813
-      for($i = 0; $insElement->childNodes->length > 0; $i++) {
+      for ($i = 0; $insElement->childNodes->length > 0; $i++) {
         $insElement->parentNode->insertBefore(
           // Note that we always specify index "0" as we're basically removing
           // the first child each time, similar to \array_shift(), and the child
