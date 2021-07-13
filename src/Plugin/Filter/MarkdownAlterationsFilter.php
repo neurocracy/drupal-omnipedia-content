@@ -219,6 +219,48 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
   }
 
   /**
+   * Alter lists.
+   *
+   * This unwraps any <p> elements found inside of list items, both because
+   * they're unnecessary for our uses and to fix an issue with the
+   * caxy/php-htmldiff library erroneously thinking the list items are always
+   * completely different, even when they're identical.
+   *
+   * @param \Symfony\Component\DomCrawler\Crawler $crawler
+   *   The Symfony DomCrawler instance to alter.
+   *
+   * @see https://github.com/caxy/php-htmldiff/issues/100
+   *   GitHub issue describing the problem this method solves.
+   */
+  protected function alterLists(Crawler $crawler): void {
+
+    foreach ($crawler->filter('li p') as $paragraph) {
+
+      // This essentially unwraps the <p> element, moving all child elements
+      // just before it in the order they appear.
+      //
+      // @see https://stackoverflow.com/questions/11651365/how-to-insert-node-in-hierarchy-of-dom-between-one-node-and-its-child-nodes/11651813#11651813
+      for ($i = 0; $paragraph->childNodes->length > 0; $i++) {
+
+        $paragraph->parentNode->insertBefore(
+          // Note that we always specify index "0" as we're basically removing
+          // the first child each time, similar to \array_shift(), and the child
+          // list updates each time we do this, akin to removing the bottom most
+          // card in a deck of cards on each iteration.
+          $paragraph->childNodes->item(0),
+          $paragraph
+        );
+
+      }
+
+      // Remove the now-empty <p>.
+      $paragraph->parentNode->removeChild($paragraph);
+
+    }
+
+  }
+
+  /**
    * Alter table of contents.
    *
    * This finds any table of contents lists and wraps them in a container with
@@ -266,6 +308,8 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
    *
    * @see $this->alterCaptions()
    *
+   * @see $this->alterLists()
+   *
    * @see $this->alterTableOfContents()
    */
   public function process($text, $langCode) {
@@ -282,6 +326,8 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
     $this->alterReferences($crawler);
 
     $this->alterCaptions($crawler);
+
+    $this->alterLists($crawler);
 
     $this->alterTableOfContents($crawler);
 
