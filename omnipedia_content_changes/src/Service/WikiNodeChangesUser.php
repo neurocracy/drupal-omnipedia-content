@@ -234,6 +234,14 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
     array $roles, NodeInterface $node, NodeInterface $previousNode
   ): ?UserInterface {
 
+    // If the anonymous user is requested, load and return it.
+    if (
+      count($roles) === 1 &&
+      $roles[0] === AccountInterface::ANONYMOUS_ROLE
+    ) {
+      return $this->userStorage->load(0);
+    }
+
     /** @var \Drupal\Core\Entity\Query\QueryInterface */
     $query = ($this->userStorage->getQuery())
       ->condition('status', 1);
