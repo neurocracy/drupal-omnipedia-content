@@ -186,6 +186,14 @@ $changes-diff-changed-stripe-colour-on-dark:
       }
     }
   }
+
+  // Hide the underlines on these that sometimes sneak past our alterations.
+  //
+  // @todo Implement EventSubscriber\Omnipedia\Changes classes to alter these.
+  ins.mod,
+  ins.diffmod {
+    text-decoration: none;
+  }
 }
 
 // The changes help block contents.
