@@ -16,6 +16,7 @@ use Drupal\omnipedia_core\Entity\NodeInterface;
 use Drupal\omnipedia_core\Service\TimelineInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Returns responses for the Omnipedia wiki node changes route.
@@ -154,6 +155,27 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   }
 
   /**
+   * Checks access for the build route.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   Run access checks for this account.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  public function accessBuild(
+    AccountInterface $account, NodeInterface $node
+  ): AccessResultInterface {
+
+    return $this->access($account, $node)->andIf(
+      AccessResult::allowedIfHasPermission(
+        $account, 'build omnipedia_content_changes'
+      )
+    );
+
+  }
+
+  /**
    * Title callback for the route.
    *
    * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
@@ -219,6 +241,30 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
     }
 
     return $this->wikiNodeChangesBuilder->build($node);
+
+  }
+
+  /**
+   * Content callback for the build route.
+   *
+   * This invalidates the changes for the provided wiki node, builds the
+   * changes, and then redirects to the changes route.
+   *
+   * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
+   *   A node object.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   A redirect response object.
+   */
+  public function viewBuild(NodeInterface $node): RedirectResponse {
+
+    $this->wikiNodeChangesCache->invalidate($node);
+
+    $this->wikiNodeChangesBuilder->build($node);
+
+    return $this->redirect('entity.node.omnipedia_changes', [
+      'node' => $node->nid->getString(),
+    ]);
 
   }
 
