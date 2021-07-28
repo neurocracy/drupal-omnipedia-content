@@ -43,4 +43,12 @@ interface WikiNodeChangesCacheInterface {
    */
   public function set(NodeInterface $node, array $renderArray): void;
 
+  /**
+   * Invalidate the changes cache for the provided wiki node.
+   *
+   * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
+   *   The wiki node to invalidate cached changes for.
+   */
+  public function invalidate(NodeInterface $node): void;
+
 }

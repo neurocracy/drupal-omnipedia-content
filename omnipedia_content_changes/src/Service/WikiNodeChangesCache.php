@@ -115,4 +115,13 @@ class WikiNodeChangesCache implements WikiNodeChangesCacheInterface {
 
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function invalidate(NodeInterface $node): void {
+    $this->changesCache->invalidate(
+      $this->wikiNodeChangesInfo->getCacheId($node->nid->getString())
+    );
+  }
+
 }
