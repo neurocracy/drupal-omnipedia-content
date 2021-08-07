@@ -20,5 +20,12 @@
     "symfony/css-selector": "^3.4"
   },
   "require-dev": {
+  },
+  "extra": {
+    "drush": {
+      "services": {
+        "drush.services.yml": "^10"
+      }
+    }
   }
 }
