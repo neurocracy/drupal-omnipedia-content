@@ -3,7 +3,6 @@
 namespace Drupal\omnipedia_content_changes\Service;
 
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\Context\CacheContextsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface;
