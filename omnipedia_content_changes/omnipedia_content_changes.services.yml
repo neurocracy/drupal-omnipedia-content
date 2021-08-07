@@ -4,7 +4,7 @@ services:
   cache.omnipedia_wiki_node_changes:
     class: Drupal\Core\Cache\CacheBackendInterface
     tags:
-      - { name: cache.bin }
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [omnipedia_wiki_node_changes]
 

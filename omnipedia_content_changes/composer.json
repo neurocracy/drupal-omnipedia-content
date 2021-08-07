@@ -13,6 +13,7 @@
   "require": {
     "caxy/php-htmldiff": "^0.1.12",
     "drupal/diff": "^1.0",
+    "drupal/pcb": "^2.3",
     "drupal/queue_ui": "^2.2",
     "drupal/warmer": "^2.0",
     "symfony/dom-crawler": "^3.4",
