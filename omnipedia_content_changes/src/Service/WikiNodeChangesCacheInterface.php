@@ -2,12 +2,20 @@
 
 namespace Drupal\omnipedia_content_changes\Service;
 
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
 
 /**
  * The Omnipedia wiki node changes cache service interface.
  */
 interface WikiNodeChangesCacheInterface {
+
+  /**
+   * Get the wiki node changes cache bin.
+   *
+   * @return \Drupal\Core\Cache\CacheBackendInterface
+   */
+  public function getCacheBin(): CacheBackendInterface;
 
   /**
    * Determine whether rendered changes for a provided wiki node are cached.

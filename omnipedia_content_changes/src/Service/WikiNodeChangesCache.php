@@ -67,6 +67,13 @@ class WikiNodeChangesCache implements WikiNodeChangesCacheInterface {
   /**
    * {@inheritdoc}
    */
+  public function getCacheBin(): CacheBackendInterface {
+    return $this->changesCache;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isCached(NodeInterface $node): bool {
     return \is_object($this->changesCache->get(
       $this->wikiNodeChangesInfo->getCacheId($node->nid->getString())
