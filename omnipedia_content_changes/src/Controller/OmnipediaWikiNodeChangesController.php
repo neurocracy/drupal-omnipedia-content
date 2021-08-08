@@ -207,6 +207,11 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   /**
    * Content callback for the route.
    *
+   * Note that this intentionally checks for and returns invalidated cached
+   * changes if available to minimize the amount of time the placeholder would
+   * be shown. We're erring on the side of showing potentially out of date
+   * changes rather than none at all.
+   *
    * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
    *   A node object.
    *
@@ -216,7 +221,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    */
   public function view(NodeInterface $node): array {
 
-    if (!$this->wikiNodeChangesCache->isCached($node)) {
+    if (!$this->wikiNodeChangesCache->isCached($node, true)) {
 
       // Log this uncached view attempt in case it's useful data for debugging
       // or future optimizations.
@@ -240,7 +245,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
 
     }
 
-    return $this->wikiNodeChangesBuilder->build($node);
+    return $this->wikiNodeChangesBuilder->build($node, true);
 
   }
 
