@@ -23,10 +23,20 @@ interface WikiNodeChangesCacheInterface {
    * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
    *   The wiki node to check.
    *
+   * @param boolean $allowInvalid
+   *   Whether to check for rendered cached changes that are still present but
+   *   have been invalidated. Defaults to false.
+   *
    * @return boolean
    *   True if cached changes are found, false otherwise.
+   *
+   * @see \Drupal\Core\Cache\CacheBackendInterface::get()
+   *   See the $allow_invalid parameter in this method for use cases of our
+   *   $allowInvalid parameter.
    */
-  public function isCached(NodeInterface $node): bool;
+  public function isCached(
+    NodeInterface $node, bool $allowInvalid = false
+  ): bool;
 
   /**
    * Get cached rendered changes for a provided wiki node, if any.
@@ -34,11 +44,19 @@ interface WikiNodeChangesCacheInterface {
    * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
    *   The wiki node to attempt to get cached changes for.
    *
+   * @param boolean $allowInvalid
+   *   Whether to check for rendered cached changes that are still present but
+   *   have been invalidated. Defaults to false.
+   *
    * @return array|null
    *   A render array if rendered changes are found for the wiki node, or null
    *   otherwise.
+   *
+   * @see \Drupal\Core\Cache\CacheBackendInterface::get()
+   *   See the $allow_invalid parameter in this method for use cases of our
+   *   $allowInvalid parameter.
    */
-  public function get(NodeInterface $node): ?array;
+  public function get(NodeInterface $node, bool $allowInvalid = false): ?array;
 
   /**
    * Set rendered changes to the changes cache.

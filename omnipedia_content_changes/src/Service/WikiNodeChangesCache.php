@@ -74,20 +74,24 @@ class WikiNodeChangesCache implements WikiNodeChangesCacheInterface {
   /**
    * {@inheritdoc}
    */
-  public function isCached(NodeInterface $node): bool {
+  public function isCached(
+    NodeInterface $node, bool $allowInvalid = false
+  ): bool {
     return \is_object($this->changesCache->get(
-      $this->wikiNodeChangesInfo->getCacheId($node->nid->getString())
+      $this->wikiNodeChangesInfo->getCacheId($node->nid->getString()),
+      $allowInvalid
     ));
   }
 
   /**
    * {@inheritdoc}
    */
-  public function get(NodeInterface $node): ?array {
+  public function get(NodeInterface $node, bool $allowInvalid = false): ?array {
 
-    if ($this->isCached($node)) {
+    if ($this->isCached($node, $allowInvalid)) {
       return $this->changesCache->get(
-        $this->wikiNodeChangesInfo->getCacheId($node->nid->getString())
+        $this->wikiNodeChangesInfo->getCacheId($node->nid->getString()),
+        $allowInvalid
       )->data;
     }
 
