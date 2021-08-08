@@ -163,14 +163,24 @@ class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNod
    * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
    *   A wiki node object to get the diff content for.
    *
+   * @param boolean $allowInvalid
+   *   Whether to check for rendered cached changes that are still present but
+   *   have been invalidated. Defaults to false.
+   *
    * @return array
    *   The diff render array.
+   *
+   * @see \Drupal\Core\Cache\CacheBackendInterface::get()
+   *   See the $allow_invalid parameter in this method for use cases of our
+   *   $allowInvalid parameter.
    */
-  protected function getDiff(NodeInterface $node): array {
+  protected function getDiff(
+    NodeInterface $node, bool $allowInvalid = false
+  ): array {
 
     // Return a cached render array if one is found in the cache.
-    if ($this->wikiNodeChangesCache->isCached($node)) {
-      return $this->wikiNodeChangesCache->get($node);
+    if ($this->wikiNodeChangesCache->isCached($node, $allowInvalid)) {
+      return $this->wikiNodeChangesCache->get($node, $allowInvalid);
     }
 
     /** \Drupal\omnipedia_core\Entity\NodeInterface|null */
@@ -298,7 +308,9 @@ class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNod
    * @see $this->getDiff()
    *   Gets diff content for a wiki node.
    */
-  public function build(NodeInterface $node): array {
+  public function build(
+    NodeInterface $node, bool $allowInvalid = false
+  ): array {
 
     /** \Drupal\omnipedia_core\Entity\NodeInterface|null */
     $previousNode = $node->getPreviousWikiNodeRevision();
@@ -310,7 +322,7 @@ class WikiNodeChangesBuilder implements WikiNodeChangesBuilderInterface, WikiNod
     }
 
     /** @var array */
-    $renderArray = $this->getDiff($node);
+    $renderArray = $this->getDiff($node, $allowInvalid);
 
     $renderArray['#markup'] =
       // Note that we can't use '#type' => 'container' or some other wrapper

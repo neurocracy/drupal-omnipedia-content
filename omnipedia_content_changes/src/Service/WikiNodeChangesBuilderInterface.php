@@ -23,10 +23,18 @@ interface WikiNodeChangesBuilderInterface {
    * @param \Drupal\omnipedia_core\Entity\NodeInterface $node
    *   A node object.
    *
+   * @param boolean $allowInvalid
+   *   Whether to check for rendered cached changes that are still present but
+   *   have been invalidated. Defaults to false.
+   *
    * @return array
    *   A render array containing the changes content for the provided wiki node.
+   *
+   * @see \Drupal\Core\Cache\CacheBackendInterface::get()
+   *   See the $allow_invalid parameter in this method for use cases of our
+   *   $allowInvalid parameter.
    */
-  public function build(NodeInterface $node): array;
+  public function build(NodeInterface $node, bool $allowInvalid = false): array;
 
   /**
    * Build placeholder content for a wiki node.
