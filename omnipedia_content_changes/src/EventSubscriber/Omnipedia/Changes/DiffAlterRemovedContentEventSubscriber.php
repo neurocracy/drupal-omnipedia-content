@@ -36,7 +36,7 @@ class DiffAlterRemovedContentEventSubscriber implements EventSubscriberInterface
    * @param \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent $event
    *   The event object.
    */
-  public function onDiffPostBuild(DiffPostBuildEvent $event): void {
+  protected function alterRemovedContent(DiffPostBuildEvent $event): void {
 
     /** @var \Symfony\Component\DomCrawler\Crawler */
     $crawler = $event->getCrawler();
@@ -56,6 +56,18 @@ class DiffAlterRemovedContentEventSubscriber implements EventSubscriberInterface
         $this->getDiffRemovedModifierClass(),
       ]));
     }
+
+  }
+
+  /**
+   * DiffPostBuildEvent handler.
+   *
+   * @param \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent $event
+   *   The event object.
+   */
+  public function onDiffPostBuild(DiffPostBuildEvent $event): void {
+
+    $this->alterRemovedContent($event);
 
   }
 

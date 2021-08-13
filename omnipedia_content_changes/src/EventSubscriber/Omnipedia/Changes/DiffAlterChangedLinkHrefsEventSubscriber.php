@@ -40,7 +40,7 @@ class DiffAlterChangedLinkHrefsEventSubscriber implements EventSubscriberInterfa
    * @todo Check if links whose href attributes changed are both internal wiki
    *   node paths before removing the changed status?
    */
-  public function onDiffPostBuild(DiffPostBuildEvent $event): void {
+  protected function alterChangedLinkHrefs(DiffPostBuildEvent $event): void {
 
     /** @var \Symfony\Component\DomCrawler\Crawler */
     $crawler = $event->getCrawler();
@@ -71,6 +71,18 @@ class DiffAlterChangedLinkHrefsEventSubscriber implements EventSubscriberInterfa
       // Remove the now-empty <ins>.
       $insElement->parentNode->removeChild($insElement);
     }
+
+  }
+
+  /**
+   * DiffPostBuildEvent handler.
+   *
+   * @param \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent $event
+   *   The event object.
+   */
+  public function onDiffPostBuild(DiffPostBuildEvent $event): void {
+
+    $this->alterChangedLinkHrefs($event);
 
   }
 

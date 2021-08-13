@@ -42,7 +42,7 @@ class DiffConvertMultiByteEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostRenderPreBuildEvent $event
    *   The event object.
    */
-  public function onDiffPostRenderPreBuild(
+  protected function convertMultiByte(
     DiffPostRenderPreBuildEvent $event
   ): void {
 
@@ -58,6 +58,21 @@ class DiffConvertMultiByteEventSubscriber implements EventSubscriberInterface {
 
     $event->setCurrentRendered($rendered['current']);
     $event->setPreviousRendered($rendered['previous']);
+
+  }
+
+
+  /**
+   * DiffPostRenderPreBuildEvent handler.
+   *
+   * @param \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostRenderPreBuildEvent $event
+   *   The event object.
+   */
+  public function onDiffPostRenderPreBuild(
+    DiffPostRenderPreBuildEvent $event
+  ): void {
+
+    $this->convertMultiByte($event);
 
   }
 

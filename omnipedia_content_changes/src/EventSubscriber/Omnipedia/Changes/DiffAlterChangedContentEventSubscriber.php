@@ -292,7 +292,7 @@ class DiffAlterChangedContentEventSubscriber implements EventSubscriberInterface
   }
 
   /**
-   * Alter any changed content found in the provided DOM.
+   * DiffPostBuildEvent handler.
    *
    * @param \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent $event
    *   The event object.

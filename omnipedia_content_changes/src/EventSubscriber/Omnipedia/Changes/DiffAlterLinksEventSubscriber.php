@@ -33,7 +33,7 @@ class DiffAlterLinksEventSubscriber implements EventSubscriberInterface, WikiNod
    * @param \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent $event
    *   The event object.
    */
-  public function onDiffPostBuild(DiffPostBuildEvent $event): void {
+  protected function alterLinks(DiffPostBuildEvent $event): void {
 
     /** @var \Symfony\Component\DomCrawler\Crawler */
     $crawler = $event->getCrawler();
@@ -54,6 +54,18 @@ class DiffAlterLinksEventSubscriber implements EventSubscriberInterface, WikiNod
       );
 
     }
+
+  }
+
+  /**
+   * DiffPostBuildEvent handler.
+   *
+   * @param \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent $event
+   *   The event object.
+   */
+  public function onDiffPostBuild(DiffPostBuildEvent $event): void {
+
+    $this->alterLinks($event);
 
   }
 

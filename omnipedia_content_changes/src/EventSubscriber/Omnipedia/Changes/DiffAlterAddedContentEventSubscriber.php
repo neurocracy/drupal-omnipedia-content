@@ -39,7 +39,7 @@ class DiffAlterAddedContentEventSubscriber implements EventSubscriberInterface, 
    * @todo Should the list item <ins> selectors attempt to avoid potential
    *   nesting?
    */
-  public function onDiffPostBuild(DiffPostBuildEvent $event): void {
+  protected function alterAddedContent(DiffPostBuildEvent $event): void {
 
     /** @var \Symfony\Component\DomCrawler\Crawler */
     $crawler = $event->getCrawler();
@@ -60,6 +60,18 @@ class DiffAlterAddedContentEventSubscriber implements EventSubscriberInterface, 
         $this->getDiffAddedModifierClass(),
       ]));
     }
+
+  }
+
+  /**
+   * DiffPostBuildEvent handler.
+   *
+   * @param \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent $event
+   *   The event object.
+   */
+  public function onDiffPostBuild(DiffPostBuildEvent $event): void {
+
+    $this->alterAddedContent($event);
 
   }
 
