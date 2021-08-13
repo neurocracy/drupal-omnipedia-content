@@ -2,7 +2,7 @@
 
 namespace Drupal\omnipedia_content_changes\EventSubscriber\Omnipedia\Changes;
 
-use Drupal\Core\Template\Attribute;
+use Drupal\ambientimpact_core\Utility\Html;
 use Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent;
 use Drupal\omnipedia_content_changes\Event\OmnipediaContentChangesEventInterface;
 use Drupal\omnipedia_content_changes\WikiNodeChangesCssClassesInterface;
@@ -38,25 +38,18 @@ class DiffAlterLinksEventSubscriber implements EventSubscriberInterface, WikiNod
     /** @var \Symfony\Component\DomCrawler\Crawler */
     $crawler = $event->getCrawler();
 
-    foreach ($crawler->filter('a.diffmod') as $linkElement) {
+    foreach ($crawler->filter(\implode(',', [
+      'a.diffmod',
+    ])) as $linkElement) {
 
-      // Parse any existing class attribute and create a new Attributes object
-      // to make class manipulation easier.
-      /** @var \Drupal\Core\Template\Attribute */
-      $attributes = new Attribute([
-        'class' => \preg_split(
-          '/\s+/' , \trim($linkElement->getAttribute('class'))
-        ),
-      ]);
-
-      $attributes->removeClass('diffmod');
-
-      $attributes->addClass($this->getDiffLinkElementClass());
-      $attributes->addClass($this->getDiffLinkChangedModifierClass());
-
-      $linkElement->setAttribute(
-        'class', \implode(' ', $attributes->getClass()->value())
+      Html::setElementClassAttribute(
+        $linkElement,
+        Html::getElementClassAttribute($linkElement)
+          ->removeClass('diffmod')
+            ->addClass($this->getDiffLinkElementClass())
+            ->addClass($this->getDiffLinkChangedModifierClass())
       );
+
     }
 
   }
