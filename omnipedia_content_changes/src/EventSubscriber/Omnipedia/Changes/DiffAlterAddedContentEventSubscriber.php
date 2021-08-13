@@ -49,6 +49,9 @@ class DiffAlterAddedContentEventSubscriber implements EventSubscriberInterface, 
 
     foreach ($crawler->filter(\implode(',', [
       'ins.diffins',
+      // This catches any changed <ins> that aren't handled by the changed
+      // event subscriber.
+      'ins.diffmod',
       '.diff-list > .replacement ins:not(.' . $changedInsClass . ')',
       '.diff-list > .new ins:not(.' . $changedInsClass . ')',
     ])) as $insElement) {

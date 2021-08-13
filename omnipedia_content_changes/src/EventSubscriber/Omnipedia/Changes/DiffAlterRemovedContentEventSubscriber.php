@@ -40,6 +40,9 @@ class DiffAlterRemovedContentEventSubscriber implements EventSubscriberInterface
 
     foreach ($crawler->filter(\implode(',', [
       'del.diffdel',
+      // This catches any changed <del> that aren't handled by the changed
+      // event subscriber.
+      'del.diffmod',
       '.diff-list > .removed del:not(.' . $changedDelClass . ')',
     ])) as $delElement) {
       $delElement->setAttribute('class', \implode(' ', [
