@@ -40,6 +40,9 @@ class DiffAlterLinksEventSubscriber implements EventSubscriberInterface, WikiNod
 
     foreach ($crawler->filter(\implode(',', [
       'a.diffmod',
+      '.diffmod a',
+      'ins a',
+      'del a',
     ])) as $linkElement) {
 
       Html::setElementClassAttribute(
