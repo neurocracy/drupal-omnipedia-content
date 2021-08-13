@@ -69,3 +69,8 @@ services:
     tags:
       - { name: 'event_subscriber', priority: -5 }
 
+  # Event subscriber to clean up any unaltered wiki node changes diff content.
+  omnipedia_content_changes.diff_clean_up_event_subscriber:
+    class: Drupal\omnipedia_content_changes\EventSubscriber\Omnipedia\Changes\DiffCleanUpEventSubscriber
+    tags:
+      - { name: 'event_subscriber', priority: 20 }
