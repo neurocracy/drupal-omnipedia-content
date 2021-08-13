@@ -78,6 +78,30 @@ $changes-diff-changed-stripe-colour-on-light: hsla(0, 0, 0, 0.15);
 $changes-diff-changed-stripe-colour-on-dark:
   $changes-diff-changed-stripe-colour-on-light;
 
+// Debug stuff. These should only be visible if the clean up event subscriber is
+// disabled for testing purposes.
+.omnipedia-changes {
+
+  ins.diffmod,
+  del.diffmod {
+    margin-inline-start:  0.3em;
+    margin-inline-end:    0.3em;
+  }
+
+  ins.diffmod {
+
+    @include set-colours($background: #93efef);
+
+    text-decoration: none;
+
+  }
+
+  del.diffmod {
+    @include set-colours($background: #fc81e8);
+  }
+
+}
+
 .omnipedia-changes,
 .omnipedia-changes-help {
   &__diff {
