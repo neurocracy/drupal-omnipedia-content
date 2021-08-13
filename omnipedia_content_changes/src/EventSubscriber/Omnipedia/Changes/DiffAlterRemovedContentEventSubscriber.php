@@ -25,7 +25,13 @@ class DiffAlterRemovedContentEventSubscriber implements EventSubscriberInterface
   }
 
   /**
+   * Alter any added content found in the provided DOM.
    *
+   * The following alterations are made:
+   *
+   * - The default classes are removed from <del> elements and our own BEM
+   *   classes are added. This handles diffed list items as well as standalone
+   *   <del> elements.
    *
    * @param \Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent $event
    *   The event object.
