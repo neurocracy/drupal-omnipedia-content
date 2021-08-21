@@ -45,7 +45,13 @@ services:
       - '@entity_type.manager'
       - '@user_permissions_hash_generator'
 
-  # Event subscriber to alter any changed wiki node changes diff content.
+  # Event subscriber to prepare wiki node changes diff content for alterations.
+  omnipedia_content_changes.diff_prepare_event_subscriber:
+    class: Drupal\omnipedia_content_changes\EventSubscriber\Omnipedia\Changes\DiffPrepareEventSubscriber
+    tags:
+      - { name: 'event_subscriber', priority: -25 }
+
+# Event subscriber to alter any changed wiki node changes diff content.
   omnipedia_content_changes.diff_alter_changed_content_event_subscriber:
     class: Drupal\omnipedia_content_changes\EventSubscriber\Omnipedia\Changes\DiffAlterChangedContentEventSubscriber
     tags:
