@@ -44,23 +44,7 @@ class DiffPrepareEventSubscriber implements EventSubscriberInterface {
         continue;
       }
 
-      // This essentially unwraps the element, moving all child elements just
-      // before it in the order they appear.
-      //
-      // @see https://stackoverflow.com/questions/11651365/how-to-insert-node-in-hierarchy-of-dom-between-one-node-and-its-child-nodes/11651813#11651813
-      for ($i = 0; $element->childNodes->length > 0; $i++) {
-        $element->parentNode->insertBefore(
-          // Note that we always specify index "0" as we're basically removing
-          // the first child each time, similar to \array_shift(), and the child
-          // list updates each time we do this, akin to removing the bottom most
-          // card in a deck of cards on each iteration.
-          $element->childNodes->item(0),
-          $element
-        );
-      }
-
-      // Remove the now-empty element.
-      $element->parentNode->removeChild($element);
+      Html::unwrapNode($element);
 
     }
 

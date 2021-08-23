@@ -2,6 +2,7 @@
 
 namespace Drupal\omnipedia_content_changes\EventSubscriber\Omnipedia\Changes;
 
+use Drupal\ambientimpact_core\Utility\Html;
 use Drupal\omnipedia_content_changes\Event\Omnipedia\Changes\DiffPostBuildEvent;
 use Drupal\omnipedia_content_changes\Event\OmnipediaContentChangesEventInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -48,28 +49,13 @@ class DiffAlterChangedLinkHrefsEventSubscriber implements EventSubscriberInterfa
     foreach (
       $crawler->filter('del.diffa.diffhref + ins.diffa.diffhref') as $insElement
     ) {
+
       // Remove the preceding <del> element containing the previous date's wiki
       // page link.
       $insElement->parentNode->removeChild($insElement->previousSibling);
 
-      // This essentially unwraps the <ins> element, moving all child elements
-      // just before it in the order they appear. This ensures that if there are
-      // any elements or nodes other than the expected <a>, they're preserved.
-      //
-      // @see https://stackoverflow.com/questions/11651365/how-to-insert-node-in-hierarchy-of-dom-between-one-node-and-its-child-nodes/11651813#11651813
-      for ($i = 0; $insElement->childNodes->length > 0; $i++) {
-        $insElement->parentNode->insertBefore(
-          // Note that we always specify index "0" as we're basically removing
-          // the first child each time, similar to \array_shift(), and the child
-          // list updates each time we do this, akin to removing the bottom most
-          // card in a deck of cards on each iteration.
-          $insElement->childNodes->item(0),
-          $insElement
-        );
-      }
+      Html::unwrapNode($insElement);
 
-      // Remove the now-empty <ins>.
-      $insElement->parentNode->removeChild($insElement);
     }
 
   }

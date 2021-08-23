@@ -2,6 +2,7 @@
 
 namespace Drupal\omnipedia_content\Plugin\Filter;
 
+use Drupal\ambientimpact_core\Utility\Html;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
@@ -236,25 +237,7 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
 
     foreach ($crawler->filter('li p') as $paragraph) {
 
-      // This essentially unwraps the <p> element, moving all child elements
-      // just before it in the order they appear.
-      //
-      // @see https://stackoverflow.com/questions/11651365/how-to-insert-node-in-hierarchy-of-dom-between-one-node-and-its-child-nodes/11651813#11651813
-      for ($i = 0; $paragraph->childNodes->length > 0; $i++) {
-
-        $paragraph->parentNode->insertBefore(
-          // Note that we always specify index "0" as we're basically removing
-          // the first child each time, similar to \array_shift(), and the child
-          // list updates each time we do this, akin to removing the bottom most
-          // card in a deck of cards on each iteration.
-          $paragraph->childNodes->item(0),
-          $paragraph
-        );
-
-      }
-
-      // Remove the now-empty <p>.
-      $paragraph->parentNode->removeChild($paragraph);
+      Html::unwrapNode($paragraph);
 
     }
 
