@@ -83,6 +83,7 @@ class DiffPrepareEventSubscriber implements EventSubscriberInterface {
     /** @var \Symfony\Component\DomCrawler\Crawler */
     $crawler = $event->getCrawler();
 
+    /** @var string XPath expression to find list elements. */
     $listXpath = '[(.//ol or .//ul or .//dl)]';
 
     // Find all <ins> and <del> elements that contain a list.
