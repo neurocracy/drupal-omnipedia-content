@@ -43,6 +43,9 @@ class DiffAlterLinksEventSubscriber implements EventSubscriberInterface, WikiNod
       '.diffmod a',
       'ins a',
       'del a',
+      '.diff-list li.new a',
+      '.diff-list li.removed a',
+      '.diff-list li.replacement a',
     ])) as $linkElement) {
 
       Html::setElementClassAttribute(
