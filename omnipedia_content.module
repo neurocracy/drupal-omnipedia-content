@@ -37,6 +37,12 @@ function omnipedia_content_help($routeName, RouteMatchInterface $routeMatch) {
  * - Replaces the heading permalink Markdown plug-in and CommonMark extension
  *   with our own plug-in and extension.
  *
+ * - Replaces the 'webuni/commonmark-attributes-extension' extension with the
+ *   'league/commonmark-ext-attributes' extension that ships with CommonMark
+ *   1.5+. Note that the extension name is not updated, and so will not apply
+ *   our custom class when the Markdown module switches to the
+ *   'league/commonmark-ext-attributes' extension.
+ *
  * - Replaces the 'rezozero/commonmark-ext-footnotes' extension with the
  *   'league/commonmark-ext-footnotes' extension that ships with CommonMark
  *   1.5+. Note that the extension name is not updated, and so will not apply
@@ -49,19 +55,43 @@ function omnipedia_content_help($routeName, RouteMatchInterface $routeMatch) {
  * @see \Drupal\omnipedia_content\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension
  *   Our heading permalink CommonMark extension.
  *
+ * @see \Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension\AttributesExtension
+ *   Our attributes Markdown plug-in class.
+ *
  * @see \Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension\FootnoteExtension
  *   Our footnotes Markdown plug-in class.
+ *
+ * @see \League\CommonMark\Extension\Attributes\AttributesExtension
+ *   CommonMark 1.5+ attributes extension.
  *
  * @see \League\CommonMark\Extension\Footnote\FootnoteExtension
  *   CommonMark 1.5+ footnotes extension.
  */
 function omnipedia_content_markdown_extension_info_alter(array &$info) {
+
   $info['league/commonmark-ext-heading-permalink']['class'] =
     'Drupal\\omnipedia_content\\Plugin\\Markdown\\CommonMark\\Extension\\HeadingPermalinkExtension';
 
   // @todo Is this needed?
   $info['league/commonmark-ext-heading-permalink']['installedClass'] =
     'Drupal\\omnipedia_content\\CommonMark\\Extension\\HeadingPermalink\\HeadingPermalinkExtension';
+
+  // Alter the Attributes extension to use the version that now ships with
+  // CommonMark until the Markdown module releases with support for it.
+  if (isset($info['webuni/commonmark-attributes-extension'])) {
+    $info['webuni/commonmark-attributes-extension']['class'] =
+      'Drupal\\omnipedia_content\\Plugin\\Markdown\\CommonMark\\Extension\\AttributesExtension';
+
+    $info['webuni/commonmark-attributes-extension']['installedClass'] =
+      'League\\CommonMark\\Extension\\Attributes\\AttributesExtension';
+
+    $info['webuni/commonmark-attributes-extension']['url'] =
+      'https://commonmark.thephpleague.com/extensions/attributes/';
+
+    // Use CommonMark's installed status.
+    $info['webuni/commonmark-attributes-extension']['installed'] =
+      $info['league/commonmark-ext-heading-permalink']['installed'];
+  }
 
   // Alter footnotes to use the version that now ships with CommonMark until the
   // Markdown module releases with support for it.
@@ -79,6 +109,7 @@ function omnipedia_content_markdown_extension_info_alter(array &$info) {
     $info['rezozero/commonmark-ext-footnotes']['installed'] =
       $info['league/commonmark-ext-heading-permalink']['installed'];
   }
+
 }
 
 /**
