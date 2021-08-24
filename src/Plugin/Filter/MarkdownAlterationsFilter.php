@@ -94,6 +94,10 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
   /**
    * Alter references.
    *
+   * - Adds 'references-heading' class to the references heading.
+   *
+   * - Adds 'references__list' class to the references list.
+   *
    * @param \Symfony\Component\DomCrawler\Crawler $crawler
    *   The Symfony DomCrawler instance to alter.
    */
@@ -108,27 +112,49 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
       $sup->setAttribute('class', 'reference');
     }
 
-    // Try to find the first heading preceding the .references container at the
-    // end of the document.
-    /** @var array */
-    $referencesHeadingResult = $crawler
-      ->filter('.references')
-      // This selects the nearest preceding heading, regardless of what heading
-      // level it is. This assumes that that's the References heading.
-      //
-      // @see https://stackoverflow.com/questions/30775686/xpath-get-closest-heading-element-h1-h2-h3-etc
-      ->evaluate(
-        './preceding-sibling::*[' . \implode(' or ', [
-          'self::h1',
-          'self::h2',
-          'self::h3',
-          'self::h4',
-          'self::h5',
-          'self::h6',
-        ]) . '][1]'
+    /** @var \Symfony\Component\DomCrawler\Crawler */
+    $referencesCrawler = $crawler->filter('.references');
+
+    /** @var \DOMElement|null */
+    $referencesList = $referencesCrawler->filter('ol')->getNode(0);
+
+    if (\is_object($referencesList)) {
+
+      Html::setElementClassAttribute(
+        $referencesList,
+        Html::getElementClassAttribute($referencesList)
+          ->addClass('references__list')
       );
 
+    }
+
+    // Try to find the first heading preceding the .references container at the
+    // end of the document.
+    //
+    // This selects the nearest preceding heading, regardless of what heading
+    // level it is. This assumes that that's the References heading.
+    //
+    // @see https://stackoverflow.com/questions/30775686/xpath-get-closest-heading-element-h1-h2-h3-etc
+    /** @var array */
+    $referencesHeadingResult = $referencesCrawler->evaluate(
+      './preceding-sibling::*[' . \implode(' or ', [
+        'self::h1',
+        'self::h2',
+        'self::h3',
+        'self::h4',
+        'self::h5',
+        'self::h6',
+      ]) . '][1]'
+    );
+
     foreach ($referencesHeadingResult as $heading) {
+
+      Html::setElementClassAttribute(
+        $heading,
+        Html::getElementClassAttribute($heading)
+          ->addClass('references-heading')
+      );
+
       /** @var \Symfony\Component\DomCrawler\Crawler */
       $permalinkCrawler = new Crawler($heading);
 
@@ -160,6 +186,7 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
       }
 
       $tableOfContentsLink->nodeValue = $permalinkName;
+
     }
 
   }
@@ -246,8 +273,10 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
   /**
    * Alter table of contents.
    *
-   * This finds any table of contents lists and wraps them in a container with
-   * a heading.
+   * - Finds any table of contents lists and wraps them in a container with a
+   *   heading.
+   *
+   * - Adds the table of contents list class to all nested lists.
    *
    * @param \Symfony\Component\DomCrawler\Crawler $crawler
    *   The Symfony DomCrawler instance to alter.
@@ -279,6 +308,14 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
       );
 
       $container->appendChild($list);
+
+      foreach ($listCrawler->children()->filter('ol, ul') as $subList) {
+        Html::setElementClassAttribute(
+          $subList,
+          Html::getElementClassAttribute($subList)
+            ->addClass($this->getTableOfContentsListClass())
+        );
+      }
 
     }
 
