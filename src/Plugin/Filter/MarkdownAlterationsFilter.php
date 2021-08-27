@@ -199,6 +199,9 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
    * link, if any. The plain text of the caption is used, without any HTML
    * elements, e.g. links or abbreviations.
    *
+   * Additionally, this removes the .omnipedia-media-caption-rendered element
+   * regardless of whether it has been used to avoid potential layout issues.
+   *
    * @param \Symfony\Component\DomCrawler\Crawler $crawler
    *   The Symfony DomCrawler instance to alter.
    */
@@ -239,11 +242,14 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
         'data-photoswipe-caption', \trim($caption->textContent)
       );
 
-      // Finally, remove the caption element as it's served its purpose and can
-      // cause layout issues if left in.
-      $caption->parentNode->removeChild($caption);
-
     }
+
+    // Remove all captions, regardless of whether they were used, as they can
+    // potentially cause layout issues if left in.
+    foreach ($captionsCrawler as $caption) {
+      $caption->parentNode->removeChild($caption);
+    }
+
   }
 
   /**
