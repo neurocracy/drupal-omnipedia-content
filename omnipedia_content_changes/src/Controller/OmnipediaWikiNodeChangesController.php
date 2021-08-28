@@ -115,7 +115,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('current_user'),
-      $container->get('logger.factory')->get('omnipedia_content_changes'),
+      $container->get('logger.channel.omnipedia_content_changes'),
       $container->get('omnipedia.timeline'),
       $container->get('omnipedia.wiki_node_changes_builder'),
       $container->get('omnipedia.wiki_node_changes_cache'),

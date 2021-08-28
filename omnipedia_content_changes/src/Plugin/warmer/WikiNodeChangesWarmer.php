@@ -131,7 +131,7 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
     );
 
     $instance->setLoggerChannel(
-      $container->get('logger.factory')->get('omnipedia_content_changes')
+      $container->get('logger.channel.omnipedia_content_changes')
     );
 
     $instance->setNodeStorage(

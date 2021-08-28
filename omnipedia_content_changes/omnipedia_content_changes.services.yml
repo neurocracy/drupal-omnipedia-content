@@ -8,6 +8,12 @@ services:
     factory: cache_factory:get
     arguments: [omnipedia_wiki_node_changes]
 
+  # Our logger channel.
+  logger.channel.omnipedia_content_changes:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: ['omnipedia_content_changes']
+
   # The Omnipedia wiki node changes builder service.
   omnipedia.wiki_node_changes_builder:
     class: Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilder
