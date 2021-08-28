@@ -4,7 +4,6 @@ namespace Drupal\omnipedia_content_changes\Plugin\warmer;
 
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Core\Form\SubformStateInterface;
-use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\node\NodeStorageInterface;
@@ -333,8 +332,7 @@ class WikiNodeChangesWarmer extends WarmerPluginBase {
         // @see \watchdog_exception()
         //   We're replicating what this function does, but using the injected
         //   logger channel.
-        $this->loggerChannel->log(
-          RfcLogLevel::ERROR,
+        $this->loggerChannel->error(
           '%type: @message in %function (line %line of %file).',
           Error::decodeException($exception)
         );

@@ -6,7 +6,6 @@ use Drupal\Component\Utility\Xss;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilderInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesCacheInterface;
@@ -225,8 +224,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
 
       // Log this uncached view attempt in case it's useful data for debugging
       // or future optimizations.
-      $this->loggerChannel->log(
-        RfcLogLevel::DEBUG,
+      $this->loggerChannel->debug(
         'Wiki node changes not cached: user <code>%uid</code> requested node <code>%nid</code> with cache ID <code>%cid</code><br>Available cache IDs for this node:<pre>%cids</pre>Current user\'s roles:<pre>%roles</pre>',
         [
           '%uid'    => $this->currentUser->id(),
