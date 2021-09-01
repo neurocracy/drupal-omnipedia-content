@@ -40,46 +40,46 @@
  */
 function omnipedia_content_markdown_extension_info_alter(array &$info) {
 
-  $info['league/commonmark-ext-heading-permalink']['class'] =
+  $info['commonmark-heading-permalink']['class'] =
     'Drupal\\omnipedia_content\\Plugin\\Markdown\\CommonMark\\Extension\\HeadingPermalinkExtension';
 
   // @todo Is this needed?
-  $info['league/commonmark-ext-heading-permalink']['installedClass'] =
+  $info['commonmark-heading-permalink']['installedClass'] =
     'Drupal\\omnipedia_content\\CommonMark\\Extension\\HeadingPermalink\\HeadingPermalinkExtension';
 
-  // Alter the Attributes extension to use the version that now ships with
-  // CommonMark until the Markdown module releases with support for it.
-  if (isset($info['webuni/commonmark-attributes-extension'])) {
-    $info['webuni/commonmark-attributes-extension']['class'] =
-      'Drupal\\omnipedia_content\\Plugin\\Markdown\\CommonMark\\Extension\\AttributesExtension';
+  // // Alter the Attributes extension to use the version that now ships with
+  // // CommonMark until the Markdown module releases with support for it.
+  // if (isset($info['webuni/commonmark-attributes-extension'])) {
+  //   $info['webuni/commonmark-attributes-extension']['class'] =
+  //     'Drupal\\omnipedia_content\\Plugin\\Markdown\\CommonMark\\Extension\\AttributesExtension';
 
-    $info['webuni/commonmark-attributes-extension']['installedClass'] =
-      'League\\CommonMark\\Extension\\Attributes\\AttributesExtension';
+  //   $info['webuni/commonmark-attributes-extension']['installedClass'] =
+  //     'League\\CommonMark\\Extension\\Attributes\\AttributesExtension';
 
-    $info['webuni/commonmark-attributes-extension']['url'] =
-      'https://commonmark.thephpleague.com/extensions/attributes/';
+  //   $info['webuni/commonmark-attributes-extension']['url'] =
+  //     'https://commonmark.thephpleague.com/extensions/attributes/';
 
-    // Use CommonMark's installed status.
-    $info['webuni/commonmark-attributes-extension']['installed'] =
-      $info['league/commonmark-ext-heading-permalink']['installed'];
-  }
+  //   // Use CommonMark's installed status.
+  //   $info['webuni/commonmark-attributes-extension']['installed'] =
+  //     $info['league/commonmark-ext-heading-permalink']['installed'];
+  // }
 
-  // Alter footnotes to use the version that now ships with CommonMark until the
-  // Markdown module releases with support for it.
-  if (isset($info['rezozero/commonmark-ext-footnotes'])) {
-    $info['rezozero/commonmark-ext-footnotes']['class'] =
-      'Drupal\\omnipedia_content\\Plugin\\Markdown\\CommonMark\\Extension\\FootnoteExtension';
+  // // Alter footnotes to use the version that now ships with CommonMark until the
+  // // Markdown module releases with support for it.
+  // if (isset($info['rezozero/commonmark-ext-footnotes'])) {
+  //   $info['rezozero/commonmark-ext-footnotes']['class'] =
+  //     'Drupal\\omnipedia_content\\Plugin\\Markdown\\CommonMark\\Extension\\FootnoteExtension';
 
-    $info['rezozero/commonmark-ext-footnotes']['installedClass'] =
-      'League\\CommonMark\\Extension\\Footnote\\FootnoteExtension';
+  //   $info['rezozero/commonmark-ext-footnotes']['installedClass'] =
+  //     'League\\CommonMark\\Extension\\Footnote\\FootnoteExtension';
 
-    $info['rezozero/commonmark-ext-footnotes']['url'] =
-      'https://commonmark.thephpleague.com/extensions/footnotes/';
+  //   $info['rezozero/commonmark-ext-footnotes']['url'] =
+  //     'https://commonmark.thephpleague.com/extensions/footnotes/';
 
-    // Use CommonMark's installed status.
-    $info['rezozero/commonmark-ext-footnotes']['installed'] =
-      $info['league/commonmark-ext-heading-permalink']['installed'];
-  }
+  //   // Use CommonMark's installed status.
+  //   $info['rezozero/commonmark-ext-footnotes']['installed'] =
+  //     $info['league/commonmark-ext-heading-permalink']['installed'];
+  // }
 
 }
 
