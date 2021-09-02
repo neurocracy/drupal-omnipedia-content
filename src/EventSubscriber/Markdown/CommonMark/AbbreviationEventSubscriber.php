@@ -439,6 +439,12 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
     /** @var \League\CommonMark\Block\Element\Document */
     $document = $event->getDocument();
 
+    // If this document is in an attached data context, return here and don't
+    // try to match any abbreviations.
+    if (\in_array('attachedData', $document->data['omnipediaContext'])) {
+      return;
+    }
+
     /** @var \League\CommonMark\Node\NodeWalker */
     $walker = $document->walker();
 
