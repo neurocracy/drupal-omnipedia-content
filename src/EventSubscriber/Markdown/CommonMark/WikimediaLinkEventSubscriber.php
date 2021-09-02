@@ -65,8 +65,19 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
     string $eventName,
     EventDispatcherInterface $eventDispatcher
   ): void {
+
     /** @var \League\CommonMark\Block\Element\Document */
     $document = $event->getDocument();
+
+    // If this document is in an attached data context, return here to avoid
+    // potential infinite recursion in case attached data contains a Wikimedia
+    // link pointing to attached data that contains the same Wikimedia link or
+    // creates a chain that contains the same Wikimedia link.
+    //
+    // @todo Implement a way to strip/unwrap these links in this context?
+    if (\in_array('attachedData', $document->data['omnipediaContext'])) {
+      return;
+    }
 
     /** @var \League\CommonMark\Node\NodeWalker */
     $walker = $document->walker();
