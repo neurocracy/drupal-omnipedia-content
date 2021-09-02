@@ -33,6 +33,12 @@ services:
     tags:
       - { name: 'event_subscriber' }
 
+  # Event subscriber to provide Omnipedia context data to CommonMark documents.
+  omnipedia_content.markdown_commonmark_omnipedia_context_event_subscriber:
+    class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\OmnipediaContextEventSubscriber
+    tags:
+      - { name: 'event_subscriber', priority: -50 }
+
   # Event subscriber to enable and output CommonMark abbreviations.
   omnipedia_content.markdown_commonmark_abbreviation_event_subscriber:
     class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\AbbreviationEventSubscriber
