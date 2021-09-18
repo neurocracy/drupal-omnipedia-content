@@ -22,7 +22,7 @@
   @include media('>=omnipedia-media-floated') {
     &--align-left,
     &--align-right {
-      max-width: 50%;
+      max-width: 30%;
     }
     &--align-left {
       float:        left;
