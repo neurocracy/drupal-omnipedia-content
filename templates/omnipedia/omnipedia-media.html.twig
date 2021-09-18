@@ -7,6 +7,9 @@
  *
  * - 'media': A render array for the media entity.
  *
+ * - 'media_type': The media entity type/bundle, e.g. 'image', 'video',
+ *   'remote_video', etc.
+ *
  * - 'attributes': Attribute object for the container element.
  *
  * - 'align': The direction to float this media element ('left' or 'right'), or
@@ -29,6 +32,7 @@
   base_class,
   base_class ~ '--align-' ~ align,
   base_class ~ '--style-' ~ style,
+  base_class ~ '--type-'  ~ media_type|clean_class,
 ]) %}
 
 {% set media = media|merge({

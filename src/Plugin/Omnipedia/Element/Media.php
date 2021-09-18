@@ -77,6 +77,7 @@ class Media extends OmnipediaElementBase {
       'omnipedia_media' => [
         'variables' => [
           'media'       => [],
+          'media_type'  => null,
           'attributes'  => null,
           'align'       => 'right',
           'style'       => 'framed',
@@ -234,6 +235,7 @@ class Media extends OmnipediaElementBase {
       '#theme'      => 'omnipedia_media',
 
       '#media'      => $mediaRenderArray,
+      '#media_type' => $mediaEntity->bundle(),
       '#attributes' => $containerAttributes,
       '#align'      => $align,
       '#style'      => $style,
