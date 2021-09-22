@@ -6,24 +6,14 @@ core_version_requirement: ^8 || ^9
 
 dependencies:
   - drupal:datetime_range
-  - drupal:media
   - drupal:node
   - drupal:user
   - diff:diff
   - omnipedia_core:omnipedia_core
   - ambientimpact_core:ambientimpact_core
   - ambientimpact_markdown:ambientimpact_markdown
-  - ambientimpact_media:ambientimpact_media
   - ambientimpact_ux:ambientimpact_ux
   - hook_event_dispatcher:core_event_dispatcher
   - hook_event_dispatcher:views_event_dispatcher
   - markdown:markdown
   - warmer:warmer
-
-config_devel:
-  install:
-    - core.entity_view_mode.media.omnipedia_embedded
-    - core.entity_view_mode.media.omnipedia_embedded_group
-    - core.entity_view_display.media.image.omnipedia_embedded
-    - core.entity_view_display.media.image.omnipedia_embedded_group
-    - image.style.omnipedia_embedded_group
