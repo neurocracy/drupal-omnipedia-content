@@ -26,7 +26,8 @@
         "UrlGenerator improperly escapes a colon in the path [#3165305]: https://www.drupal.org/project/drupal/issues/3165305#comment-14058586 ": "https://www.drupal.org/files/issues/2021-04-13/url_escaped-3165305-10.patch"
       },
       "drupal/markdown": {
-        "Declaration of Drupal\\markdown\\Plugin\\Markdown\\MissingExtension::isBundled is not compatible with Drupal\\markdown\\Plugin\\Markdown\\ExtensionInterface [#3215919]: https://www.drupal.org/project/markdown/issues/3215919 ": "https://git.drupalcode.org/project/markdown/-/merge_requests/10.patch"
+        "Declaration of Drupal\\markdown\\Plugin\\Markdown\\MissingExtension::isBundled is not compatible with Drupal\\markdown\\Plugin\\Markdown\\ExtensionInterface [#3215919]: https://www.drupal.org/project/markdown/issues/3215919 ": "https://git.drupalcode.org/project/markdown/-/merge_requests/10.patch",
+        "Error: Call to a member function getId() on bool in markdown_preprocess_installable_library() (line 179 of markdown.module) [#3222716]: https://www.drupal.org/project/markdown/issues/3222716 ": "https://git.drupalcode.org/project/markdown/-/merge_requests/12.patch"
       }
     }
   }
