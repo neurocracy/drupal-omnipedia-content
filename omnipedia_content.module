@@ -5,8 +5,8 @@
  *
  * This performs the following:
  *
- * - Replaces the heading permalink Markdown plug-in and CommonMark extension
- *   with our own plug-in and extension.
+
+ * - Replaces the heading permalink CommonMark extension with our own.
  *
  * - Replaces the 'rezozero/commonmark-ext-footnotes' extension with the
  *   'league/commonmark-ext-footnotes' extension that ships with CommonMark
@@ -14,8 +14,6 @@
  *   our custom class when the Markdown module switches to the
  *   'league/commonmark-ext-footnotes' extension.
  *
- * @see \Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension\HeadingPermalinkExtension
- *   Our heading permalink Markdown plug-in class.
  *
  * @see \Drupal\omnipedia_content\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension
  *   Our heading permalink CommonMark extension.
@@ -28,12 +26,8 @@
  */
 function omnipedia_content_markdown_extension_info_alter(array &$info) {
 
-  $info['commonmark-heading-permalink']['class'] =
-    'Drupal\\omnipedia_content\\Plugin\\Markdown\\CommonMark\\Extension\\HeadingPermalinkExtension';
-
-  // @todo Is this needed?
-  $info['commonmark-heading-permalink']['installedClass'] =
-    'Drupal\\omnipedia_content\\CommonMark\\Extension\\HeadingPermalink\\HeadingPermalinkExtension';
+  $info['commonmark-heading-permalink']['object'] =
+    'Drupal\omnipedia_content\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension';
 
   // // Alter footnotes to use the version that now ships with CommonMark until the
   // // Markdown module releases with support for it.
