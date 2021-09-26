@@ -14,8 +14,6 @@ use League\CommonMark\Extension\Footnote\Node\FootnoteContainer;
 use League\CommonMark\Extension\Footnote\Node\FootnoteRef;
 use League\CommonMark\Inline\Element\Text;
 use League\CommonMark\Reference\Reference;
-use Drupal\markdown\Plugin\Markdown\SettingsInterface;
-use Drupal\markdown\Traits\SettingsTrait;
 
 /**
  * Omnipedia Markdown footnotes plug-in class.
@@ -28,11 +26,6 @@ use Drupal\markdown\Traits\SettingsTrait;
  *
  * - Inserts a heading just before the footnotes container, named "References".
  *
- * Note that the alter hook only applies this class to the
- * 'rezozero/commonmark-ext-footnotes' extension, meaning that this class will
- * be ignored once the Markdown module switches over to the
- * 'league/commonmark-ext-footnotes' extension shipped with CommonMark 1.5+.
- *
  * This does not have an annotation as we don't want Drupal's plug-in system to
  * pick it up, because we alter the existing extension in the alter hook,
  * replacing it with this class.
@@ -43,23 +36,17 @@ use Drupal\markdown\Traits\SettingsTrait;
  * @see \Drupal\omnipedia_content\Plugin\Filter\MarkdownAlterationsFilter
  *   Performs additional alterations that are too difficult or not possible in
  *   this extension.
- *
- * @todo When @link https://www.drupal.org/project/markdown/issues/3136378
- *   Markdown starts to support the built-in CommonMark footnotes @endLink,
- *   revise this extension as needed.
- *
- * @see https://git.drupalcode.org/project/markdown/-/commit/0749113699124bc2c1b4347b884445dc074aaf83
- *   Markdown module commit that adds support for the built-in CommonMark
- *   footnotes extension.
  */
-class FootnoteExtension extends MarkdownFootnoteExtension implements SettingsInterface {
-
-  use SettingsTrait;
+class FootnoteExtension extends MarkdownFootnoteExtension {
 
   /**
    * {@inheritdoc}
+   *
+   * This sets our expected classes, ID prefix, and disables the <hr> by
+   * default. These should not be altered without altering the CSS that uses
+   * them as well.
    */
-  public static function defaultSettings() {
+  public static function defaultSettings($pluginDefinition) {
     return [
       'backref_class'       => 'references__backreference-link',
       'container_add_hr'    => false,
@@ -74,21 +61,16 @@ class FootnoteExtension extends MarkdownFootnoteExtension implements SettingsInt
   /**
    * {@inheritdoc}
    */
-  public function settingsKey() {
-    return 'footnote';
-  }
+  public function register($environment) {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function setEnvironment(EnvironmentInterface $environment) {
-    $environment->addExtension(new CommonMarkFootnoteExtension());
+    parent::register($environment);
 
     $environment->addEventListener(
       DocumentParsedEvent::class,
       [\get_class($this), 'onDocumentParsed'],
       -10
     );
+
   }
 
   /**
