@@ -60,17 +60,17 @@ $changes-diff-padding: 0.3em;
 ///
 /// Stripe colour to apply to removed diffs for colour blindness on light.
 ///
-$changes-diff-removed-stripe-colour-on-light: hsla(0, 0, 0, 0.10);
+$changes-diff-removed-stripe-colour-on-light: hsla(0, 0%, 0%, 0.10);
 
 ///
 /// Stripe colour to apply to removed diffs for colour blindness on dark.
 ///
-$changes-diff-removed-stripe-colour-on-dark: hsla(0, 0, 0, 0.25);
+$changes-diff-removed-stripe-colour-on-dark: hsla(0, 0%, 0%, 0.25);
 
 ///
 /// Stripe colour to apply to changed diffs for colour blindness on light.
 ///
-$changes-diff-changed-stripe-colour-on-light: hsla(0, 0, 0, 0.15);
+$changes-diff-changed-stripe-colour-on-light: hsla(0, 0%, 0%, 0.15);
 
 ///
 /// Stripe colour to apply to changed diffs for colour blindness on light.
