@@ -2,14 +2,17 @@
 //   Omnipedia <main-page> element partial
 // -----------------------------------------------------------------------------
 
+@use 'sass/helpers/breakpoint';
+@use 'sass/variables/general';
+
 ///
 /// Spacing around and within the main page container.
 ///
-/// @require {variable} $general-spacing
+/// @require {variable} general.$general-spacing
 ///
-$omnipedia-main-page-spacing: $general-spacing * 1.5 !default;
+$omnipedia-main-page-spacing: general.$general-spacing * 1.5 !default;
 
-@include add-breakpoints((
+@include breakpoint.add((
   // The viewport width at which the main page switches from single column to
   // two columns.
   'omnipedia-main-page-dual-column': 70em

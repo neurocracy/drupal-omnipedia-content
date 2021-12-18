@@ -2,14 +2,16 @@
 //   Omnipedia <infobox> element stylesheet
 // -----------------------------------------------------------------------------
 
-@import '../../../../ambientimpact/ambientimpact_core/stylesheets/_common.scss';
-@import '../../../_components.scss';
+@use '_infobox' as infobox;
+@use 'sass/helpers/breakpoint';
+@use 'sass/helpers/hide';
+@use 'sass/helpers/layout';
 
 .omnipedia-infobox {
   max-width: 100%;
 
-  margin-bottom:  $omnipedia-infobox-outer-spacing;
-  padding:        $omnipedia-infobox-inner-spacing;
+  margin-bottom:  infobox.$omnipedia-infobox-outer-spacing;
+  padding:        infobox.$omnipedia-infobox-inner-spacing;
 
   // Match Wikipedia's infobox font size.
   font-size: 88%;
@@ -20,19 +22,19 @@
     font-size: 100%;
   }
 
-  @include media('>=omnipedia-infobox-floated') {
+  @include breakpoint.on('>=omnipedia-infobox-floated') {
     float: right;
 
     max-width:  50%;
     width:      22em;
 
-    margin-left: $omnipedia-infobox-outer-spacing;
+    margin-left: infobox.$omnipedia-infobox-outer-spacing;
   }
 
   &__name {
     display:    block;
 
-    padding-bottom: $omnipedia-infobox-inner-spacing;
+    padding-bottom: infobox.$omnipedia-infobox-inner-spacing;
 
     font-size:    120%;
     text-align:   center;
@@ -44,7 +46,7 @@
 
     &-item-title {
       * + & {
-        margin-top: $omnipedia-infobox-inner-spacing;
+        margin-top: infobox.$omnipedia-infobox-inner-spacing;
       }
 
       font-weight: bold;
@@ -54,10 +56,10 @@
       margin-left: 0;
     }
 
-    @include use-grid {
+    @include layout.use-grid {
       display: grid;
 
-      grid-gap: $omnipedia-infobox-inner-spacing;
+      grid-gap: infobox.$omnipedia-infobox-inner-spacing;
 
       grid-template-columns: 1fr 2fr;
 
@@ -81,7 +83,7 @@
 
     // The 'media' item title should be visually hidden.
     &-item-title--media {
-      @include hide-me;
+      @include hide.me;
     }
 
     // Media value items are centred horizontally, including any captions they

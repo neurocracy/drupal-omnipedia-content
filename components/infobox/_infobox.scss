@@ -2,21 +2,24 @@
 //   Omnipedia <infobox> element partial
 // -----------------------------------------------------------------------------
 
+@use 'sass/helpers/breakpoint';
+@use 'sass/variables/general';
+
 ///
 /// Spacing between the infobox and other elements.
 ///
-/// @require {variable} $general-spacing
+/// @require {variable} general.$general-spacing
 ///
-$omnipedia-infobox-outer-spacing: $general-spacing !default;
+$omnipedia-infobox-outer-spacing: general.$general-spacing !default;
 
 ///
 /// Spacing within the infobox and its inner elements.
 ///
-/// @require {variable} $general-spacing
+/// @require {variable} general.$general-spacing
 ///
-$omnipedia-infobox-inner-spacing: $general-spacing !default;
+$omnipedia-infobox-inner-spacing: general.$general-spacing !default;
 
-@include add-breakpoints((
+@include breakpoint.add((
   // The viewport width at which infoboxes can be floated alongside other
   // content.
   'omnipedia-infobox-floated': 30em

@@ -2,7 +2,9 @@
 //   Omnipedia - Content changes - Wiki node changes styles
 // -----------------------------------------------------------------------------
 
-@import '../../../../../ambientimpact/ambientimpact_core/stylesheets/_common.scss';
+@use 'material.common/material.general' as material-general;
+@use 'sass:color';
+@use 'sass/helpers/colour';
 
 ///
 /// Omnipedia wiki node changes - added element background colour on light.
@@ -16,7 +18,7 @@ $changes-diff-added-background-colour-on-light: #9CCC65;
 ///
 /// @link https://www.materialui.co/colors/light-green/900
 ///
-$changes-diff-added-background-colour-on-dark: scale-color(
+$changes-diff-added-background-colour-on-dark: color.scale(
   #33691E, $lightness: -10%
 );
 
@@ -32,7 +34,7 @@ $changes-diff-removed-background-colour-on-light: #ef9a9a;
 ///
 /// @link https://www.materialui.co/colors/red/900
 ///
-$changes-diff-removed-background-colour-on-dark: scale-color(
+$changes-diff-removed-background-colour-on-dark: color.scale(
   #b71c1c, $lightness: -20%
 );
 
@@ -48,7 +50,7 @@ $changes-diff-changed-background-colour-on-light: #FFF176;
 ///
 /// @link https://www.materialui.co/colors/yellow/700
 ///
-$changes-diff-changed-background-colour-on-dark: scale-color(
+$changes-diff-changed-background-colour-on-dark: color.scale(
   #FBC02D, $lightness: -40%
 );
 
@@ -90,14 +92,14 @@ $changes-diff-changed-stripe-colour-on-dark:
 
   ins.diffmod {
 
-    @include set-colours($background: #93efef);
+    @include colour.set($background: #93efef);
 
     text-decoration: none;
 
   }
 
   del.diffmod {
-    @include set-colours($background: #fc81e8);
+    @include colour.set($background: #fc81e8);
   }
 
 }
@@ -108,7 +110,7 @@ $changes-diff-changed-stripe-colour-on-dark:
     padding-left:   $changes-diff-padding;
     padding-right:  $changes-diff-padding;
 
-    border-radius:  $material-border-radius;
+    border-radius:  material-general.$border-radius;
 
     // If this wraps to a new line, this property makes the horizontal padding
     // and border radius apply to each line where they break:
@@ -121,12 +123,12 @@ $changes-diff-changed-stripe-colour-on-dark:
     // Remove the default underlines on <ins> elements.
     text-decoration: none;
 
-    @include set-colours(
+    @include colour.set(
       $background: $changes-diff-added-background-colour-on-light
     );
 
-    @include on-dark-colour-scheme {
-      @include set-colours(
+    @include colour.on-dark-scheme {
+      @include colour.set(
         $background: $changes-diff-added-background-colour-on-dark
       );
     }
@@ -135,12 +137,12 @@ $changes-diff-changed-stripe-colour-on-dark:
   &__diff--removed {
     text-decoration: line-through;
 
-    @include set-colours(
+    @include colour.set(
       $background: $changes-diff-removed-background-colour-on-light
     );
 
-    @include on-dark-colour-scheme {
-      @include set-colours(
+    @include colour.on-dark-scheme {
+      @include colour.set(
         $background: $changes-diff-removed-background-colour-on-dark
       );
     }
@@ -156,7 +158,7 @@ $changes-diff-changed-stripe-colour-on-dark:
 
     --stripe-colour: #{$changes-diff-removed-stripe-colour-on-light};
 
-    @include on-dark-colour-scheme {
+    @include colour.on-dark-scheme {
       --stripe-colour: #{$changes-diff-removed-stripe-colour-on-dark};
     }
 
@@ -165,19 +167,19 @@ $changes-diff-changed-stripe-colour-on-dark:
   }
 
   &__diff--changed {
-    @include set-colours(
+    @include colour.set(
       $background: $changes-diff-changed-background-colour-on-light
     );
 
-    @include on-dark-colour-scheme {
-      @include set-colours(
+    @include colour.on-dark-scheme {
+      @include colour.set(
         $background: $changes-diff-changed-background-colour-on-dark
       );
     }
 
     --stripe-colour: #{$changes-diff-changed-stripe-colour-on-light};
 
-    @include on-dark-colour-scheme {
+    @include colour.on-dark-scheme {
       --stripe-colour: #{$changes-diff-changed-stripe-colour-on-dark};
     }
 

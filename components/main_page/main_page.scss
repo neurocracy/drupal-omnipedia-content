@@ -2,15 +2,16 @@
 //   Omnipedia <main-page> element stylesheet
 // -----------------------------------------------------------------------------
 
-@import '../../../../ambientimpact/ambientimpact_core/stylesheets/_common.scss';
-@import '../../../_components.scss';
+@use '_main_page' as main-page;
+@use 'sass/helpers/breakpoint';
+@use 'sass/variables/general';
 
 .omnipedia-main-page {
   * + &__item {
-    margin-top: $omnipedia-main-page-spacing * 2;
+    margin-top: main-page.$omnipedia-main-page-spacing * 2;
   }
 
-  @include media('>=omnipedia-main-page-dual-column') {
+  @include breakpoint.on('>=omnipedia-main-page-dual-column') {
     // Since we're only dealing with two columns and one row at the moment,
     // there's no point using grid as flexbox has been around longer and
     // we'd just have to maintain two layout methods. If this gets more
@@ -22,7 +23,7 @@
 
       &__item {
         width:  49%;
-        width:  calc(50% - #{$omnipedia-main-page-spacing} / 2);
+        width:  calc(50% - #{main-page.$omnipedia-main-page-spacing} / 2);
 
         * + & {
           margin-top: 0;
@@ -37,8 +38,8 @@
 
     box-sizing: border-box;
 
-    @include media('>=omnipedia-main-page-dual-column') {
-      padding:  $omnipedia-main-page-spacing;
+    @include breakpoint.on('>=omnipedia-main-page-dual-column') {
+      padding:  main-page.$omnipedia-main-page-spacing;
     }
   }
 
@@ -54,9 +55,9 @@
 
   &__heading {
     margin-top:     0;
-    margin-bottom:  $general-spacing;
+    margin-bottom:  general.$general-spacing;
 
-    @include media('>=omnipedia-main-page-dual-column') {
+    @include breakpoint.on('>=omnipedia-main-page-dual-column') {
       margin-top:   -0.4em;
     }
   }
@@ -76,6 +77,6 @@
 
   & + * {
     // Add a top margin before any element following this section.
-    margin-top: $omnipedia-main-page-spacing;
+    margin-top: main-page.$omnipedia-main-page-spacing;
   }
 }
