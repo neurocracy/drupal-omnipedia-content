@@ -10,7 +10,7 @@
 ///
 /// @require {variable} general.$general-spacing
 ///
-$omnipedia-main-page-spacing: general.$general-spacing * 1.5 !default;
+$spacing: general.$general-spacing * 1.5 !default;
 
 @include breakpoint.add((
   // The viewport width at which the main page switches from single column to

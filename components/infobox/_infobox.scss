@@ -10,14 +10,14 @@
 ///
 /// @require {variable} general.$general-spacing
 ///
-$omnipedia-infobox-outer-spacing: general.$general-spacing !default;
+$outer-spacing: general.$general-spacing !default;
 
 ///
 /// Spacing within the infobox and its inner elements.
 ///
 /// @require {variable} general.$general-spacing
 ///
-$omnipedia-infobox-inner-spacing: general.$general-spacing !default;
+$inner-spacing: general.$general-spacing !default;
 
 @include breakpoint.add((
   // The viewport width at which infoboxes can be floated alongside other

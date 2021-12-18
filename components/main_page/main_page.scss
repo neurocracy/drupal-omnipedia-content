@@ -8,7 +8,7 @@
 
 .omnipedia-main-page {
   * + &__item {
-    margin-top: main-page.$omnipedia-main-page-spacing * 2;
+    margin-top: main-page.$spacing * 2;
   }
 
   @include breakpoint.on('>=omnipedia-main-page-dual-column') {
@@ -23,7 +23,7 @@
 
       &__item {
         width:  49%;
-        width:  calc(50% - #{main-page.$omnipedia-main-page-spacing} / 2);
+        width:  calc(50% - #{main-page.$spacing} / 2);
 
         * + & {
           margin-top: 0;
@@ -39,7 +39,7 @@
     box-sizing: border-box;
 
     @include breakpoint.on('>=omnipedia-main-page-dual-column') {
-      padding:  main-page.$omnipedia-main-page-spacing;
+      padding:  main-page.$spacing;
     }
   }
 
@@ -77,6 +77,6 @@
 
   & + * {
     // Add a top margin before any element following this section.
-    margin-top: main-page.$omnipedia-main-page-spacing;
+    margin-top: main-page.$spacing;
   }
 }

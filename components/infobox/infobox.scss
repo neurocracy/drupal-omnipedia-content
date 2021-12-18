@@ -10,8 +10,8 @@
 .omnipedia-infobox {
   max-width: 100%;
 
-  margin-bottom:  infobox.$omnipedia-infobox-outer-spacing;
-  padding:        infobox.$omnipedia-infobox-inner-spacing;
+  margin-bottom:  infobox.$outer-spacing;
+  padding:        infobox.$inner-spacing;
 
   // Match Wikipedia's infobox font size.
   font-size: 88%;
@@ -28,13 +28,13 @@
     max-width:  50%;
     width:      22em;
 
-    margin-left: infobox.$omnipedia-infobox-outer-spacing;
+    margin-left: infobox.$outer-spacing;
   }
 
   &__name {
     display:    block;
 
-    padding-bottom: infobox.$omnipedia-infobox-inner-spacing;
+    padding-bottom: infobox.$inner-spacing;
 
     font-size:    120%;
     text-align:   center;
@@ -46,7 +46,7 @@
 
     &-item-title {
       * + & {
-        margin-top: infobox.$omnipedia-infobox-inner-spacing;
+        margin-top: infobox.$inner-spacing;
       }
 
       font-weight: bold;
@@ -59,7 +59,7 @@
     @include layout.use-grid {
       display: grid;
 
-      grid-gap: infobox.$omnipedia-infobox-inner-spacing;
+      grid-gap: infobox.$inner-spacing;
 
       grid-template-columns: 1fr 2fr;
 
