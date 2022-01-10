@@ -2,7 +2,7 @@ name: Omnipedia - Content (legacy)
 type: module
 description: Provides legacy content-related functionality for Omnipedia, such as text filters to convert legacy content.
 package: Omnipedia
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9
 
 dependencies:
   - ambientimpact_markdown:ambientimpact_markdown
