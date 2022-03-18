@@ -6,6 +6,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Session\PermissionsHashGeneratorInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesUserInterface;
 use Drupal\omnipedia_core\Entity\NodeInterface;
@@ -32,9 +33,9 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
   protected $defaultCache;
 
   /**
-   * The current user.
+   * The current user proxy service.
    *
-   * @var \Drupal\Core\Session\AccountInterface
+   * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $currentUser;
 
@@ -74,8 +75,8 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
    * @param \Drupal\Core\Cache\CacheBackendInterface $defaultCache
    *   The default Drupal cache bin.
    *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current user.
+   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
+   *   The current user proxy service.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The Drupal entity type manager.
@@ -84,7 +85,7 @@ class WikiNodeChangesUser implements WikiNodeChangesUserInterface {
    *   The Drupal user permissions hash generator.
    */
   public function __construct(
-    AccountInterface                  $currentUser,
+    AccountProxyInterface             $currentUser,
     CacheBackendInterface             $defaultCache,
     EntityTypeManagerInterface        $entityTypeManager,
     PermissionsHashGeneratorInterface $permissionsHashGenerator

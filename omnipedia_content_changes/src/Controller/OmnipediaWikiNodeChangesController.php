@@ -7,6 +7,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesBuilderInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesCacheInterface;
 use Drupal\omnipedia_content_changes\Service\WikiNodeChangesInfoInterface;
@@ -23,9 +24,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class OmnipediaWikiNodeChangesController extends ControllerBase {
 
   /**
-   * The current user.
+   * The current user proxy service.
    *
-   * @var \Drupal\Core\Session\AccountInterface
+   * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $currentUser;
 
@@ -67,8 +68,8 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
   /**
    * Constructs this controller; saves dependencies.
    *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current user.
+   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
+   *   The current user proxy service.
    *
    * @param \Psr\Log\LoggerInterface $loggerChannel
    *   Our logger channel.
@@ -89,7 +90,7 @@ class OmnipediaWikiNodeChangesController extends ControllerBase {
    *   The Omnipedia wiki node changes user service.
    */
   public function __construct(
-    AccountInterface                $currentUser,
+    AccountProxyInterface           $currentUser,
     LoggerInterface                 $loggerChannel,
     TimelineInterface               $timeline,
     WikiNodeChangesBuilderInterface $wikiNodeChangesBuilder,
