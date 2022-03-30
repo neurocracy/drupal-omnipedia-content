@@ -1,0 +1,32 @@
+diff --git a/core/lib/Drupal/Core/Routing/UrlGenerator.php b/core/lib/Drupal/Core/Routing/UrlGenerator.php
+index 5e21568be5..4d899a88e5 100644
+--- a/core/lib/Drupal/Core/Routing/UrlGenerator.php
++++ b/core/lib/Drupal/Core/Routing/UrlGenerator.php
+@@ -65,10 +65,8 @@ class UrlGenerator implements UrlGeneratorInterface {
+     // the slash can be used to designate a hierarchical structure and we want allow using it with this meaning
+     // some webservers don't allow the slash in encoded form in the path for security reasons anyway
+     // see http://stackoverflow.com/questions/4069002/http-400-if-2f-part-of-get-url-in-jboss
+-    // Map from these encoded characters.
+-    '%2F',
+-    // Map to these decoded characters.
+-    '/',
++    '%2F' => '/',
++    '%3A' => ':',
+   ];
+ 
+   /**
+@@ -304,7 +302,13 @@ public function generateFromRoute($name, $parameters = [], $options = [], $colle
+     }
+     // The contexts base URL is already encoded
+     // (see Symfony\Component\HttpFoundation\Request).
+-    $path = str_replace($this->decodedChars[0], $this->decodedChars[1], rawurlencode($path));
++    // %3A is invalid for Private folder type so unsetting it.
++    if ($name == 'system.private_file_download') {
++      $path = strtr(rawurlencode($path), array_diff($this->decodedChars, [':']));
++    }
++    else {
++      $path = strtr(rawurlencode($path), $this->decodedChars);
++    }
+ 
+     // Drupal paths rarely include dots, so skip this processing if possible.
+     if (strpos($path, '/.') !== FALSE) {

@@ -23,7 +23,7 @@
   "extra": {
     "patches": {
       "drupal/core": {
-        "UrlGenerator improperly escapes a colon in the path [#3165305]: https://www.drupal.org/project/drupal/issues/3165305#comment-14058586 ": "https://www.drupal.org/files/issues/2021-04-13/url_escaped-3165305-10.patch"
+        "UrlGenerator improperly escapes a colon in the path [#3165305]: https://www.drupal.org/project/drupal/issues/3165305#comment-14058586": "drupal/modules/omnipedia/omnipedia_content/patches/drupal/core/url_escaped-3165305-10.patch"
       }
     }
   }
