@@ -16,8 +16,8 @@
     "drupal/pcb": "^2.3",
     "drupal/queue_ui": "^2.2",
     "drupal/warmer": "^2.0",
-    "symfony/dom-crawler": "^3.4",
-    "symfony/css-selector": "^3.4"
+    "symfony/dom-crawler": "^3.4 || ^4.4",
+    "symfony/css-selector": "^3.4 || ^4.4"
   },
   "require-dev": {
   },
