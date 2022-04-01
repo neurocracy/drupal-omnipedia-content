@@ -18,8 +18,6 @@
     "symfony/css-selector": "^3.4 || ^4.4",
     "symfony/dom-crawler": "^3.4 || ^4.4"
   },
-  "require-dev": {
-  },
   "extra": {
     "patches": {
       "drupal/core": {
