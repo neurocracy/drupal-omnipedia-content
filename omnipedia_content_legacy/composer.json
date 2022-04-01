@@ -14,8 +14,8 @@
     "drupal/freelinking": "^3.1",
     "drupal/hook_event_dispatcher": "^2.0",
     "mustache/mustache": "^2.13",
-    "symfony/dom-crawler": "^3.4 || ^4.4",
-    "symfony/css-selector": "^3.4 || ^4.4"
+    "symfony/css-selector": "^3.4 || ^4.4",
+    "symfony/dom-crawler": "^3.4 || ^4.4"
   },
   "require-dev": {
   }
