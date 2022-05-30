@@ -12,7 +12,7 @@
   ],
   "require": {
     "8fold/commonmark-abbreviations": "^1.2",
-    "drupal/hook_event_dispatcher": "^2.0",
+    "drupal/hook_event_dispatcher": "^2.0 || ^3.0",
     "drupal/markdown": "^3.0@RC",
     "league/commonmark": "^1.6.1",
     "symfony/css-selector": "^3.4 || ^4.4",
