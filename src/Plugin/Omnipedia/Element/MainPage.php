@@ -6,8 +6,8 @@ use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
 use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementBase;
-use Drupal\omnipedia_core\Service\TimelineInterface;
 use Drupal\omnipedia_core\Service\WikiNodeRevisionInterface;
+use Drupal\omnipedia_date\Service\TimelineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -26,7 +26,7 @@ class MainPage extends OmnipediaElementBase {
   /**
    * The Omnipedia timeline service.
    *
-   * @var \Drupal\omnipedia_core\Service\TimelineInterface
+   * @var \Drupal\omnipedia_date\Service\TimelineInterface
    */
   protected $timeline;
 
@@ -40,7 +40,7 @@ class MainPage extends OmnipediaElementBase {
   /**
    * {@inheritdoc}
    *
-   * @param \Drupal\omnipedia_core\Service\TimelineInterface $timeline
+   * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
    *   The Omnipedia timeline service.
    *
    * @param \Drupal\omnipedia_core\Service\WikiNodeRevisionInterface $wikiNodeRevision

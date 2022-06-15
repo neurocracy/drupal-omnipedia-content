@@ -9,6 +9,7 @@ dependencies:
   - drupal:node
   - drupal:user
   - omnipedia_core:omnipedia_core
+  - omnipedia_date:omnipedia_date
   - ambientimpact_core:ambientimpact_core
   - ambientimpact_markdown:ambientimpact_markdown
   - ambientimpact_ux:ambientimpact_ux

@@ -5,8 +5,8 @@ namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
 use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementBase;
-use Drupal\omnipedia_core\Service\TimelineInterface;
 use Drupal\omnipedia_core\Service\WikiNodeRevisionInterface;
+use Drupal\omnipedia_date\Service\TimelineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -24,7 +24,7 @@ class About extends OmnipediaElementBase {
   /**
    * The Omnipedia timeline service.
    *
-   * @var \Drupal\omnipedia_core\Service\TimelineInterface
+   * @var \Drupal\omnipedia_date\Service\TimelineInterface
    */
   protected $timeline;
 
@@ -38,7 +38,7 @@ class About extends OmnipediaElementBase {
   /**
    * {@inheritdoc}
    *
-   * @param \Drupal\omnipedia_core\Service\TimelineInterface $timeline
+   * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
    *   The Omnipedia timeline service.
    *
    * @param \Drupal\omnipedia_core\Service\WikiNodeRevisionInterface $wikiNodeRevision

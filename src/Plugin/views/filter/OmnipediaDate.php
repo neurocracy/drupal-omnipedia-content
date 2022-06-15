@@ -2,7 +2,7 @@
 
 namespace Drupal\omnipedia_content\Plugin\views\filter;
 
-use Drupal\omnipedia_core\Service\TimelineInterface;
+use Drupal\omnipedia_date\Service\TimelineInterface;
 use Drupal\views\Plugin\views\display\DisplayPluginBase;
 use Drupal\views\Plugin\views\filter\InOperator;
 use Drupal\views\ViewExecutable;
@@ -23,7 +23,7 @@ class OmnipediaDate extends InOperator {
   /**
    * The Omnipedia timeline service.
    *
-   * @var \Drupal\omnipedia_core\Service\TimelineInterface
+   * @var \Drupal\omnipedia_date\Service\TimelineInterface
    */
   protected $timeline;
 
@@ -39,7 +39,7 @@ class OmnipediaDate extends InOperator {
    * @param mixed $pluginDefinition
    *   The plug-in implementation definition.
    *
-   * @param \Drupal\omnipedia_core\Service\TimelineInterface $timeline
+   * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
    *   The Omnipedia timeline service.
    */
   public function __construct(

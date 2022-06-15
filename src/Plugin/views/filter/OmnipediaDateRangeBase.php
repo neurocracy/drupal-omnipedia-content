@@ -4,7 +4,7 @@ namespace Drupal\omnipedia_content\Plugin\views\filter;
 
 use Drupal\Core\Database\Query\Condition;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\omnipedia_core\Service\TimelineInterface;
+use Drupal\omnipedia_date\Service\TimelineInterface;
 use Drupal\views\Plugin\views\filter\FilterPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -51,7 +51,7 @@ abstract class OmnipediaDateRangeBase extends FilterPluginBase {
   /**
    * The Omnipedia timeline service.
    *
-   * @var \Drupal\omnipedia_core\Service\TimelineInterface
+   * @var \Drupal\omnipedia_date\Service\TimelineInterface
    */
   protected $timeline;
 
@@ -67,7 +67,7 @@ abstract class OmnipediaDateRangeBase extends FilterPluginBase {
    * @param mixed $pluginDefinition
    *   The plug-in implementation definition.
    *
-   * @param \Drupal\omnipedia_core\Service\TimelineInterface $timeline
+   * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
    *   The Omnipedia timeline service.
    */
   public function __construct(
