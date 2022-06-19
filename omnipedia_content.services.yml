@@ -87,11 +87,3 @@ services:
       - '@plugin.manager.omnipedia_element'
     tags:
       - { name: 'event_subscriber' }
-
-  # hook_views_data() event subscriber to define Omnipedia date plug-ins.
-  omnipedia_content.views_data_omnipedia_date_event_subscriber:
-    class: Drupal\omnipedia_content\EventSubscriber\Views\ViewsDataOmnipediaDateEventSubscriber
-    arguments:
-      - '@string_translation'
-    tags:
-      - { name: 'event_subscriber' }
