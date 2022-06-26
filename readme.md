@@ -67,3 +67,5 @@ section](#planned-improvements).
 * [Move Omnipedia element plug-in infrastructure to new `omnipedia_element` module](https://github.com/neurocracy/drupal-omnipedia-content/issues/3)
 
 * [Move all Markdown functionality to new `omnipedia_markdown` module](https://github.com/neurocracy/drupal-omnipedia-content/issues/4)
+
+* [Refactor `EventSubscriber\Markdown\CommonMark\AbbreviationEventSubscriber` into multiple files](https://github.com/neurocracy/drupal-omnipedia-content/issues/7)
