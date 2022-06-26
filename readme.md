@@ -47,3 +47,11 @@ Then, in your root ```composer.json```, add the following to the
 Then, in your project's root, run ```composer require
 "drupal/omnipedia_content:3.x-dev@dev"``` to have Composer install the module
 and its required dependencies for you.
+
+----
+
+# Description
+
+This contains our content infrastructure that provides custom HTML elements for
+wiki content that gets rendered as standard HTML, and many alterations built on
+top of Markdown for our specific use-cases.
