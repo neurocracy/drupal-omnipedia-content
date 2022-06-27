@@ -13,6 +13,7 @@
   "require": {
     "php": "^7.4|^8",
     "8fold/commonmark-abbreviations": "^1.2",
+    "cweagans/composer-patches": "^1.7",
     "drupal/hook_event_dispatcher": "^3.0",
     "drupal/markdown": "^3.0@RC",
     "league/commonmark": "^1.6.1",
