@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\omnipedia_content_legacy\PluginManager;
 
 use Drupal\Core\Render\RendererInterface;

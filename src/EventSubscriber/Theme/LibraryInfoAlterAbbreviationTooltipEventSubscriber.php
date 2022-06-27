@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\omnipedia_content\EventSubscriber\Theme;
 
 use Drupal\hook_event_dispatcher\HookEventDispatcherInterface;

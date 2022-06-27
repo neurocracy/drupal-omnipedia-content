@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark;
 
 use Drupal\ambientimpact_markdown\AmbientImpactMarkdownEventInterface;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\omnipedia_content\EventSubscriber\Form;
 
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;

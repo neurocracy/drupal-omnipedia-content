@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\omnipedia_content_legacy\Plugin\Filter;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;

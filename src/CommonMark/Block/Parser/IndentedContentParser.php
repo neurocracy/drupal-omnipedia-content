@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\omnipedia_content\CommonMark\Block\Parser;
 
 use Drupal\omnipedia_content\CommonMark\Block\Element\IndentedContent;

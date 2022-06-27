@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
 use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementBase;
