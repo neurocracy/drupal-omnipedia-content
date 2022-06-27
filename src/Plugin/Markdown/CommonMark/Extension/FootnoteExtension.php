@@ -202,7 +202,7 @@ class FootnoteExtension extends MarkdownFootnoteExtension {
     // stick. See the GitHub issue linked in the docblock for this method.
     $heading->appendChild(
       /** @var \League\CommonMark\Inline\Element\Text */
-      new Text($headingContent)
+      new Text((string) $headingContent)
     );
 
     // Insert the heading right before the footnotes container.
