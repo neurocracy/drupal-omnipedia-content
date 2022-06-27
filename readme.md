@@ -56,7 +56,8 @@ and its required dependencies for you.
 
 This contains our content infrastructure that provides custom HTML elements for
 wiki content that gets rendered as standard HTML, and many alterations built on
-top of Markdown for our specific use-cases.
+top of [CommonMark](https://commonmark.thephpleague.com/) for our specific
+use-cases.
 
 Note that this module is planned to be broken up into multiple modules that
 better encapsulate and separate systems; see [the Planned improvements
