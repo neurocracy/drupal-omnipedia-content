@@ -32,21 +32,21 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
    *
    * @var array
    */
-  protected $elementErrors = [];
+  protected array $elementErrors = [];
 
   /**
    * The Drupal messenger service.
    *
    * @var \Drupal\Core\Messenger\MessengerInterface
    */
-  protected $messenger;
+  protected MessengerInterface $messenger;
 
   /**
    * The Drupal renderer service.
    *
    * @var \Drupal\Core\Render\RendererInterface
    */
-  protected $renderer;
+  protected RendererInterface $renderer;
 
   /**
    * Generated XPath for any element names that render their own children.
@@ -59,7 +59,7 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
    *
    * @see $this->getNonRenderingElementXPath()
    */
-  protected $nonRenderingElementXPath = null;
+  protected ?string $nonRenderingElementXPath = null;
 
   /**
    * Creates the discovery object.

@@ -20,14 +20,14 @@ class ThemeOmnipediaElementEventSubscriber implements EventSubscriberInterface {
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $moduleHandler;
+  protected ModuleHandlerInterface $moduleHandler;
 
   /**
    * The OmnipediaElement plug-in manager.
    *
    * @var \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface
    */
-  protected $elementManager;
+  protected OmnipediaElementManagerInterface $elementManager;
 
   /**
    * Event subscriber constructor; saves dependencies.
@@ -61,7 +61,7 @@ class ThemeOmnipediaElementEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\core_event_dispatcher\Event\Theme\ThemeEvent $event
    *   The event object.
    */
-  public function theme(ThemeEvent $event) {
+  public function theme(ThemeEvent $event): void {
     /** @var array */
     $plugins = $this->elementManager->getTheme();
 

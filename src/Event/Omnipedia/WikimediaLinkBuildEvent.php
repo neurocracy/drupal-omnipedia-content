@@ -17,28 +17,28 @@ class WikimediaLinkBuildEvent extends Event {
    *
    * @var \League\CommonMark\Inline\Element\Link
    */
-  protected $link;
+  protected Link $link;
 
   /**
    * The Wikimedia prefixed URL.
    *
    * @var string
    */
-  protected $prefixedUrl;
+  protected string $prefixedUrl;
 
   /**
    * The built URL.
    *
    * @var string
    */
-  protected $builtUrl;
+  protected string $builtUrl;
 
   /**
    * The Wikimedia article title for this link.
    *
    * @var string
    */
-  protected $articleTitle;
+  protected string $articleTitle;
 
   /**
    * Constructs this event object.
@@ -70,7 +70,7 @@ class WikimediaLinkBuildEvent extends Event {
    * @return \League\CommonMark\Inline\Element\Link
    *   The CommonMark Link element object.
    */
-  public function getLink() {
+  public function getLink(): Link {
     return $this->link;
   }
 

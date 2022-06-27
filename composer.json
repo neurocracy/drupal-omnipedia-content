@@ -11,6 +11,7 @@
     }
   ],
   "require": {
+    "php": "^7.4|^8",
     "8fold/commonmark-abbreviations": "^1.2",
     "drupal/hook_event_dispatcher": "^3.0",
     "drupal/markdown": "^3.0@RC",

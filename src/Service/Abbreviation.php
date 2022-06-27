@@ -19,7 +19,7 @@ class Abbreviation implements AbbreviationInterface {
    *
    * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
-  protected $eventDispatcher;
+  protected EventDispatcherInterface $eventDispatcher;
 
   /**
    * A basic regular expression to match terms with.
@@ -38,14 +38,14 @@ class Abbreviation implements AbbreviationInterface {
    *
    * @var string[]
    */
-  protected $abbreviations = [];
+  protected array $abbreviations = [];
 
   /**
    * Whether the abbreviations build event has been dispatched this request.
    *
    * @var boolean
    */
-  protected $abbreviationsBuildEventDispatched = false;
+  protected bool $abbreviationsBuildEventDispatched = false;
 
   /**
    * Constructs this service object; saves dependencies.

@@ -25,7 +25,7 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
    *
    * @var \Drupal\omnipedia_content\Service\AbbreviationInterface
    */
-  protected $abbreviation;
+  protected AbbreviationInterface $abbreviation;
 
   /**
    * Event subscriber constructor; saves dependencies.

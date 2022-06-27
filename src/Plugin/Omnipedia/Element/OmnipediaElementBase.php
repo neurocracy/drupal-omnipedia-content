@@ -26,21 +26,21 @@ abstract class OmnipediaElementBase extends PluginBase implements ContainerFacto
    *
    * @var \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface
    */
-  protected $elementManager;
+  protected OmnipediaElementManagerInterface $elementManager;
 
   /**
    * The DOM elements this plug-in instance is to parse and render.
    *
    * @var \Symfony\Component\DomCrawler\Crawler
    */
-  protected $elements;
+  protected Crawler $elements;
 
   /**
    * Any errors logged by this plug-in.
    *
    * @var array
    */
-  protected $errors = [];
+  protected array $errors = [];
 
   /**
    * Constructs an OmnipediaElementBase object.

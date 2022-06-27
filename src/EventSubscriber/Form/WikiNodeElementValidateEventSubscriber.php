@@ -34,14 +34,14 @@ class WikiNodeElementValidateEventSubscriber implements EventSubscriberInterface
    *
    * @var \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface
    */
-  protected $elementManager;
+  protected OmnipediaElementManagerInterface $elementManager;
 
   /**
    * The Drupal renderer service.
    *
    * @var \Drupal\Core\Render\RendererInterface
    */
-  protected $renderer;
+  protected RendererInterface $renderer;
 
   /**
    * Event subscriber constructor; saves dependencies.

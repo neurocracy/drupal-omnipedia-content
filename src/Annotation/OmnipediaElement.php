@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\omnipedia_content\Annotation;
 
 use Drupal\Component\Annotation\Plugin;
+use Drupal\Core\Annotation\Translation;
 
 /**
  * Defines an OmnipediaElement annotation object.
@@ -25,7 +26,7 @@ class OmnipediaElement extends Plugin {
    *
    * @var string
    */
-  public $html_element;
+  public string $html_element;
 
   /**
    * Whether children of this element should be automatically rendered.
@@ -35,7 +36,7 @@ class OmnipediaElement extends Plugin {
    *
    * @var boolean
    */
-  public $render_children = true;
+  public bool $render_children = true;
 
   /**
    * The human readable title of the element.
@@ -44,7 +45,7 @@ class OmnipediaElement extends Plugin {
    *
    * @ingroup plugin_translatable
    */
-  public $title;
+  public Translation $title;
 
   /**
    * A brief human readable description of the element.
@@ -53,6 +54,6 @@ class OmnipediaElement extends Plugin {
    *
    * @ingroup plugin_translatable
    */
-  public $description;
+  public Translation $description;
 
 }

@@ -17,7 +17,7 @@ declare(strict_types=1);
  * @see \Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension\FootnoteExtension
  *   Our footnotes Markdown plug-in class.
  */
-function omnipedia_content_markdown_extension_info_alter(array &$info) {
+function omnipedia_content_markdown_extension_info_alter(array &$info): void {
 
   $info['commonmark-heading-permalink']['object'] =
     'Drupal\omnipedia_content\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension';
@@ -43,6 +43,6 @@ function omnipedia_content_markdown_extension_info_alter(array &$info) {
  *   Feature request to conditionally add the 'current' query item only if one
  *   or more redirect destinations configured to the current page.
  */
-function omnipedia_content_link_alter(array &$variables) {
+function omnipedia_content_link_alter(array &$variables): void {
   unset($variables['options']['query']['current']);
 }

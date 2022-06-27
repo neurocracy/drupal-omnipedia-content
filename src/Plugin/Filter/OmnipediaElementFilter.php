@@ -26,7 +26,7 @@ class OmnipediaElementFilter extends FilterBase implements ContainerFactoryPlugi
    *
    * @var \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface
    */
-  protected $elementManager;
+  protected OmnipediaElementManagerInterface $elementManager;
 
   /**
    * Constructs this filter object.

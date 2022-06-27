@@ -28,14 +28,14 @@ class About extends OmnipediaElementBase {
    *
    * @var \Drupal\omnipedia_date\Service\TimelineInterface
    */
-  protected $timeline;
+  protected TimelineInterface $timeline;
 
   /**
    * The Omnipedia wiki node revision service.
    *
    * @var \Drupal\omnipedia_core\Service\WikiNodeRevisionInterface
    */
-  protected $wikiNodeRevision;
+  protected WikiNodeRevisionInterface $wikiNodeRevision;
 
   /**
    * {@inheritdoc}

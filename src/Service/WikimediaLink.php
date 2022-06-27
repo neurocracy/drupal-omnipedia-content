@@ -20,7 +20,7 @@ class WikimediaLink implements WikimediaLinkInterface {
    *
    * @var array
    */
-  protected $wikiPrefixes = [];
+  protected array $wikiPrefixes = [];
 
   /**
    * Constructs this service object.

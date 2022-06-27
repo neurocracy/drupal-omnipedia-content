@@ -27,7 +27,7 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
    *
    * @var \Drupal\omnipedia_content\Service\WikimediaLinkInterface
    */
-  protected $wikimediaLink;
+  protected WikimediaLinkInterface $wikimediaLink;
 
   /**
    * Event subscriber constructor; saves dependencies.

@@ -18,7 +18,7 @@ class AbbreviationsBuildEvent extends Event {
    *
    * @var string[]
    */
-  protected $abbreviations = [];
+  protected array $abbreviations = [];
 
   /**
    * Constructs this event object.

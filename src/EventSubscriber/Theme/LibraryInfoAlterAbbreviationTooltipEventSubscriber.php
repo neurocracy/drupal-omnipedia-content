@@ -32,7 +32,7 @@ class LibraryInfoAlterAbbreviationTooltipEventSubscriber implements EventSubscri
    * @param \Drupal\core_event_dispatcher\Event\Theme\LibraryInfoAlterEvent $event
    *   The event object.
    */
-  public function onLibraryInfoAlter(LibraryInfoAlterEvent $event) {
+  public function onLibraryInfoAlter(LibraryInfoAlterEvent $event): void {
 
     /** @var array */
     $libraries = &$event->getLibraries();
