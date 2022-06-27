@@ -24,6 +24,10 @@ part of this codebase is useful or will inspire someone out there.
 
 * [Composer](https://getcomposer.org/)
 
+## Drupal dependencies
+
+* Several [```ambientimpact_*``` modules](https://github.com/Ambient-Impact/drupal-modules) must be present.
+
 ----
 
 # Installation
