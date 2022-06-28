@@ -105,7 +105,7 @@ To build specific things:
 # Description
 
 This contains our content infrastructure that provides custom HTML elements for
-wiki content that gets rendered as standard HTML, and many alterations built on
+wiki content which gets rendered as standard HTML, and many alterations built on
 top of [CommonMark](https://commonmark.thephpleague.com/) for our specific
 use-cases.
 
