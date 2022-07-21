@@ -60,7 +60,7 @@ AmbientImpact.addComponent('OmnipediaTooltip', function(OmnipediaTooltip, $) {
      *
      * @see https://api.jquery.com/parents/
      */
-    var $container = $trigger.parents(
+    let $container = $trigger.parents(
       OmnipediaTooltip.containerSelectors.join(',')
     ).last();
 
