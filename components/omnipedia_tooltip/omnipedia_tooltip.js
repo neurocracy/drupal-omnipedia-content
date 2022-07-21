@@ -26,6 +26,12 @@ AmbientImpact.addComponent('OmnipediaTooltip', function(OmnipediaTooltip, $) {
    * used to ensure tooltips are inserted outside of all of these elements,
    * which avoids inheriting their styles.
    *
+   * Additional notes:
+   *
+   * - 'p': This is to fix a strange issue in Chrome that would briefly collapse
+   *   space after a link when the tooltip would be inserted after it, so
+   *   instead we try a containing parapgraph, if found.
+   *
    * @type {Array}
    */
   this.containerSelectors = [
@@ -33,9 +39,6 @@ AmbientImpact.addComponent('OmnipediaTooltip', function(OmnipediaTooltip, $) {
     '.omnipedia-media-group',
     '.omnipedia-media',
     'blockquote',
-    // This is to fix a strange issue in Chrome that would briefly collapse
-    // space after a link when the tooltip would be inserted after it, so
-    // instead we try a containing parapgraph, if found.
     'p',
     'strong',
     'em',
