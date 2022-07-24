@@ -16,6 +16,29 @@ part of this codebase is useful or will inspire someone out there.
 
 ----
 
+# Description
+
+This contains our content infrastructure that provides custom HTML elements for
+wiki content which gets rendered as standard HTML, and many alterations built on
+top of [CommonMark](https://commonmark.thephpleague.com/) for our specific
+use-cases.
+
+Note that this module is planned to be broken up into multiple modules that
+better encapsulate and separate systems; see [the Planned improvements
+section](#planned-improvements).
+
+----
+
+# Planned improvements
+
+* [Move Omnipedia element plug-in infrastructure to new `omnipedia_element` module](https://github.com/neurocracy/drupal-omnipedia-content/issues/3)
+
+* [Move all Markdown functionality to new `omnipedia_markdown` module](https://github.com/neurocracy/drupal-omnipedia-content/issues/4)
+
+* [Refactor `EventSubscriber\Markdown\CommonMark\AbbreviationEventSubscriber` into multiple files](https://github.com/neurocracy/drupal-omnipedia-content/issues/7)
+
+----
+
 # Requirements
 
 * [Drupal 9](https://www.drupal.org/download) ([Drupal 8 is end-of-life](https://www.drupal.org/psa-2021-11-30))
@@ -99,26 +122,3 @@ project root.
 To build specific things:
 
 * ```grunt css``` - compiles CSS files from Sass; applies [Autoprefixer](https://github.com/postcss/autoprefixer).
-
-----
-
-# Description
-
-This contains our content infrastructure that provides custom HTML elements for
-wiki content which gets rendered as standard HTML, and many alterations built on
-top of [CommonMark](https://commonmark.thephpleague.com/) for our specific
-use-cases.
-
-Note that this module is planned to be broken up into multiple modules that
-better encapsulate and separate systems; see [the Planned improvements
-section](#planned-improvements).
-
-----
-
-# Planned improvements
-
-* [Move Omnipedia element plug-in infrastructure to new `omnipedia_element` module](https://github.com/neurocracy/drupal-omnipedia-content/issues/3)
-
-* [Move all Markdown functionality to new `omnipedia_markdown` module](https://github.com/neurocracy/drupal-omnipedia-content/issues/4)
-
-* [Refactor `EventSubscriber\Markdown\CommonMark\AbbreviationEventSubscriber` into multiple files](https://github.com/neurocracy/drupal-omnipedia-content/issues/7)
