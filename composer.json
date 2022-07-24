@@ -13,18 +13,10 @@
   "require": {
     "php": "^7.4|^8",
     "8fold/commonmark-abbreviations": "^1.2",
-    "cweagans/composer-patches": "^1.7",
     "drupal/hook_event_dispatcher": "^3.0",
     "drupal/markdown": "^3.0@RC",
     "league/commonmark": "^1.6.1",
     "symfony/css-selector": "^4.4",
     "symfony/dom-crawler": "^4.4"
-  },
-  "extra": {
-    "patches": {
-      "drupal/core": {
-        "UrlGenerator improperly escapes a colon in the path [#3165305]: https://www.drupal.org/project/drupal/issues/3165305#comment-14058586": "drupal/modules/custom/omnipedia_content/patches/drupal/core/url_escaped-3165305-10.patch"
-      }
-    }
   }
 }
