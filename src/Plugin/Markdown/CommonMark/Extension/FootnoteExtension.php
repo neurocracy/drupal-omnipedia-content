@@ -24,7 +24,10 @@ use League\CommonMark\Reference\Reference;
  * to alter the output with the following:
  *
  * - Rewrites the inline reference link text to add square brackets around the
- *   numbers to match Wikipedia. I.e.: "1" becomes "[1]", etc.
+ *   numbers to match Wikipedia. I.e.: "1" becomes "[1]", etc. Also replaces any
+ *   trailing space in the text preceding the inline reference with a single
+ *   non-breaking space so that the reference link can't occasionally end up by
+ *   itself on a new line.
  *
  * - Inserts a heading just before the footnotes container, named "References".
  *
@@ -148,7 +151,7 @@ class FootnoteExtension extends MarkdownFootnoteExtension {
   }
 
   /**
-   * Alter CommonMark inline footnote reference text.
+   * Alter CommonMark inline footnote reference text and preceding space.
    *
    * @param \League\CommonMark\Block\Element\Document $document
    *   The CommonMark document object.
@@ -173,6 +176,37 @@ class FootnoteExtension extends MarkdownFootnoteExtension {
 
     $node->setReference($newReference);
     $document->getReferenceMap()->addReference($newReference);
+
+    /** @var \League\CommonMark\Node\Node|null */
+    $previousNode = $node->previous();
+
+    if (\is_object($previousNode) && $previousNode instanceof Text) {
+
+      /** @var string */
+      $precedingText = $previousNode->getContent();
+
+      // Attempt to match one or more trailing spaces in the preceding text node
+      // to be replaced by a non-breaking space.
+      if (
+        \preg_match(
+          '/\s+$/', $precedingText, $matches, \PREG_OFFSET_CAPTURE
+        ) === 1 &&
+        isset($matches[0][1])
+      ) {
+
+        // Note that the ' ' is a Unicode non-breaking space. '&nbsp;' seems to
+        // get escaped here, likely due to this being a text node and thus
+        // doesn't allow HTML input. A more elegant solution to this in the
+        // future may be to implement a new inline node type to represent one or
+        // more non-breaking spaces that renders to '&nbsp;' HTML.
+        $previousNode->setContent(
+          \mb_substr($precedingText, 0, $matches[0][1]) . ' '
+        );
+
+      }
+
+    }
+
   }
 
   /**
