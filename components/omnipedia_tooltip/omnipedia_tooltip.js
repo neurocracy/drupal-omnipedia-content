@@ -75,27 +75,23 @@ AmbientImpact.addComponent('OmnipediaTooltip', function(OmnipediaTooltip, $) {
       // to the found container.
       $insertAfter = $container;
 
-      /**
-       * The next sibling node to the container, or null if none.
-       *
-       * @type {HTMLElement|null}
-       */
-      let nextSibling = $insertAfter[0].nextSibling;
+    }
 
-      // If the next sibling is a text node, set $insertAfter to that text node
-      // rather than the container.
-      //
-      // This fixes an issue in Chrome that could cause white-space after the
-      // container to collapse the first time that a tooltip would be inserted
-      // right after the container.
-      //
-      // Note that this should only be applied when a container is found, as it
-      // can cause white-space reflow (ironically enough) if applied if no
-      // container is present in Chrome.
-      if (nextSibling !== null && nextSibling.nodeName === '#text') {
-        $insertAfter = $(nextSibling);
-      }
+    /**
+     * The next sibling node to the container, or null if none.
+     *
+     * @type {HTMLElement|null}
+     */
+    let nextSibling = $insertAfter[0].nextSibling;
 
+    // If the next sibling is a text node, set $insertAfter to that text node
+    // rather than the container.
+    //
+    // This fixes an issue in Chrome that could cause white-space after the
+    // container to collapse the first time that a tooltip would be inserted
+    // right after the container.
+    if (nextSibling !== null && nextSibling.nodeName === '#text') {
+      $insertAfter = $(nextSibling);
     }
 
     $tooltip.insertAfter($insertAfter);
