@@ -41,6 +41,15 @@ AmbientImpact.addComponent('OmnipediaTooltip', function(OmnipediaTooltip, $) {
   aiTooltip.defaults.insertCallback = function($tooltip, $trigger) {
 
     /**
+     * The element to insert the tooltip after, in a jQuery collection.
+     *
+     * This defaults to the $trigger if no container is found below.
+     *
+     * @type {jQuery}
+     */
+    let $insertAfter = $trigger;
+
+    /**
      * The ancestor element that tooltips should be placed after.
      *
      * Since jQuery().parents() can filter by a provided selector,
@@ -60,38 +69,36 @@ AmbientImpact.addComponent('OmnipediaTooltip', function(OmnipediaTooltip, $) {
       OmnipediaTooltip.containerSelectors.join(',')
     ).last();
 
-    // If one of the above containers contains the trigger, insert the tooltip
-    // after the container.
     if ($container.length > 0) {
+
+      // If one of the above containers contains the trigger, set $insertAfter
+      // to the found container.
+      $insertAfter = $container;
 
       /**
        * The next sibling node to the container, or null if none.
        *
        * @type {HTMLElement|null}
        */
-      let nextSibling = $container[0].nextSibling;
+      let nextSibling = $insertAfter[0].nextSibling;
 
-      // If the next sibling is a text node, insert the tooltip after it rather
-      // than the container. This fixes an issue in Chrome that could cause
-      // white-space after the container to collapse the first time that a
-      // tooltip would be inserted right after the container.
+      // If the next sibling is a text node, set $insertAfter to that text node
+      // rather than the container.
+      //
+      // This fixes an issue in Chrome that could cause white-space after the
+      // container to collapse the first time that a tooltip would be inserted
+      // right after the container.
+      //
+      // Note that this should only be applied when a container is found, as it
+      // can cause white-space reflow (ironically enough) if applied if no
+      // container is present in Chrome.
       if (nextSibling !== null && nextSibling.nodeName === '#text') {
-
-        $tooltip.insertAfter(nextSibling);
-
-        return;
-
+        $insertAfter = $(nextSibling);
       }
-
-      $tooltip.insertAfter($container);
-
-      return;
 
     }
 
-    // If none of the above containers are found, just insert the tooltip after
-    // the triggering element.
-    $tooltip.insertAfter($trigger);
+    $tooltip.insertAfter($insertAfter);
 
   }
 
