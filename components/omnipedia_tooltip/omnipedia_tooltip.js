@@ -26,12 +26,6 @@ AmbientImpact.addComponent('OmnipediaTooltip', function(OmnipediaTooltip, $) {
    * used to ensure tooltips are inserted outside of all of these elements,
    * which avoids inheriting their styles.
    *
-   * Additional notes:
-   *
-   * - 'p': This is to fix a strange issue in Chrome that would briefly collapse
-   *   space after a link when the tooltip would be inserted after it, so
-   *   instead we try a containing parapgraph, if found.
-   *
    * @type {Array}
    */
   this.containerSelectors = [
@@ -39,7 +33,6 @@ AmbientImpact.addComponent('OmnipediaTooltip', function(OmnipediaTooltip, $) {
     '.omnipedia-media-group',
     '.omnipedia-media',
     'blockquote',
-    'p',
     'strong',
     'em',
     'sup',
@@ -70,9 +63,30 @@ AmbientImpact.addComponent('OmnipediaTooltip', function(OmnipediaTooltip, $) {
     // If one of the above containers contains the trigger, insert the tooltip
     // after the container.
     if ($container.length > 0) {
+
+      /**
+       * The next sibling node to the container, or null if none.
+       *
+       * @type {HTMLElement|null}
+       */
+      let nextSibling = $container[0].nextSibling;
+
+      // If the next sibling is a text node, insert the tooltip after it rather
+      // than the container. This fixes an issue in Chrome that could cause
+      // white-space after the container to collapse the first time that a
+      // tooltip would be inserted right after the container.
+      if (nextSibling !== null && nextSibling.nodeName === '#text') {
+
+        $tooltip.insertAfter(nextSibling);
+
+        return;
+
+      }
+
       $tooltip.insertAfter($container);
 
       return;
+
     }
 
     // If none of the above containers are found, just insert the tooltip after
