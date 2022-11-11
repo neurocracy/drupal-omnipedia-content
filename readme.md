@@ -74,7 +74,7 @@ Then, in your root ```composer.json```, add the following to the
 ```"repositories"``` section:
 
 ```json
-{
+"drupal/omnipedia_content": {
   "type": "vcs",
   "url": "https://github.com/neurocracy/drupal-omnipedia-content.git"
 }
