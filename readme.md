@@ -49,7 +49,9 @@ section](#planned-improvements).
 
 ## Drupal dependencies
 
-* Several [```ambientimpact_*``` modules](https://github.com/Ambient-Impact/drupal-modules) must be present.
+Follow the Composer installation instructions for these dependencies first:
+
+* Several of the [`ambientimpact_*` modules](https://github.com/Ambient-Impact/drupal-modules).
 
 ## Front-end dependencies
 
