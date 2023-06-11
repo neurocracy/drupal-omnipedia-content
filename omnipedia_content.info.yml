@@ -2,7 +2,7 @@ name: Omnipedia - Content
 type: module
 description: Provides content-related functionality for Omnipedia.
 package: Omnipedia
-core_version_requirement: ^9
+core_version_requirement: ^9.5 || ^10.0
 
 dependencies:
   - drupal:datetime_range

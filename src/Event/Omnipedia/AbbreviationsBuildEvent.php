@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_content\Event\Omnipedia;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Abbreviations build event.

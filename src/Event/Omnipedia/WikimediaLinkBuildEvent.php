@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\omnipedia_content\Event\Omnipedia;
 
 use League\CommonMark\Inline\Element\Link;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Wikimedia link build event.

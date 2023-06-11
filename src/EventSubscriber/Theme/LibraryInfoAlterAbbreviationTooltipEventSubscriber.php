@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_content\EventSubscriber\Theme;
 
-use Drupal\hook_event_dispatcher\HookEventDispatcherInterface;
 use Drupal\core_event_dispatcher\Event\Theme\LibraryInfoAlterEvent;
+use Drupal\core_event_dispatcher\ThemeHookEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -22,7 +22,7 @@ class LibraryInfoAlterAbbreviationTooltipEventSubscriber implements EventSubscri
    */
   public static function getSubscribedEvents() {
     return [
-      HookEventDispatcherInterface::LIBRARY_INFO_ALTER => 'onLibraryInfoAlter',
+      ThemeHookEvents::LIBRARY_INFO_ALTER => 'onLibraryInfoAlter',
     ];
   }
 

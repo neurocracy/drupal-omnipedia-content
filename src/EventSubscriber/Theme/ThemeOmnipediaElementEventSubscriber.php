@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\omnipedia_content\EventSubscriber\Theme;
 
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\hook_event_dispatcher\HookEventDispatcherInterface;
 use Drupal\core_event_dispatcher\Event\Theme\ThemeEvent;
+use Drupal\core_event_dispatcher\ThemeHookEvents;
 use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -51,7 +51,7 @@ class ThemeOmnipediaElementEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     return [
-      HookEventDispatcherInterface::THEME => 'theme',
+      ThemeHookEvents::THEME => 'theme',
     ];
   }
 
