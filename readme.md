@@ -54,6 +54,9 @@ described in the installation instructions for these dependencies:
 
 * The [`ambientimpact_core`](https://github.com/Ambient-Impact/drupal-ambientimpact-core), [`ambientimpact_markdown`](https://github.com/Ambient-Impact/drupal-ambientimpact-markdown), and [`ambientimpact_ux`](https://github.com/Ambient-Impact/drupal-ambientimpact-ux) modules.
 
+* The [`omnipedia_core`](https://github.com/neurocracy/drupal-omnipedia-core) and [`omnipedia_date`](https://github.com/neurocracy/drupal-omnipedia-date) modules.
+
+
 ## Front-end dependencies
 
 To build front-end assets for this project, [Node.js](https://nodejs.org/) and
