@@ -52,7 +52,7 @@ section](#planned-improvements).
 Before attempting to install this, you must add the Composer repositories as
 described in the installation instructions for these dependencies:
 
-* Several of the [`ambientimpact_*` modules](https://github.com/Ambient-Impact/drupal-modules).
+* The [`ambientimpact_core`](https://github.com/Ambient-Impact/drupal-ambientimpact-core), [`ambientimpact_markdown`](https://github.com/Ambient-Impact/drupal-ambientimpact-markdown), and [`ambientimpact_ux`](https://github.com/Ambient-Impact/drupal-ambientimpact-ux) modules.
 
 ## Front-end dependencies
 
