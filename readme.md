@@ -187,3 +187,5 @@ The following major version bumps indicate breaking changes:
   * Removes PHP 7.4 support; Drupal 10 only supports PHP 8.
 
   * Requires [`drupal/ambientimpact_core` 2.x](https://github.com/Ambient-Impact/drupal-ambientimpact-core/tree/2.x) 2.x for Drupal 10 support.
+
+  * Requires [`drupal/ambientimpact_markdown` 2.x](https://github.com/Ambient-Impact/drupal-ambientimpact-markdown/tree/2.x) 2.x for Drupal 10 support.

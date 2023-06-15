@@ -15,7 +15,7 @@
     "drupal/core": "^10.0",
     "8fold/commonmark-abbreviations": "^1.2",
     "drupal/ambientimpact_core": "2.x-dev@dev",
-    "drupal/ambientimpact_markdown": "1.x-dev@dev",
+    "drupal/ambientimpact_markdown": "2.x-dev@dev",
     "drupal/ambientimpact_ux": "1.x-dev@dev",
     "drupal/hook_event_dispatcher": "^3.1 || ^4.0",
     "drupal/markdown": "^3.0@RC",
