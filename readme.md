@@ -41,7 +41,7 @@ section](#planned-improvements).
 
 # Requirements
 
-* [Drupal 10](https://www.drupal.org/download) ([Drupal 8 is end-of-life](https://www.drupal.org/psa-2021-11-30))
+* [Drupal 10](https://www.drupal.org/download)
 
 * PHP 8
 
