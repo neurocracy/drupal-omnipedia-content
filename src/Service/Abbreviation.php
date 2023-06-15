@@ -87,8 +87,8 @@ class Abbreviation implements AbbreviationInterface {
     $buildEvent = new AbbreviationsBuildEvent($this->abbreviations);
 
     $this->eventDispatcher->dispatch(
-      OmnipediaContentEventInterface::ABBREVIATIONS_BUILD,
-      $buildEvent
+      $buildEvent,
+      OmnipediaContentEventInterface::ABBREVIATIONS_BUILD
     );
 
     $this->abbreviations = $buildEvent->getAbbreviations();

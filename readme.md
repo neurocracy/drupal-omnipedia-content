@@ -41,9 +41,9 @@ section](#planned-improvements).
 
 # Requirements
 
-* [Drupal 9.5](https://www.drupal.org/download) ([Drupal 8 is end-of-life](https://www.drupal.org/psa-2021-11-30))
+* [Drupal 10](https://www.drupal.org/download) ([Drupal 8 is end-of-life](https://www.drupal.org/psa-2021-11-30))
 
-* PHP 7.4 or PHP 8
+* PHP 8
 
 * [Composer](https://getcomposer.org/)
 
@@ -92,7 +92,7 @@ In your root `composer.json`, add the following to the `"repositories"` section:
 ### Installing
 
 Once you've completed all of the above, run `composer require
-"drupal/omnipedia_content:5.x-dev@dev"` in the root of your project to have
+"drupal/omnipedia_content:6.x-dev@dev"` in the root of your project to have
 Composer install this and its required dependencies for you.
 
 ## Front-end assets
@@ -116,7 +116,7 @@ Once those are defined, add the following to the `"dependencies"` section of
 your top-level `package.json`:
 
 ```json
-"drupal-omnipedia-content": "workspace:^5"
+"drupal-omnipedia-content": "workspace:^6"
 ```
 
 Then run `yarn install` and let Yarn do the rest.
@@ -179,3 +179,9 @@ The following major version bumps indicate breaking changes:
   * Increases minimum version of [Hook Event Dispatcher](https://www.drupal.org/project/hook_event_dispatcher) to 3.1, removes deprecated code, and adds support for 4.0 which supports Drupal 10.
 
   * Removes the `omnipedia_content_legacy` module; you can still find it in the 4.x branch.
+
+* 6.x:
+
+  * Requires [Drupal 10](https://www.drupal.org/project/drupal/releases/10.0.0) due to non-backwards compatible change to [`\Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher::dispatch()`](https://git.drupalcode.org/project/drupal/-/commit/7b324dd8f18919fc4d728bdb0afbcf27c8c02cb2#6e9d627c11801448b7a793c204471d8f951ae2fb).
+
+  * Removes PHP 7.4 support; Drupal 10 only supports PHP 8.

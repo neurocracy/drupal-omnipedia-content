@@ -11,8 +11,8 @@
     }
   ],
   "require": {
-    "php": "^7.4 || ^8",
-    "drupal/core": "^9.5",
+    "php": "^8",
+    "drupal/core": "^10.0",
     "8fold/commonmark-abbreviations": "^1.2",
     "drupal/ambientimpact_core": "1.x-dev@dev",
     "drupal/ambientimpact_markdown": "1.x-dev@dev",

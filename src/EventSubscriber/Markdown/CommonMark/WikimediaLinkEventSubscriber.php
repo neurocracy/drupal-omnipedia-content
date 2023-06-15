@@ -127,8 +127,8 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
         );
 
         $eventDispatcher->dispatch(
-          OmnipediaContentEventInterface::WIKIMEDIA_LINK_BUILD,
-          $linkEvent
+          $linkEvent,
+          OmnipediaContentEventInterface::WIKIMEDIA_LINK_BUILD
         );
 
         /** @var string */
