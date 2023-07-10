@@ -2,6 +2,7 @@
 //   Omnipedia <main-page> element stylesheet
 // -----------------------------------------------------------------------------
 
+@use 'media';
 @use '_main_page' as main-page;
 @use 'sass/helpers/breakpoint';
 @use 'sass/variables/general';
@@ -66,7 +67,11 @@
     // Lines up roughly with top of adjacent text.
     margin-top: 0.3em;
 
-    max-width:  33%;
+    // Only constrain the max-width when floated alongside text content.
+    @include breakpoint.on('>=omnipedia-media-floated') {
+      max-width: 33%;
+    }
+
   }
 
   &__featured-article {
