@@ -24,7 +24,7 @@
     "drupal/hook_event_dispatcher": "^3.1 || ^4.0",
     "drupal/markdown": "^3.0@RC",
     "drupal/omnipedia_core": "4.x-dev@dev || 5.x-dev@dev",
-    "drupal/omnipedia_date": "4.x-dev@dev",
+    "drupal/omnipedia_date": "4.x-dev@dev || 5.x-dev@dev",
     "league/commonmark": "^1.6.1",
     "symfony/css-selector": "^4.4 || ^6.2",
     "symfony/dom-crawler": "^4.4 || ^6.2"
