@@ -16,4 +16,5 @@ dependencies:
   - ambientimpact_ux:ambientimpact_ux
   - hook_event_dispatcher:core_event_dispatcher
   - hook_event_dispatcher:views_event_dispatcher
+  - hux:hux
   - markdown:markdown
