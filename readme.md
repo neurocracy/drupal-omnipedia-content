@@ -13,20 +13,6 @@ wiki content which gets rendered as standard HTML, and many alterations built on
 top of [CommonMark](https://commonmark.thephpleague.com/) for our specific
 use-cases.
 
-Note that this module is planned to be broken up into multiple modules that
-better encapsulate and separate systems; see [the Planned improvements
-section](#planned-improvements).
-
-----
-
-# Planned improvements
-
-* [Move Omnipedia element plug-in infrastructure to new `omnipedia_element` module](https://github.com/neurocracy/drupal-omnipedia-content/issues/3)
-
-* [Move all Markdown functionality to new `omnipedia_markdown` module](https://github.com/neurocracy/drupal-omnipedia-content/issues/4)
-
-* [Refactor `EventSubscriber\Markdown\CommonMark\AbbreviationEventSubscriber` into multiple files](https://github.com/neurocracy/drupal-omnipedia-content/issues/7)
-
 ----
 
 # Requirements
