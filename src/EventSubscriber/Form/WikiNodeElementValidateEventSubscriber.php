@@ -10,7 +10,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\core_event_dispatcher\Event\Form\FormIdAlterEvent;
 use Drupal\hook_event_dispatcher\HookEventDispatcherInterface;
 use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
-use Drupal\omnipedia_core\Entity\Node;
+use Drupal\omnipedia_core\Entity\WikiNodeInfo;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -65,7 +65,7 @@ class WikiNodeElementValidateEventSubscriber implements EventSubscriberInterface
    */
   public static function getSubscribedEvents(): array {
     return [
-      'hook_event_dispatcher.form_node_' . Node::getWikiNodeType() . '_edit_form.alter' => 'onFormAlter',
+      'hook_event_dispatcher.form_node_' . WikiNodeInfo::TYPE . '_edit_form.alter' => 'onFormAlter',
     ];
   }
 
