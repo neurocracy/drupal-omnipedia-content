@@ -12,24 +12,13 @@ use Symfony\Contracts\EventDispatcher\Event;
 class AbbreviationsBuildEvent extends Event {
 
   /**
-   * Any abbreviations added to this event by subscribers.
-   *
-   * Keys are the abbreviated term and values are the description of that term.
-   *
-   * @var string[]
-   */
-  protected array $abbreviations = [];
-
-  /**
    * Constructs this event object.
    *
    * @param array $abbreviations
    *   An array of abbreviations; keys are the abbreviated term and values are
    *   the description of that term.
    */
-  public function __construct(array $abbreviations) {
-    $this->abbreviations = $abbreviations;
-  }
+  public function __construct(protected array $abbreviations) {}
 
   /**
    * Add abbreviations to the event.

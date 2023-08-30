@@ -13,34 +13,6 @@ use Symfony\Contracts\EventDispatcher\Event;
 class WikimediaLinkBuildEvent extends Event {
 
   /**
-   * The CommonMark Link element object.
-   *
-   * @var \League\CommonMark\Inline\Element\Link
-   */
-  protected Link $link;
-
-  /**
-   * The Wikimedia prefixed URL.
-   *
-   * @var string
-   */
-  protected string $prefixedUrl;
-
-  /**
-   * The built URL.
-   *
-   * @var string
-   */
-  protected string $builtUrl;
-
-  /**
-   * The Wikimedia article title for this link.
-   *
-   * @var string
-   */
-  protected string $articleTitle;
-
-  /**
    * Constructs this event object.
    *
    * @param \League\CommonMark\Inline\Element\Link $link
@@ -56,13 +28,11 @@ class WikimediaLinkBuildEvent extends Event {
    *   The Wikimedia article title for this link.
    */
   public function __construct(
-    Link $link, string $prefixedUrl, string $builtUrl, string $articleTitle
-  ) {
-    $this->link         = $link;
-    $this->prefixedUrl  = $prefixedUrl;
-    $this->builtUrl     = $builtUrl;
-    $this->articleTitle = $articleTitle;
-  }
+    protected readonly Link $link,
+    protected string $prefixedUrl,
+    protected string $builtUrl,
+    protected string $articleTitle,
+  ) {}
 
   /**
    * Get the CommonMark Link element object.

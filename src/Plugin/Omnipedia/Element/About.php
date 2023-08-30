@@ -24,20 +24,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class About extends OmnipediaElementBase {
 
   /**
-   * The Omnipedia timeline service.
-   *
-   * @var \Drupal\omnipedia_date\Service\TimelineInterface
-   */
-  protected TimelineInterface $timeline;
-
-  /**
-   * The Omnipedia wiki node revision service.
-   *
-   * @var \Drupal\omnipedia_core\Service\WikiNodeRevisionInterface
-   */
-  protected WikiNodeRevisionInterface $wikiNodeRevision;
-
-  /**
    * {@inheritdoc}
    *
    * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
@@ -49,18 +35,16 @@ class About extends OmnipediaElementBase {
   public function __construct(
     array $configuration, string $pluginID, array $pluginDefinition,
     OmnipediaElementManagerInterface $elementManager,
-    TranslationInterface      $stringTranslation,
-    TimelineInterface         $timeline,
-    WikiNodeRevisionInterface $wikiNodeRevision
+    $stringTranslation,
+    protected readonly TimelineInterface          $timeline,
+    protected readonly WikiNodeRevisionInterface  $wikiNodeRevision,
   ) {
+
     parent::__construct(
       $configuration, $pluginID, $pluginDefinition,
-      $elementManager, $stringTranslation
+      $elementManager, $stringTranslation,
     );
 
-    // Save dependencies.
-    $this->timeline         = $timeline;
-    $this->wikiNodeRevision = $wikiNodeRevision;
   }
 
   /**
@@ -75,7 +59,7 @@ class About extends OmnipediaElementBase {
       $container->get('plugin.manager.omnipedia_element'),
       $container->get('string_translation'),
       $container->get('omnipedia.timeline'),
-      $container->get('omnipedia.wiki_node_revision')
+      $container->get('omnipedia.wiki_node_revision'),
     );
   }
 
@@ -125,7 +109,7 @@ class About extends OmnipediaElementBase {
           [
             '@see'  => 'see' . $optionIndex,
             '@use'  => 'use' . $optionIndex,
-          ]
+          ],
         ));
 
         continue;
@@ -136,7 +120,7 @@ class About extends OmnipediaElementBase {
       /** @var \Drupal\omnipedia_core\Entity\NodeInterface|null */
       $seeNode = $this->wikiNodeRevision->getWikiNodeRevision(
         $seeNodeTitle,
-        $this->timeline->getDateFormatted('current', 'storage')
+        $this->timeline->getDateFormatted('current', 'storage'),
       );
 
       if ($seeNode === null) {
@@ -145,7 +129,7 @@ class About extends OmnipediaElementBase {
           [
             '@attribute'  => 'see' . $optionIndex,
             '@title'      => $seeNodeTitle,
-          ]
+          ],
         ));
 
         continue;

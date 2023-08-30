@@ -23,21 +23,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * The Omnipedia Wikimedia link service.
-   *
-   * @var \Drupal\omnipedia_content\Service\WikimediaLinkInterface
-   */
-  protected WikimediaLinkInterface $wikimediaLink;
-
-  /**
    * Event subscriber constructor; saves dependencies.
    *
    * @param \Drupal\omnipedia_content\Service\WikimediaLinkInterface $wikimediaLink
    *   The Omnipedia Wikimedia link service.
    */
-  public function __construct(WikimediaLinkInterface $wikimediaLink) {
-    $this->wikimediaLink = $wikimediaLink;
-  }
+  public function __construct(
+    protected readonly WikimediaLinkInterface $wikimediaLink,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -88,7 +81,7 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
     // build event here so that we don't have to check on every while iteration.
     /** @var bool */
     $hasListeners = $eventDispatcher->hasListeners(
-      OmnipediaContentEventInterface::WIKIMEDIA_LINK_BUILD
+      OmnipediaContentEventInterface::WIKIMEDIA_LINK_BUILD,
     );
 
     while ($event = $walker->next()) {
@@ -123,12 +116,12 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
 
         /** @var \Drupal\omnipedia_content\Event\Omnipedia\WikimediaLinkBuildEvent */
         $linkEvent = new WikimediaLinkBuildEvent(
-          $node, $prefixedUrl, $builtUrl, $articleTitle
+          $node, $prefixedUrl, $builtUrl, $articleTitle,
         );
 
         $eventDispatcher->dispatch(
           $linkEvent,
-          OmnipediaContentEventInterface::WIKIMEDIA_LINK_BUILD
+          OmnipediaContentEventInterface::WIKIMEDIA_LINK_BUILD,
         );
 
         /** @var string */

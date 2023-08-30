@@ -30,20 +30,6 @@ class WikiNodeElementValidateEventSubscriber implements EventSubscriberInterface
   use DependencySerializationTrait;
 
   /**
-   * The OmnipediaElement plug-in manager.
-   *
-   * @var \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface
-   */
-  protected OmnipediaElementManagerInterface $elementManager;
-
-  /**
-   * The Drupal renderer service.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected RendererInterface $renderer;
-
-  /**
    * Event subscriber constructor; saves dependencies.
    *
    * @param \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface $elementManager
@@ -53,12 +39,9 @@ class WikiNodeElementValidateEventSubscriber implements EventSubscriberInterface
    *   The Drupal renderer service.
    */
   public function __construct(
-    OmnipediaElementManagerInterface  $elementManager,
-    RendererInterface                 $renderer
-  ) {
-    $this->elementManager = $elementManager;
-    $this->renderer       = $renderer;
-  }
+    protected readonly OmnipediaElementManagerInterface $elementManager,
+    protected readonly RendererInterface                $renderer,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -107,7 +90,7 @@ class WikiNodeElementValidateEventSubscriber implements EventSubscriberInterface
    *   Returns any element errors for output in form validation.
    */
   public function validateBodyElement(
-    array &$element, FormStateInterface $formState, array &$form
+    array &$element, FormStateInterface $formState, array &$form,
   ): void {
     if (!isset($element['#needs_validation'])) {
       return;

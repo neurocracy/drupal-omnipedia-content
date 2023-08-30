@@ -22,13 +22,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class OmnipediaElementFilter extends FilterBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The OmnipediaElement plug-in manager.
-   *
-   * @var \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface
-   */
-  protected OmnipediaElementManagerInterface $elementManager;
-
-  /**
    * Constructs this filter object.
    *
    * @param array $configuration
@@ -46,12 +39,11 @@ class OmnipediaElementFilter extends FilterBase implements ContainerFactoryPlugi
    */
   public function __construct(
     array $configuration, string $pluginID, array $pluginDefinition,
-    OmnipediaElementManagerInterface $elementManager
+    protected readonly OmnipediaElementManagerInterface $elementManager,
   ) {
+
     parent::__construct($configuration, $pluginID, $pluginDefinition);
 
-    // Save dependencies.
-    $this->elementManager = $elementManager;
   }
 
   /**
@@ -63,7 +55,7 @@ class OmnipediaElementFilter extends FilterBase implements ContainerFactoryPlugi
   ) {
     return new static(
       $configuration, $pluginID, $pluginDefinition,
-      $container->get('plugin.manager.omnipedia_element')
+      $container->get('plugin.manager.omnipedia_element'),
     );
   }
 
@@ -72,7 +64,7 @@ class OmnipediaElementFilter extends FilterBase implements ContainerFactoryPlugi
    */
   public function process($text, $langCode) {
     return new FilterProcessResult(
-      $this->elementManager->convertElements($text)
+      $this->elementManager->convertElements($text),
     );
   }
 

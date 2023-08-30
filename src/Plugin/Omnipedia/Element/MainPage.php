@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
 use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
 use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementBase;
@@ -26,20 +25,6 @@ use Symfony\Component\DomCrawler\Crawler;
 class MainPage extends OmnipediaElementBase {
 
   /**
-   * The Omnipedia timeline service.
-   *
-   * @var \Drupal\omnipedia_date\Service\TimelineInterface
-   */
-  protected TimelineInterface $timeline;
-
-  /**
-   * The Omnipedia wiki node revision service.
-   *
-   * @var \Drupal\omnipedia_core\Service\WikiNodeRevisionInterface
-   */
-  protected WikiNodeRevisionInterface $wikiNodeRevision;
-
-  /**
    * {@inheritdoc}
    *
    * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
@@ -51,18 +36,16 @@ class MainPage extends OmnipediaElementBase {
   public function __construct(
     array $configuration, string $pluginID, array $pluginDefinition,
     OmnipediaElementManagerInterface $elementManager,
-    TranslationInterface      $stringTranslation,
-    TimelineInterface         $timeline,
-    WikiNodeRevisionInterface $wikiNodeRevision
+    $stringTranslation,
+    protected readonly TimelineInterface         $timeline,
+    protected readonly WikiNodeRevisionInterface $wikiNodeRevision,
   ) {
+
     parent::__construct(
       $configuration, $pluginID, $pluginDefinition,
       $elementManager, $stringTranslation
     );
 
-    // Save dependencies.
-    $this->timeline         = $timeline;
-    $this->wikiNodeRevision = $wikiNodeRevision;
   }
 
   /**
@@ -77,7 +60,7 @@ class MainPage extends OmnipediaElementBase {
       $container->get('plugin.manager.omnipedia_element'),
       $container->get('string_translation'),
       $container->get('omnipedia.timeline'),
-      $container->get('omnipedia.wiki_node_revision')
+      $container->get('omnipedia.wiki_node_revision'),
     );
   }
 
@@ -112,13 +95,13 @@ class MainPage extends OmnipediaElementBase {
     /** @var \Drupal\omnipedia_core\Entity\NodeInterface|null */
     $featuredArticleNode = $this->wikiNodeRevision->getWikiNodeRevision(
       $featuredArticleElement->attr('article'),
-      $this->timeline->getDateFormatted('current', 'storage')
+      $this->timeline->getDateFormatted('current', 'storage'),
     );
 
     if ($featuredArticleNode === null) {
       $this->setError($this->t(
         'Cannot find the specified featured wiki page titled "@title" for the current date.',
-        ['@title' => $featuredArticleElement->attr('article')]
+        ['@title' => $featuredArticleElement->attr('article')],
       ));
     }
 

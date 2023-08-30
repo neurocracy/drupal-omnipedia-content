@@ -21,21 +21,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class AbbreviationEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * The Omnipedia abbreviation service.
-   *
-   * @var \Drupal\omnipedia_content\Service\AbbreviationInterface
-   */
-  protected AbbreviationInterface $abbreviation;
-
-  /**
    * Event subscriber constructor; saves dependencies.
    *
    * @param \Drupal\omnipedia_content\Service\AbbreviationInterface $abbreviation
    *   The Omnipedia abbreviation service.
    */
-  public function __construct(AbbreviationInterface $abbreviation) {
-    $this->abbreviation = $abbreviation;
-  }
+  public function __construct(
+    protected readonly AbbreviationInterface $abbreviation,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -58,7 +51,7 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
    *   The event object.
    */
   public function onCommonMarkCreateEnvironment(
-    CreateEnvironmentEvent $event
+    CreateEnvironmentEvent $event,
   ): void {
 
     /** @var \League\CommonMark\ConfigurableEnvironmentInterface */
@@ -124,7 +117,7 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
       // \mb_substr() would cause unexpected results.
       $trailing = \mb_strcut(
         $content,
-        $match['offset'] + \mb_strlen($match['abbreviation'])
+        $match['offset'] + \mb_strlen($match['abbreviation']),
       );
 
       // Save any found text after the abbreviation as a Text node.
@@ -134,13 +127,13 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
 
       // Now for the abbreviation.
       $newNodes[] = new Abbreviation($match['abbreviation'], [
-        'attributes' => ['title' => $match['description']]
+        'attributes' => ['title' => $match['description']],
       ]);
 
       // Remove the abbreviation and trailing content from the original text.
       $content = \mb_substr($content, 0,
         \mb_strlen($content) - \mb_strlen($trailing) -
-          \mb_strlen($match['abbreviation'])
+          \mb_strlen($match['abbreviation']),
       );
 
     }
@@ -188,10 +181,10 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
    * @return boolean
    */
   protected function isAbbreviationNone(
-    Abbreviation $abbreviation
+    Abbreviation $abbreviation,
   ): bool {
     return \mb_strtolower(
-      $abbreviation->getData('attributes', ['title' => ''])['title']
+      $abbreviation->getData('attributes', ['title' => ''])['title'],
     ) === 'none';
   }
 
@@ -251,12 +244,12 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
    *   If $direction is not one of the expected values.
    */
   protected function findAjacentTextNode(
-    Node $startNode, string $direction
+    Node $startNode, string $direction,
   ): ?Text {
 
     if (!\in_array($direction, ['next', 'previous'])) {
       throw new \InvalidArgumentException(
-        '$direction must be one of \'next\' or \'previous\'; was: \'' . $direction . '\''
+        '$direction must be one of \'next\' or \'previous\'; was: \'' . $direction . '\'',
       );
     }
 
@@ -339,7 +332,7 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
    * @return boolean
    */
   protected function isAbbreviationParenthesized(
-    Abbreviation $abbreviation
+    Abbreviation $abbreviation,
   ): bool {
 
     /** @var \League\CommonMark\Inline\Element\Text|null */
@@ -411,7 +404,7 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
    * @see $this->isAbbreviationInLink()
    */
   protected function alterAbbreviationNode(
-    Abbreviation $abbreviation
+    Abbreviation $abbreviation,
   ): void {
 
     if (

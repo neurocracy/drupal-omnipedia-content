@@ -16,20 +16,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class ThemeOmnipediaElementEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * The Drupal module handler service.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected ModuleHandlerInterface $moduleHandler;
-
-  /**
-   * The OmnipediaElement plug-in manager.
-   *
-   * @var \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface
-   */
-  protected OmnipediaElementManagerInterface $elementManager;
-
-  /**
    * Event subscriber constructor; saves dependencies.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
@@ -39,12 +25,9 @@ class ThemeOmnipediaElementEventSubscriber implements EventSubscriberInterface {
    *   The OmnipediaElement plug-in manager.
    */
   public function __construct(
-    ModuleHandlerInterface $moduleHandler,
-    OmnipediaElementManagerInterface $elementManager
-  ) {
-    $this->moduleHandler = $moduleHandler;
-    $this->elementManager = $elementManager;
-  }
+    protected readonly ModuleHandlerInterface $moduleHandler,
+    protected readonly OmnipediaElementManagerInterface $elementManager,
+  ) {}
 
   /**
    * {@inheritdoc}

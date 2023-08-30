@@ -7,7 +7,6 @@ namespace Drupal\omnipedia_content\Plugin\Filter;
 use Drupal\ambientimpact_core\Utility\Html;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
 use Drupal\omnipedia_content\Utility\TableOfContentsHtmlClassesTrait;
@@ -73,11 +72,11 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
    */
   public function __construct(
     array $configuration, string $pluginId, array $pluginDefinition,
-    TranslationInterface $stringTranslation
+    protected $stringTranslation,
   ) {
+
     parent::__construct($configuration, $pluginId, $pluginDefinition);
 
-    $this->stringTranslation = $stringTranslation;
   }
 
   /**
@@ -89,7 +88,7 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
   ) {
     return new static(
       $configuration, $pluginId, $pluginDefinition,
-      $container->get('string_translation')
+      $container->get('string_translation'),
     );
   }
 
@@ -125,7 +124,7 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
       Html::setElementClassAttribute(
         $referencesList,
         Html::getElementClassAttribute($referencesList)
-          ->addClass('references__list')
+          ->addClass('references__list'),
       );
 
     }
@@ -146,7 +145,7 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
         'self::h4',
         'self::h5',
         'self::h6',
-      ]) . '][1]'
+      ]) . '][1]',
     );
 
     foreach ($referencesHeadingResult as $heading) {
@@ -154,7 +153,7 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
       Html::setElementClassAttribute(
         $heading,
         Html::getElementClassAttribute($heading)
-          ->addClass('references-heading')
+          ->addClass('references-heading'),
       );
 
       /** @var \Symfony\Component\DomCrawler\Crawler */
@@ -241,7 +240,7 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
 
       // Set the caption contents as plain text, i.e. stripped of HTML elements.
       $link->setAttribute(
-        'data-photoswipe-caption', \trim($caption->textContent)
+        'data-photoswipe-caption', \trim($caption->textContent),
       );
 
     }
@@ -302,9 +301,9 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
           '<h3 class="' . $this->getTableOfContentsHeadingClass() . '">' .
             (string) $this->t('Table of contents') .
           '</h3>' .
-        '</div>'
+        '</div>',
       ))->filter(
-        '.' . $this->getTableOfContentsBaseClass()
+        '.' . $this->getTableOfContentsBaseClass(),
       )->getNode(0);
 
       if (!($container instanceof \DOMNode)) {
@@ -312,7 +311,7 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
       }
 
       $container = $list->parentNode->insertBefore(
-        $list->ownerDocument->importNode($container, true), $list
+        $list->ownerDocument->importNode($container, true), $list,
       );
 
       $container->appendChild($list);
@@ -321,7 +320,7 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
         Html::setElementClassAttribute(
           $subList,
           Html::getElementClassAttribute($subList)
-            ->addClass($this->getTableOfContentsListClass())
+            ->addClass($this->getTableOfContentsListClass()),
         );
       }
 
@@ -348,7 +347,7 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
       // top-level text content in a <p> element.
       '<div id="omnipedia-markdown-alterations-filter-root">' .
         (string) $text .
-      '</div>'
+      '</div>',
     );
 
     $this->alterReferences($crawler);
@@ -361,8 +360,8 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
 
     return new FilterProcessResult(
       $crawler->filter(
-        '#omnipedia-markdown-alterations-filter-root'
-      )->html()
+        '#omnipedia-markdown-alterations-filter-root',
+      )->html(),
     );
 
   }

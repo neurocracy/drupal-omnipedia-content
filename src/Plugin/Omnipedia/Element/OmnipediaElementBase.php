@@ -7,7 +7,6 @@ namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
 use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementInterface;
@@ -20,13 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class OmnipediaElementBase extends PluginBase implements ContainerFactoryPluginInterface, OmnipediaElementInterface {
 
   use StringTranslationTrait;
-
-  /**
-   * The OmnipediaElement plug-in manager.
-   *
-   * @var \Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface
-   */
-  protected OmnipediaElementManagerInterface $elementManager;
 
   /**
    * The DOM elements this plug-in instance is to parse and render.
@@ -43,7 +35,7 @@ abstract class OmnipediaElementBase extends PluginBase implements ContainerFacto
   protected array $errors = [];
 
   /**
-   * Constructs an OmnipediaElementBase object.
+   * Constructs an OmnipediaElementBase object; saves dependencies.
    *
    * @param array $configuration
    *   A configuration array containing information about the plug-in instance.
@@ -63,17 +55,15 @@ abstract class OmnipediaElementBase extends PluginBase implements ContainerFacto
    */
   public function __construct(
     array $configuration, string $pluginID, array $pluginDefinition,
-    OmnipediaElementManagerInterface $elementManager,
-    TranslationInterface $stringTranslation
+    protected readonly OmnipediaElementManagerInterface $elementManager,
+    protected $stringTranslation,
   ) {
-    parent::__construct($configuration, $pluginID, $pluginDefinition);
 
-    // Save dependencies.
-    $this->elementManager     = $elementManager;
-    $this->stringTranslation  = $stringTranslation;
+    parent::__construct($configuration, $pluginID, $pluginDefinition);
 
     // Pass on the Symfony DomCrawler instance provided by our plug-in manager.
     $this->elements = $configuration['elements'];
+
   }
 
   /**
@@ -81,12 +71,12 @@ abstract class OmnipediaElementBase extends PluginBase implements ContainerFacto
    */
   public static function create(
     ContainerInterface $container,
-    array $configuration, $pluginID, $pluginDefinition
+    array $configuration, $pluginID, $pluginDefinition,
   ) {
     return new static(
       $configuration, $pluginID, $pluginDefinition,
       $container->get('plugin.manager.omnipedia_element'),
-      $container->get('string_translation')
+      $container->get('string_translation'),
     );
   }
 

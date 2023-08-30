@@ -15,13 +15,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Abbreviation implements AbbreviationInterface {
 
   /**
-   * The Symfony event dispatcher service.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected EventDispatcherInterface $eventDispatcher;
-
-  /**
    * A basic regular expression to match terms with.
    *
    * This attempts to match the term only when it's surrounded by non-word
@@ -53,9 +46,9 @@ class Abbreviation implements AbbreviationInterface {
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
    *   The Symfony event dispatcher service.
    */
-  public function __construct(EventDispatcherInterface $eventDispatcher) {
-    $this->eventDispatcher = $eventDispatcher;
-  }
+  public function __construct(
+    protected readonly EventDispatcherInterface $eventDispatcher,
+  ) {}
 
   /**
    * {@inheritdoc}

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\omnipedia_content\Service;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\omnipedia_content\Service\WikimediaLinkInterface;
 
 /**
@@ -23,19 +22,16 @@ class WikimediaLink implements WikimediaLinkInterface {
   protected array $wikiPrefixes = [];
 
   /**
-   * Constructs this service object.
+   * Constructs this service object; saves dependencies.
    *
    * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
    *   The Drupal string translation service.
    */
-  public function __construct(
-    TranslationInterface $stringTranslation
-  ) {
-    // Save dependencies.
-    $this->stringTranslation = $stringTranslation;
+  public function __construct(protected $stringTranslation) {
 
     // Build prefixes, which requires the translation service.
     $this->wikiPrefixes = $this->buildPrefixes();
+
   }
 
   /**
