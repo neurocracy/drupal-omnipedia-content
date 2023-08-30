@@ -39,14 +39,14 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
    *
    * @var \Drupal\Core\Messenger\MessengerInterface
    */
-  protected MessengerInterface $messenger;
+  protected readonly MessengerInterface $messenger;
 
   /**
    * The Drupal renderer service.
    *
    * @var \Drupal\Core\Render\RendererInterface
    */
-  protected RendererInterface $renderer;
+  protected readonly RendererInterface $renderer;
 
   /**
    * Generated XPath for any element names that render their own children.
