@@ -117,7 +117,7 @@ class About extends OmnipediaElementBase {
 
       $seeNodeTitle = $element->getAttribute('see' . $optionIndex);
 
-      /** @var \Drupal\omnipedia_core\Entity\NodeInterface|null */
+      /** @var \Drupal\node\NodeInterface|null */
       $seeNode = $this->wikiNodeRevision->getWikiNodeRevision(
         $seeNodeTitle,
         $this->timeline->getDateFormatted('current', 'storage'),

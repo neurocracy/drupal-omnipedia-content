@@ -92,7 +92,7 @@ class MainPage extends OmnipediaElementBase {
     /** @var \Symfony\Component\DomCrawler\Crawler */
     $newsElement = $this->elements->filter('news');
 
-    /** @var \Drupal\omnipedia_core\Entity\NodeInterface|null */
+    /** @var \Drupal\node\NodeInterface|null */
     $featuredArticleNode = $this->wikiNodeRevision->getWikiNodeRevision(
       $featuredArticleElement->attr('article'),
       $this->timeline->getDateFormatted('current', 'storage'),
