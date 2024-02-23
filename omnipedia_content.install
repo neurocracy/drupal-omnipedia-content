@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Clear cached filter plug-in output for MarkdownAttachmentsFilter.
+ */
+function omnipedia_content_update_10601(): void {
+
+  // Clearing all render caching works for our purposes but it's fairly
+  // heavy-handed. A more elegant version of this could loop through all filter
+  // formats, passing their 'config:filter.format.*' cache tags to the
+  // invalidator if said format has the 'omnipedia_markdown_attachments' filter
+  // enabled.
+  \Drupal::service('cache_tags.invalidator')->invalidateTags(['rendered']);
+
+}
+
