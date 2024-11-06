@@ -16,3 +16,13 @@ function omnipedia_content_update_10601(): void {
 
 }
 
+/**
+ * Rebuild container and libraries for 6.x to 7.x upgrade.
+ */
+function omnipedia_content_update_10701(): void {
+
+  \Drupal::service('kernel')->invalidateContainer();
+
+  \Drupal::service('library.discovery')->clearCachedDefinitions();
+
+}
