@@ -153,3 +153,5 @@ The following major version bumps indicate breaking changes:
   * Increased [`drupal/ambientimpact_ux` to 2.x](https://github.com/Ambient-Impact/drupal-ambientimpact-ux/tree/2.x) from 1.x.
 
   * Removed the `omnipedia_tooltip` component and moved the functionality it provided (reparent tooltips) to [`omnipedia_site_theme` 8.x](https://github.com/neurocracy/drupal-omnipedia-site-theme/tree/8.x).
+
+  * Removed Symfony 4.x support; only Symfony 6.x is supported now.
