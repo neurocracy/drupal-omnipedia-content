@@ -17,7 +17,7 @@ use-cases.
 
 # Requirements
 
-* [Drupal 10](https://www.drupal.org/download)
+* [Drupal 10 or 11](https://www.drupal.org/download)
 
 * PHP 8.1
 
