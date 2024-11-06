@@ -1,5 +1,0 @@
-component.omnipedia_tooltip:
-  js:
-    omnipedia_tooltip.js: {}
-  dependencies:
-    - ambientimpact_ux/component.tooltip
