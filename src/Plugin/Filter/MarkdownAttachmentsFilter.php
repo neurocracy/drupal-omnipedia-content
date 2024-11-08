@@ -28,9 +28,6 @@ class MarkdownAttachmentsFilter extends FilterBase {
     $result = new FilterProcessResult($text);
 
     foreach ([
-      'abbr' => [
-        'library' => ['ambientimpact_ux/component.abbr'],
-      ],
       '.references' => [
         'library' => ['omnipedia_content/component.reference'],
       ],
