@@ -26,3 +26,14 @@ function omnipedia_content_update_10701(): void {
   \Drupal::service('library.discovery')->clearCachedDefinitions();
 
 }
+
+/**
+ * Clear cached attached data output to enable abbreviations everywhere.
+ */
+function omnipedia_content_update_10702(): void {
+
+  \Drupal::service('cache_tags.invalidator')->invalidateTags([
+    'omnipedia_attached_data_list',
+  ]);
+
+}
