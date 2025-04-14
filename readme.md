@@ -30,7 +30,7 @@ described in the installation instructions for these dependencies:
 
 * The [`ambientimpact_core`](https://github.com/Ambient-Impact/drupal-ambientimpact-core), [`ambientimpact_markdown`](https://github.com/Ambient-Impact/drupal-ambientimpact-markdown), and [`ambientimpact_ux`](https://github.com/Ambient-Impact/drupal-ambientimpact-ux) modules.
 
-* The [`omnipedia_core`](https://github.com/neurocracy/drupal-omnipedia-core) and [`omnipedia_date`](https://github.com/neurocracy/drupal-omnipedia-date) modules.
+* The [`omnipedia_core`](https://gitlab.com/neurocracy/omnipedia/modules/omnipedia-core) and [`omnipedia_date`](https://gitlab.com/neurocracy/omnipedia/modules/omnipedia-date) modules.
 
 ## Front-end dependencies
 
@@ -58,9 +58,10 @@ should get you up and running.
 In your root `composer.json`, add the following to the `"repositories"` section:
 
 ```json
-"drupal/omnipedia_content": {
+{
   "type": "vcs",
-  "url": "https://github.com/neurocracy/drupal-omnipedia-content.git"
+  "url": "https://gitlab.com/neurocracy/omnipedia/modules/omnipedia-content.git",
+  "only": ["drupal/omnipedia_content"]
 }
 ```
 
@@ -152,6 +153,6 @@ The following major version bumps indicate breaking changes:
 
   * Increased [`drupal/ambientimpact_ux` to 2.x](https://github.com/Ambient-Impact/drupal-ambientimpact-ux/tree/2.x) from 1.x.
 
-  * Removed the `omnipedia_tooltip` component and moved the functionality it provided (reparent tooltips) to [`omnipedia_site_theme` 8.x](https://github.com/neurocracy/drupal-omnipedia-site-theme/tree/8.x).
+  * Removed the `omnipedia_tooltip` component and moved the functionality it provided (reparent tooltips) to [`omnipedia_site_theme`](https://gitlab.com/neurocracy/omnipedia/omnipedia-theme).
 
   * Removed Symfony 4.x support; only Symfony 6.x is supported now.
