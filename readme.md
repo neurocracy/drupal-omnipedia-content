@@ -13,6 +13,8 @@ wiki content which gets rendered as standard HTML, and many alterations built on
 top of [CommonMark](https://commonmark.thephpleague.com/) for our specific
 use-cases.
 
+*Please note that [all development and issue tracking is done on <img src="https://gitlab.com/neurocracy/omnipedia/omnipedia/-/raw/main/docs/assets/gitlab/gitlab-logo.svg" alt="The GitLab logo" width="16" height="16"> GitLab](https://gitlab.com/neurocracy/omnipedia/modules/omnipedia-content).*
+
 ----
 
 # Requirements
