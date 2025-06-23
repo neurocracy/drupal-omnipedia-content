@@ -113,7 +113,7 @@ class WikiNodeElementValidateEventSubscriber implements EventSubscriberInterface
     // libraries, etc.) and use that on a successful form submit.
     //
     // We don't need the actual rendered output here, so that's ignored.
-    $this->renderer->renderPlain($renderArray);
+    $this->renderer->renderInIsolation($renderArray);
 
     /** @var array */
     $errors = $this->elementManager->getElementFormValidationErrors();
