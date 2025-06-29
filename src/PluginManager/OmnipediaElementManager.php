@@ -8,6 +8,7 @@ use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -266,6 +267,14 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
 
         /** @var array */
         $renderArray = $instance->getRenderArray();
+
+        $cacheMetadata = BubbleableMetadata::createFromRenderArray(
+          $renderArray,
+        );
+
+        $cacheMetadata->merge(BubbleableMetadata::createFromObject($instance));
+
+        $cacheMetadata->applyTo($renderArray);
 
         // Render the new element as an HTML string.
         //

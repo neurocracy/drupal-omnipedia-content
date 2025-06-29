@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
+use Drupal\Core\Cache\CacheableDependencyInterface;
+
 /**
  * An interface for all OmnipediaElement plug-ins.
  */
-interface OmnipediaElementInterface {
+interface OmnipediaElementInterface extends CacheableDependencyInterface {
 
   /**
    * Get the name of the HTML element this plug-in handles.

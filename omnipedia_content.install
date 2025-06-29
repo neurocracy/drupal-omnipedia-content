@@ -48,4 +48,16 @@ function omnipedia_content_update_10703(): void {
     'media_view',
   ]);
 
+/**
+ * Invalidate rendered cache tag for addition of element cache tags.
+ */
+function omnipedia_content_update_10704(): void {
+
+  // We don't currently have a cache tag for elements so this is
+  \Drupal::service('cache_tags.invalidator')->invalidateTags([
+    'rendered',
+  ]);
+
+}
+
 }

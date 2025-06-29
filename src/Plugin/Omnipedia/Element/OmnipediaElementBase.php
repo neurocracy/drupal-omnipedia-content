@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -110,6 +111,27 @@ abstract class OmnipediaElementBase extends PluginBase implements ContainerFacto
    */
   public function getErrors(): array {
     return $this->errors;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+    return Cache::PERMANENT;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return ['omnipedia_element', 'omnipedia_element:' . $this->getPluginId()];
   }
 
 }
