@@ -49,3 +49,15 @@ function omnipedia_content_update_10703(): void {
   ]);
 
 }
+
+/**
+ * Invalidate cache tags for disabling infobox media view mode.
+ */
+function omnipedia_content_update_10704(): void {
+
+  // We don't currently have a cache tag for specific elements.
+  \Drupal::service('cache_tags.invalidator')->invalidateTags([
+    'media_view',
+  ]);
+
+}

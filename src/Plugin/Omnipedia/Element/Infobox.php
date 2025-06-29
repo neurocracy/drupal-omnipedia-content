@@ -96,7 +96,7 @@ class Infobox extends OmnipediaElementBase {
         //   applied if they aren't already set by the author?
         $mediaElement->setAttribute('align', 'none');
         $mediaElement->setAttribute('style', 'frameless');
-        $mediaElement->setAttribute('view-mode', 'omnipedia_infobox');
+        // $mediaElement->setAttribute('view-mode', 'omnipedia_infobox');
       } else {
         $item['isMedia'] = false;
       }
