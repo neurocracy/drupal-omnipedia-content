@@ -18,3 +18,12 @@ dependencies:
   - hook_event_dispatcher:views_event_dispatcher
   - hux:hux
   - markdown:markdown
+
+config_devel:
+  optional:
+    - core.entity_view_display.media.image.omnipedia_infobox
+    - core.entity_view_mode.media.omnipedia_infobox
+    - image.style.omnipedia_infobox_1300x2600
+    - image.style.omnipedia_infobox_325x650
+    - image.style.omnipedia_infobox_650x1300
+    - responsive_image.styles.omnipedia_infobox
