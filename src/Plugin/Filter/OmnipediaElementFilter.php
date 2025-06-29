@@ -63,9 +63,13 @@ class OmnipediaElementFilter extends FilterBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function process($text, $langCode) {
-    return new FilterProcessResult(
+
+    // @todo Add cache tags for each element that was rendered so they can be
+    //  invalidated individually.
+    return (new FilterProcessResult(
       $this->elementManager->convertElements($text),
-    );
+    ))->addCacheTags(['omnipedia_element']);
+
   }
 
 }

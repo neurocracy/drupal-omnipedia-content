@@ -61,3 +61,14 @@ function omnipedia_content_update_10704(): void {
   ]);
 
 }
+
+/**
+ * Invalidate 'rendered' cache tag for addition of 'omnipedia_element' tag.
+ */
+function omnipedia_content_update_10705(): void {
+
+  \Drupal::service('cache_tags.invalidator')->invalidateTags([
+    'rendered',
+  ]);
+
+}
