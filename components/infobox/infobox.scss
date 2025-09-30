@@ -97,7 +97,7 @@
 
     // Lists within the info section should not have bullets or numbers,
     // as that clutters things.
-    ul, ol {
+    ul:not(.contextual-links), ol {
       padding-left: 0 !important;
       list-style:   none;
     }
