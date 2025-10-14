@@ -72,3 +72,12 @@ function omnipedia_content_update_10705(): void {
   ]);
 
 }
+
+/**
+ * Rebuild container for element plug-in manager constructor changes.
+ */
+function omnipedia_content_update_10706(): void {
+
+  \Drupal::service('kernel')->invalidateContainer();
+
+}

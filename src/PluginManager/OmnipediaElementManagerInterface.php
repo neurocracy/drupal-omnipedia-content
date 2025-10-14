@@ -4,34 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_content\PluginManager;
 
-use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
-
 /**
  * Defines an interface for OmnipediaElement plug-in managers.
  */
 interface OmnipediaElementManagerInterface {
-
-  /**
-   * Set additional dependencies.
-   *
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The Drupal messenger service.
-   *
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The Drupal renderer service.
-   *
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
-   *   The Drupal string translation service.
-   *
-   * @see https://symfony.com/doc/3.4/service_container/parent_services.html#overriding-parent-dependencies
-   */
-  public function setAddtionalDependencies(
-    MessengerInterface    $messenger,
-    RendererInterface     $renderer,
-    TranslationInterface  $stringTranslation
-  ): void;
 
   /**
    * Convert all elements that have element plug-ins into standard HTML.

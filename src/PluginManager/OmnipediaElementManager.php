@@ -35,20 +35,6 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
   protected array $elementErrors = [];
 
   /**
-   * The Drupal messenger service.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected readonly MessengerInterface $messenger;
-
-  /**
-   * The Drupal renderer service.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected readonly RendererInterface $renderer;
-
-  /**
    * Generated XPath for any element names that render their own children.
    *
    * This starts off as null to indicate that it has not been built, and if no
@@ -75,15 +61,24 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   The module handler to invoke the alter hook with.
    *
-   * @see \Drupal\plugin_type_example\SandwichPluginManager
-   *   This method is based heavily on the sandwich manager from the
-   *   'examples' module.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The Drupal messenger service.
+   *
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The Drupal renderer service.
+   *
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
+   *   The Drupal string translation service.
    */
   public function __construct(
     \Traversable            $namespaces,
     CacheBackendInterface   $cacheBackend,
-    ModuleHandlerInterface  $moduleHandler
+    ModuleHandlerInterface  $moduleHandler,
+    protected readonly MessengerInterface $messenger,
+    protected readonly RendererInterface  $renderer,
+    TranslationInterface  $stringTranslation,
   ) {
+
     parent::__construct(
       // This tells the plug-in manager to look for OmnipediaElement plug-ins in
       // the 'src/Plugin/Omnipedia/Element' subdirectory of any enabled modules.
@@ -116,19 +111,9 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
     // read, and then the resulting data is cached using the provided cache
     // backend.
     $this->setCacheBackend($cacheBackend, 'omnipedia_element_info');
-  }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function setAddtionalDependencies(
-    MessengerInterface    $messenger,
-    RendererInterface     $renderer,
-    TranslationInterface  $stringTranslation
-  ):void {
-    $this->messenger          = $messenger;
-    $this->renderer           = $renderer;
-    $this->stringTranslation  = $stringTranslation;
+    $this->setStringTranslation($stringTranslation);
+
   }
 
   /**

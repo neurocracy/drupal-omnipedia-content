@@ -4,13 +4,12 @@ services:
   plugin.manager.omnipedia_element:
     class: Drupal\omnipedia_content\PluginManager\OmnipediaElementManager
     parent: default_plugin_manager
-    calls:
-      -
-        - setAddtionalDependencies
-        -
-          - '@messenger'
-          - '@renderer'
-          - '@string_translation'
+    arguments:
+      $messenger: '@messenger'
+      $renderer: '@renderer'
+      $stringTranslation: '@string_translation'
+
+  Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface: '@plugin.manager.omnipedia_element'
 
   # The Omnipedia abbreviation service.
   omnipedia.abbreviation:
