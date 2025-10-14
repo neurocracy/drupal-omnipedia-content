@@ -12,6 +12,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\omnipedia_content\Annotation\OmnipediaElement as OmnipediaElementAnnotation;
 use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
 use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementInterface;
@@ -69,6 +70,9 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
    *
    * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
    *   The Drupal string translation service.
+   *
+   * @param \Drupal\Core\Theme\ThemeManagerInterface $themeManager
+   *   The Drupal theme manager service.
    */
   public function __construct(
     \Traversable            $namespaces,
@@ -77,6 +81,7 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
     protected readonly MessengerInterface $messenger,
     protected readonly RendererInterface  $renderer,
     TranslationInterface  $stringTranslation,
+    protected readonly ThemeManagerInterface $themeManager,
   ) {
 
     parent::__construct(
@@ -113,6 +118,22 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
     $this->setCacheBackend($cacheBackend, 'omnipedia_element_info');
 
     $this->setStringTranslation($stringTranslation);
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function alterDefinitions(&$definitions) {
+
+    if (!$this->alterHook) {
+      return;
+    }
+
+    $this->moduleHandler->alter($this->alterHook, $definitions);
+
+    // Allow themes to also alter definitions.
+    $this->themeManager->alter($this->alterHook, $definitions);
 
   }
 

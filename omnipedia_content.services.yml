@@ -8,6 +8,7 @@ services:
       $messenger: '@messenger'
       $renderer: '@renderer'
       $stringTranslation: '@string_translation'
+      $themeManager: '@theme.manager'
 
   Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface: '@plugin.manager.omnipedia_element'
 
