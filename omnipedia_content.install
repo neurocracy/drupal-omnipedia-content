@@ -81,3 +81,16 @@ function omnipedia_content_update_10706(): void {
   \Drupal::service('kernel')->invalidateContainer();
 
 }
+
+/**
+ * Rebuild libraries (and thus components) and element plug-ins for pitch.
+ */
+function omnipedia_content_update_10707(): void {
+
+  \Drupal::service('library.discovery')->clearCachedDefinitions();
+
+  \Drupal::service(
+    'plugin.manager.omnipedia_element',
+  )->clearCachedDefinitions();
+
+}
