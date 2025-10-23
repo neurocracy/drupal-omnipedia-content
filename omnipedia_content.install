@@ -94,3 +94,14 @@ function omnipedia_content_update_10707(): void {
   )->clearCachedDefinitions();
 
 }
+
+/**
+ * Rebuild element plug-ins for <pitch-highlight> element.
+ */
+function omnipedia_content_update_10708(): void {
+
+  \Drupal::service(
+    'plugin.manager.omnipedia_element',
+  )->clearCachedDefinitions();
+
+}
