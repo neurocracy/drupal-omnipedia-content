@@ -105,3 +105,14 @@ function omnipedia_content_update_10708(): void {
   )->clearCachedDefinitions();
 
 }
+
+/**
+ * Rebuild element plug-ins for moving pitch elements to separate module.
+ */
+function omnipedia_content_update_10709(): void {
+
+  \Drupal::service(
+    'plugin.manager.omnipedia_element',
+  )->clearCachedDefinitions();
+
+}
