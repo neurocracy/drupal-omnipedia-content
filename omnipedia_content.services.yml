@@ -18,11 +18,15 @@ services:
     arguments:
       - '@event_dispatcher'
 
+  Drupal\omnipedia_content\Service\AbbreviationInterface: '@omnipedia.abbreviation'
+
   # The Omnipedia Wikimedia link service.
   omnipedia.wikimedia_link:
     class: Drupal\omnipedia_content\Service\WikimediaLink
     arguments:
       - '@string_translation'
+
+  Drupal\omnipedia_content\Service\WikimediaLinkInterface: '@omnipedia.wikimedia_link'
 
   # Event subscriber to add Omnipedia element validation to wiki node edit form.
   omnipedia_content.form_wiki_node_element_validate_event_subscriber:

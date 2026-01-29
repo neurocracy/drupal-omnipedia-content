@@ -116,3 +116,12 @@ function omnipedia_content_update_10709(): void {
   )->clearCachedDefinitions();
 
 }
+
+/**
+ * Rebuild container for addition of autowire interface service aliases.
+ */
+function omnipedia_content_update_10710(): void {
+
+  \Drupal::service('kernel')->invalidateContainer();
+
+}
