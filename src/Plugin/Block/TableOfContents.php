@@ -11,6 +11,7 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -184,12 +185,22 @@ class TableOfContents extends BlockBase implements BlockPluginInterface, Contain
 
     }
 
+    /** @var \Drupal\Core\Render\BubbleableMetadata */
+    $nodeCacheMetadata = BubbleableMetadata::createFromObject($node);
+
     /** @var \Drupal\Core\Entity\EntityViewBuilderInterface */
     $viewBuilder = $this->entityTypeManager->getViewBuilder(
       $node->getEntityTypeId(),
     );
 
     $bodyRenderArray = $viewBuilder->viewField($node->get('body'), 'full');
+
+    // Merge in the body field's cache metadata, if any. This is probably not
+    // necessary as the node likely would have this already but it shouldn't
+    // hurt to do this here.
+    $nodeCacheMetadata->merge(BubbleableMetadata::createFromRenderArray(
+      $bodyRenderArray,
+    ));
 
     /** @var \Drupal\Core\Render\RenderContext */
     $renderContext = new RenderContext();
@@ -213,17 +224,22 @@ class TableOfContents extends BlockBase implements BlockPluginInterface, Contain
     /** @var \Symfony\Component\DomCrawler\Crawler */
     $tocCrawler = $rootCrawler->filter('.table-of-contents');
 
+    $renderArray = [];
+
+    // Always apply the cache metadata to the render array even if we don't find
+    // a table of contents so that cache tags and contexts allow it to be
+    // invalidated/vary if/when it does get edited to add one.
+    $nodeCacheMetadata->applyTo($renderArray);
+
     if (count($tocCrawler) === 0) {
 
-      return [];
+      return $renderArray;
 
     }
 
-    $tocMarkup = $tocCrawler->outerHtml();
+    $renderArray['#markup'] = $tocCrawler->outerHtml();
 
-    return [
-      '#markup' => $tocMarkup,
-    ];
+    return $renderArray;
 
   }
 
