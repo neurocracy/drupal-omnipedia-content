@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
- * Provides a block to display a wiki node's table of contents.
+ * Provides a block to display a node's table of contents.
  *
  * @see https://www.drupal.org/project/table_of_contents
  *   We initially wanted to use this because it's fairly robust and well
@@ -120,10 +120,10 @@ class TableOfContents extends BlockBase implements BlockPluginInterface, Contain
   }
 
   /**
-   * Get the current wiki node, if any.
+   * Get the current node, if any.
    *
    * @return \Drupal\node\NodeInterface|null
-   *   A wiki node if one is being viewed, and null otherwise.
+   *   A node if one is being viewed, and null otherwise.
    *
    * @todo Use plug-in context instead of getting the node from the current
    *   route match.
@@ -134,12 +134,12 @@ class TableOfContents extends BlockBase implements BlockPluginInterface, Contain
    *   Example of using context-aware plug-in that contains an entity as
    *   context.
    */
-  protected function getCurrentWikiNode(): ?NodeInterface {
+  protected function getCurrentNode(): ?NodeInterface {
 
-    // If there's a 'node' route parameter, attempt to resolve it to a wiki
-    // node. Note that the 'node' parameter is not upcast into a Node object if
+    // If there's a 'node' route parameter, attempt to resolve it to a node.
+    // Note that the 'node' parameter is not upcast into a Node object if
     // viewing a (Drupal) revision other than the currently published one.
-    return $this->wikiNodeResolver->resolveWikiNode(
+    return $this->wikiNodeResolver->resolveNode(
       $this->currentRouteMatch->getParameter('node'),
     );
 
@@ -159,7 +159,7 @@ class TableOfContents extends BlockBase implements BlockPluginInterface, Contain
     }
 
     /** @var \Drupal\node\NodeInterface|null */
-    $node = $this->getCurrentWikiNode();
+    $node = $this->getCurrentNode();
 
     if (!is_object($node)) {
 
@@ -177,7 +177,7 @@ class TableOfContents extends BlockBase implements BlockPluginInterface, Contain
   public function build() {
 
     /** @var \Drupal\node\NodeInterface|null */
-    $node = $this->getCurrentWikiNode();
+    $node = $this->getCurrentNode();
 
     if (!is_object($node)) {
 
@@ -260,7 +260,7 @@ class TableOfContents extends BlockBase implements BlockPluginInterface, Contain
     ];
 
     /** @var \Drupal\node\NodeInterface|null */
-    $node = $this->getCurrentWikiNode();
+    $node = $this->getCurrentNode();
 
     // @todo Also include wiki revisions?
     if (is_object($node)) {
@@ -281,7 +281,7 @@ class TableOfContents extends BlockBase implements BlockPluginInterface, Contain
     $maxAge = Cache::PERMANENT;
 
     /** @var \Drupal\node\NodeInterface|null */
-    $node = $this->getCurrentWikiNode();
+    $node = $this->getCurrentNode();
 
     // @todo Also include wiki revisions?
     if (is_object($node)) {
@@ -303,7 +303,7 @@ class TableOfContents extends BlockBase implements BlockPluginInterface, Contain
     $tags = ['block_view:' . $this->getPluginId()];
 
     /** @var \Drupal\node\NodeInterface|null */
-    $node = $this->getCurrentWikiNode();
+    $node = $this->getCurrentNode();
 
     // @todo Also include wiki revisions?
     if (is_object($node)) {
