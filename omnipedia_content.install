@@ -125,6 +125,7 @@ function omnipedia_content_update_10710(): void {
   \Drupal::service('kernel')->invalidateContainer();
 
 }
+
 /**
  * Clear cached block definitions for addition of table of contents block.
  */

@@ -7,7 +7,6 @@ namespace Drupal\omnipedia_content\Plugin\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -41,7 +40,7 @@ use Symfony\Component\DomCrawler\Crawler;
   admin_label:  new TranslatableMarkup('Table of Contents'),
   category:     new TranslatableMarkup('Omnipedia'),
 )]
-class TableOfContents extends BlockBase implements BlockPluginInterface, ContainerFactoryPluginInterface {
+class TableOfContents extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * {@inheritdoc}
@@ -54,6 +53,9 @@ class TableOfContents extends BlockBase implements BlockPluginInterface, Contain
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $currentRouteMatch
    *   The Drupal current route match service.
+   *
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
+   *   The string translation service.
    *
    * @param \Drupal\omnipedia_core\Service\WikiNodeResolverInterface $wikiNodeResolver
    *   The Omnipedia wiki node resolver service.
