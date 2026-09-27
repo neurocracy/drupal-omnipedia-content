@@ -93,6 +93,35 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
   }
 
   /**
+   * Alter heading permalinks.
+   *
+   * - Adds 'ambientimpact-icon--text-hidden' class to permalink icons. This was
+   *   possible to add originally via the Markdown module configuration but it
+   *   now escapes/strips ampersands so those cannot be used in the [icon] tag
+   *   we provide; instead we add it after Markdown has been rendered into HTML.
+   *
+   * @param \Symfony\Component\DomCrawler\Crawler $crawler
+   *   The Symfony DomCrawler instance to alter.
+   */
+  protected function alterHeadingPermalinks(Crawler $crawler): void {
+
+    /** @var \Symfony\Component\DomCrawler\Crawler */
+    $iconCrawler = $crawler->filter(
+      '.heading-permalink .ambientimpact-icon--icon-standalone',
+    );
+
+    foreach ($iconCrawler as $iconElement) {
+
+      Html::setElementClassAttribute(
+        $iconElement,
+        Html::getElementClassAttribute($iconElement)
+          ->addClass('ambientimpact-icon--text-hidden'),
+      );
+    }
+
+  }
+
+  /**
    * Alter references.
    *
    * - Adds 'references-heading' class to the references heading.
@@ -331,6 +360,8 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    *
+   * @see $this->alterHeadingPermalinks()
+   *
    * @see $this->alterReferences()
    *
    * @see $this->alterCaptions()
@@ -349,6 +380,8 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
         (string) $text .
       '</div>',
     );
+
+    $this->alterHeadingPermalinks($crawler);
 
     $this->alterReferences($crawler);
 
