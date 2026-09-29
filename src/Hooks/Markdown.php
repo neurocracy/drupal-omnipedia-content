@@ -9,6 +9,7 @@ use Drupal\hux\Attribute\Alter;
 use Drupal\omnipedia_content\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
 use Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension\FootnoteExtension;
 use League\CommonMark\Extension\Footnote\FootnoteExtension as CommonMarkFootnoteExtension;
+use Drupal\omnipedia_content\CommonMark\Extension\Attributes\AttributesExtension;
 
 /**
  * Markdown hook implementations.
@@ -54,6 +55,8 @@ class Markdown {
       );
 
     }
+
+    $info['commonmark-attributes']['object'] = AttributesExtension::class;
 
   }
 
