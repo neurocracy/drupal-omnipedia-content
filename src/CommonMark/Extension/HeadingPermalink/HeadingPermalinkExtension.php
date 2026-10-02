@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\omnipedia_content\CommonMark\Extension\HeadingPermalink;
 
 use Drupal\omnipedia_content\CommonMark\Normalizer\WikiSlugNormalizer;
-use League\CommonMark\ConfigurableEnvironmentInterface;
+use League\CommonMark\Environment\EnvironmentBuilderInterface;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\ExtensionInterface;
 use League\CommonMark\Extension\HeadingPermalink\HeadingPermalink;
@@ -29,14 +29,14 @@ class HeadingPermalinkExtension implements ExtensionInterface {
   /**
    * {@inheritdoc}
    */
-  public function register(ConfigurableEnvironmentInterface $environment) {
+  public function register(EnvironmentBuilderInterface $environment): void {
     $environment->addEventListener(
       DocumentParsedEvent::class,
       new HeadingPermalinkProcessor(new WikiSlugNormalizer()),
       -100
     );
 
-    $environment->addInlineRenderer(
+    $environment->addRenderer(
       HeadingPermalink::class, new HeadingPermalinkRenderer()
     );
   }

@@ -6,7 +6,7 @@ namespace Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\markdown\Plugin\Markdown\CommonMark\Extension\FootnoteExtension as MarkdownFootnoteExtension;
-use League\CommonMark\Block\Element\Document;
+use League\CommonMark\Node\Block\Document;
 use League\CommonMark\Block\Element\Heading;
 use League\CommonMark\EnvironmentInterface;
 use League\CommonMark\Event\DocumentParsedEvent;
@@ -89,7 +89,7 @@ class FootnoteExtension extends MarkdownFootnoteExtension {
    *   The event object.
    */
   public static function onDocumentParsed(DocumentParsedEvent $event): void {
-    /** @var \League\CommonMark\Block\Element\Document */
+    /** @var \League\CommonMark\Node\Block\Document */
     $document = $event->getDocument();
 
     /** @var \League\CommonMark\Node\NodeWalker */
@@ -153,7 +153,7 @@ class FootnoteExtension extends MarkdownFootnoteExtension {
   /**
    * Alter CommonMark inline footnote reference text and preceding space.
    *
-   * @param \League\CommonMark\Block\Element\Document $document
+   * @param \League\CommonMark\Node\Block\Document $document
    *   The CommonMark document object.
    *
    * @param \League\CommonMark\Extension\Footnote\Node\FootnoteRef $node
@@ -214,7 +214,7 @@ class FootnoteExtension extends MarkdownFootnoteExtension {
    *
    * This inserts a heading before the footnotes container.
    *
-   * @param \League\CommonMark\Block\Element\Document $document
+   * @param \League\CommonMark\Node\Block\Document $document
    *   The CommonMark document object.
    *
    * @param \League\CommonMark\Extension\Footnote\Node\FootnoteContainer $node
