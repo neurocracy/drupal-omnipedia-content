@@ -34,6 +34,8 @@ class Markdown {
    */
   public function extensionInfoAlter(array &$info): void {
 
+    return; // Temporary for CommonMark 2.x upgrade.
+
     $info['commonmark-heading-permalink']['object'] =
       HeadingPermalinkExtension::class;
 
