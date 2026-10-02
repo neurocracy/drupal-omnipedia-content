@@ -7,7 +7,7 @@ namespace Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark;
 use Drupal\ambientimpact_markdown\AmbientImpactMarkdownEventInterface;
 use Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent;
 use Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentPreParsedEvent;
-use League\CommonMark\Block\Element\BlockQuote;
+use League\CommonMark\Extension\CommonMark\Node\Block\BlockQuote;
 use League\CommonMark\Input\MarkdownInput;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -66,13 +66,13 @@ class BlockQuoteEventSubscriber implements EventSubscriberInterface {
    */
   public function onCommonMarkDocumentParsed(DocumentParsedEvent $event): void {
 
-    /** @var \League\CommonMark\Block\Element\Document */
+    /** @var \League\CommonMark\Node\Block\Document */
     $document = $event->getDocument();
 
     /** @var \League\CommonMark\Node\NodeWalker */
     $walker = $document->walker();
 
-    /** @var \League\CommonMark\Block\Element\BlockQuote[] */
+    /** @var \League\CommonMark\Extension\CommonMark\Node\Block\BlockQuote[] */
     $startBlockQuotes = [];
 
     while ($event = $walker->next()) {
@@ -96,7 +96,7 @@ class BlockQuoteEventSubscriber implements EventSubscriberInterface {
 
       $currentNode = $startBlockQuote;
 
-      /** @var \League\CommonMark\Block\Element\BlockQuote[] */
+      /** @var \League\CommonMark\Extension\CommonMark\Node\Block\BlockQuote[] */
       $emptyBlockQuotes = [];
 
       while (
