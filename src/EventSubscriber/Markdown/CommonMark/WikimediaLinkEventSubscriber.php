@@ -9,7 +9,7 @@ use Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent;
 use Drupal\omnipedia_content\Event\Omnipedia\OmnipediaContentEventInterface;
 use Drupal\omnipedia_content\Event\Omnipedia\WikimediaLinkBuildEvent;
 use Drupal\omnipedia_content\Service\WikimediaLinkInterface;
-use League\CommonMark\Inline\Element\Link;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -61,7 +61,7 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
     EventDispatcherInterface $eventDispatcher
   ): void {
 
-    /** @var \League\CommonMark\Block\Element\Document */
+    /** @var \League\CommonMark\Node\Block\Document */
     $document = $event->getDocument();
 
     // If this document is in an attached data context, return here to avoid

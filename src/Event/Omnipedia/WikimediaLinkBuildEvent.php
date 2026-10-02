@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_content\Event\Omnipedia;
 
-use League\CommonMark\Inline\Element\Link;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
@@ -15,7 +15,7 @@ class WikimediaLinkBuildEvent extends Event {
   /**
    * Constructs this event object.
    *
-   * @param \League\CommonMark\Inline\Element\Link $link
+   * @param \League\CommonMark\Extension\CommonMark\Node\Inline\Link $link
    *   The CommonMark Link element object.
    *
    * @param string $prefixedUrl
@@ -37,7 +37,7 @@ class WikimediaLinkBuildEvent extends Event {
   /**
    * Get the CommonMark Link element object.
    *
-   * @return \League\CommonMark\Inline\Element\Link
+   * @return \League\CommonMark\Extension\CommonMark\Node\Inline\Link
    *   The CommonMark Link element object.
    */
   public function getLink(): Link {
