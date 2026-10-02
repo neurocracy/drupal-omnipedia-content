@@ -47,7 +47,7 @@ class OmnipediaContextEventSubscriber implements EventSubscriberInterface {
     DocumentPreParsedEvent $event
   ): void {
 
-    /** @var \League\CommonMark\Block\Element\Document */
+    /** @var \League\CommonMark\Node\Block\Document */
     $document = $event->getDocument();
 
     /** @var string[] */
@@ -78,16 +78,40 @@ class OmnipediaContextEventSubscriber implements EventSubscriberInterface {
         $crawler->filter('omnipedia-context-root')->html()
       ));
 
-      foreach ($foundContexts as $foundContext) {
-        $document->data['omnipediaContext'][] = $foundContext;
+      if (\is_object($document->data)) {
+
+        // CommonMark 2.x.
+        $document->data->append('omnipediaContext', $foundContexts);
+
+      } else {
+
+        // CommonMark 1.x.
+        foreach ($foundContexts as $foundContext) {
+
+          $document->data['omnipediaContext'][] = $foundContext;
+
+        }
+
       }
 
     }
 
+    if (!empty($document->data['omnipediaContext'])) {
+      return;
+    }
+
     // Provide a 'none' context if no context was provided so that the data is
     // always guaranteed to exist.
-    if (empty($document->data['omnipediaContext'])) {
+    if (\is_object($document->data)) {
+
+      // CommonMark 2.x.
+      $document->data->append('omnipediaContext', ['none']);
+
+    } else {
+
+      // CommonMark 1.x.
       $document->data['omnipediaContext'] = ['none'];
+
     }
 
   }
