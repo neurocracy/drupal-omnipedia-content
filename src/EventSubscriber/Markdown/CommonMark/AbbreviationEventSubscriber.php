@@ -10,8 +10,7 @@ use Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent;
 use Drupal\omnipedia_content\Service\AbbreviationInterface;
 use Eightfold\CommonMarkAbbreviations\Abbreviation;
 use Eightfold\CommonMarkAbbreviations\AbbreviationExtension;
-use League\CommonMark\Inline\Element\Link;
-use League\CommonMark\Inline\Element\Text;
+use League\CommonMark\Node\Inline\Text;
 use League\CommonMark\Node\Node;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -96,7 +95,7 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
     }
 
     /** @var string */
-    $content = $textNode->getContent();
+    $content = $textNode->getLiteral();
 
     // Get all matches and reverse their order so that we start from the end of
     // the string content, working towards the start.
@@ -184,7 +183,7 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
     Abbreviation $abbreviation,
   ): bool {
     return \mb_strtolower(
-      $abbreviation->getData('attributes', ['title' => ''])['title'],
+      $abbreviation->data->get('attributes', ['title' => ''])['title'],
     ) === 'none';
   }
 
@@ -198,8 +197,8 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
    *   True if the last text content character is '(', false otherwise.
    */
   protected function isOpenParenthesis(Node $node): bool {
-    return \method_exists($node, 'getContent') &&
-      \mb_substr($node->getContent(), -1) === '(';
+    return \method_exists($node, 'getLiteral') &&
+      \mb_substr($node->getLiteral(), -1) === '(';
   }
 
   /**
@@ -212,8 +211,8 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
    *   True if the first text content character is ')', false otherwise.
    */
   protected function isCloseParenthesis(Node $node): bool {
-    return \method_exists($node, 'getContent') &&
-      \mb_substr($node->getContent(), 0, 1) === ')';
+    return \method_exists($node, 'getLiteral') &&
+      \mb_substr($node->getLiteral(), 0, 1) === ')';
   }
 
   /**
@@ -415,7 +414,7 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $textNode = new Text($abbreviation->getContent());
+    $textNode = new Text($abbreviation->getLiteral());
 
     $abbreviation->insertAfter($textNode);
 
@@ -431,7 +430,7 @@ class AbbreviationEventSubscriber implements EventSubscriberInterface {
    */
   public function onCommonMarkDocumentParsed(DocumentParsedEvent $event): void {
 
-    /** @var \League\CommonMark\Block\Element\Document */
+    /** @var \League\CommonMark\Node\Block\Document */
     $document = $event->getDocument();
 
     /** @var \League\CommonMark\Node\NodeWalker */
