@@ -57,6 +57,11 @@ services:
     tags:
       - { name: 'event_subscriber' }
 
+  omnipedia_content.markdown_commonmark_heading_permalink_config_event_subscriber:
+    class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\HeadingPermalinkConfigEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+
   # Event subscriber to add CommonMark indented content parser and renderer.
   omnipedia_content.markdown_commonmark_indented_content_event_subscriber:
     class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\IndentedContentEventSubscriber
@@ -74,6 +79,11 @@ services:
     class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\WikimediaLinkEventSubscriber
     arguments:
       - '@omnipedia.wikimedia_link'
+    tags:
+      - { name: 'event_subscriber' }
+
+  omnipedia_content.markdown_commonmark_wiki_slug_normalizer_event_subscriber:
+    class: Drupal\omnipedia_content\EventSubscriber\Markdown\CommonMark\WikiSlugNormalizerEventSubscriber
     tags:
       - { name: 'event_subscriber' }
 

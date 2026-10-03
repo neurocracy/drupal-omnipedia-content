@@ -6,7 +6,6 @@ namespace Drupal\omnipedia_content\Hooks;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\hux\Attribute\Alter;
-use Drupal\omnipedia_content\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
 use Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension\FootnoteExtension;
 use League\CommonMark\Extension\Footnote\FootnoteExtension as CommonMarkFootnoteExtension;
 
@@ -22,12 +21,7 @@ class Markdown {
    *
    * This performs the following:
    *
-   * - Replaces the heading permalink CommonMark extension with our own.
-   *
    * - Replaces the footnotes Markdown module plug-in with our own.
-   *
-   * @see \Drupal\omnipedia_content\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension
-   *   Our heading permalink CommonMark extension.
    *
    * @see \Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension\FootnoteExtension
    *   Our footnotes Markdown plug-in class.
@@ -35,9 +29,6 @@ class Markdown {
   public function extensionInfoAlter(array &$info): void {
 
     return; // Temporary for CommonMark 2.x upgrade.
-
-    $info['commonmark-heading-permalink']['object'] =
-      HeadingPermalinkExtension::class;
 
     $info['commonmark-footnotes']['class'] = FootnoteExtension::class;
     $info['commonmark-footnotes']['object'] = CommonMarkFootnoteExtension::class;
