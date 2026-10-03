@@ -295,6 +295,12 @@ class MarkdownAlterationsFilter extends FilterBase implements ContainerFactoryPl
    *
    * @see https://github.com/caxy/php-htmldiff/issues/100
    *   GitHub issue describing the problem this method solves.
+   *
+   * @todo Determine if this is still the case for all lists in CommonMark 2.x
+   *   as it seems to have fixed this with table of contents lists.
+   *
+   * @see https://github.com/thephpleague/commonmark/issues/613
+   *   Removed <p> elements generating in table of contents list items.
    */
   protected function alterLists(Crawler $crawler): void {
 
