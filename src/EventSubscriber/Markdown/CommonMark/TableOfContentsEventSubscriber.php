@@ -36,7 +36,7 @@ class TableOfContentsEventSubscriber implements EventSubscriberInterface {
     CreateEnvironmentEvent $event
   ): void {
 
-    /** @var \League\CommonMark\ConfigurableEnvironmentInterface */
+    /** @var \League\CommonMark\Environment\EnvironmentBuilderInterface */
     $environment = $event->getEnvironment();
 
     $environment->mergeConfig([

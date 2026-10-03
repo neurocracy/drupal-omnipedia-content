@@ -52,7 +52,7 @@ class IndentedContentEventSubscriber implements EventSubscriberInterface {
   public function onCommonMarkCreateEnvironment(
     CreateEnvironmentEvent $event
   ): void {
-    /** @var \League\CommonMark\ConfigurableEnvironmentInterface */
+    /** @var \League\CommonMark\Environment\EnvironmentBuilderInterface */
     $environment = $event->getEnvironment();
 
     // This adds our IndentedContentStartParser class one weight lighter than
