@@ -7,14 +7,14 @@ namespace Drupal\omnipedia_content\Plugin\Markdown\CommonMark\Extension;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\markdown\Plugin\Markdown\CommonMark\Extension\FootnoteExtension as MarkdownFootnoteExtension;
 use League\CommonMark\Node\Block\Document;
-use League\CommonMark\Block\Element\Heading;
+use League\CommonMark\Extension\CommonMark\Node\Block\Heading;
 use League\CommonMark\EnvironmentInterface;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\Footnote\FootnoteExtension as CommonMarkFootnoteExtension;
 use League\CommonMark\Extension\Footnote\Node\Footnote;
 use League\CommonMark\Extension\Footnote\Node\FootnoteContainer;
 use League\CommonMark\Extension\Footnote\Node\FootnoteRef;
-use League\CommonMark\Inline\Element\Text;
+use League\CommonMark\Node\Inline\Text;
 use League\CommonMark\Reference\Reference;
 
 /**
@@ -175,7 +175,7 @@ class FootnoteExtension extends MarkdownFootnoteExtension {
     );
 
     $node->setReference($newReference);
-    $document->getReferenceMap()->addReference($newReference);
+    $document->getReferenceMap()->add($newReference);
 
     /** @var \League\CommonMark\Node\Node|null */
     $previousNode = $node->previous();
@@ -183,7 +183,7 @@ class FootnoteExtension extends MarkdownFootnoteExtension {
     if (\is_object($previousNode) && $previousNode instanceof Text) {
 
       /** @var string */
-      $precedingText = $previousNode->getContent();
+      $precedingText = $previousNode->getLiteral();
 
       // Attempt to match one or more trailing spaces in the preceding text node
       // to be replaced by a non-breaking space.
@@ -199,7 +199,7 @@ class FootnoteExtension extends MarkdownFootnoteExtension {
         // doesn't allow HTML input. A more elegant solution to this in the
         // future may be to implement a new inline node type to represent one or
         // more non-breaking spaces that renders to '&nbsp;' HTML.
-        $previousNode->setContent(
+        $previousNode->setLiteral(
           \mb_substr($precedingText, 0, $matches[0][1]) . ' '
         );
 
