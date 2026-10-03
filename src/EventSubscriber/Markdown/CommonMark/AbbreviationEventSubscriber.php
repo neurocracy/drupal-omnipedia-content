@@ -10,6 +10,7 @@ use Drupal\ambientimpact_markdown\Event\Markdown\CommonMark\DocumentParsedEvent;
 use Drupal\omnipedia_content\Service\AbbreviationInterface;
 use Eightfold\CommonMarkAbbreviations\Abbreviation;
 use Eightfold\CommonMarkAbbreviations\AbbreviationExtension;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Node\Inline\Text;
 use League\CommonMark\Node\Node;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
