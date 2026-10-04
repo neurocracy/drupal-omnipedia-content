@@ -78,21 +78,7 @@ class OmnipediaContextEventSubscriber implements EventSubscriberInterface {
         $crawler->filter('omnipedia-context-root')->html()
       ));
 
-      if (\is_object($document->data)) {
-
-        // CommonMark 2.x.
-        $document->data->append('omnipediaContext', $foundContexts);
-
-      } else {
-
-        // CommonMark 1.x.
-        foreach ($foundContexts as $foundContext) {
-
-          $document->data['omnipediaContext'][] = $foundContext;
-
-        }
-
-      }
+      $document->data->append('omnipediaContext', $foundContexts);
 
     }
 
@@ -102,17 +88,7 @@ class OmnipediaContextEventSubscriber implements EventSubscriberInterface {
 
     // Provide a 'none' context if no context was provided so that the data is
     // always guaranteed to exist.
-    if (\is_object($document->data)) {
-
-      // CommonMark 2.x.
-      $document->data->append('omnipediaContext', ['none']);
-
-    } else {
-
-      // CommonMark 1.x.
-      $document->data['omnipediaContext'] = ['none'];
-
-    }
+    $document->data->append('omnipediaContext', ['none']);
 
   }
 

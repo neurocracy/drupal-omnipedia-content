@@ -17,7 +17,7 @@
   "require": {
     "php": "^8.1",
     "drupal/core": "^10.3 || ^11.0",
-    "8fold/commonmark-abbreviations": "^1.2 || ^2.1",
+    "8fold/commonmark-abbreviations": "^2.1",
     "drupal/ambientimpact_core": "^2.0@dev || ^3.0@dev",
     "drupal/ambientimpact_markdown": "^3.0@dev",
     "drupal/ambientimpact_ux": "^2.0@dev",
@@ -26,7 +26,7 @@
     "drupal/markdown": "^3.0",
     "drupal/omnipedia_core": "^4.0@dev || ^5.0@dev || ^6.0@dev",
     "drupal/omnipedia_date": "^4.0@dev || ^5.0@dev",
-    "league/commonmark": "^1.6.1 || ^2.0",
+    "league/commonmark": "^2.0",
     "symfony/css-selector": "^6.2 || ^7.3",
     "symfony/dom-crawler": "^6.2 || ^7.3"
   }
