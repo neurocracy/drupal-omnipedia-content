@@ -134,3 +134,17 @@ function omnipedia_content_update_10711(): void {
   \Drupal::service('plugin.manager.block')->clearCachedDefinitions();
 
 }
+
+/**
+ * Invalidate container & Markdown CommonMark parsers for CommonMark 2.x.
+ */
+function omnipedia_content_update_11801(): void {
+
+  \Drupal::service('kernel')->invalidateContainer();
+
+  \Drupal::service('cache_tags.invalidator')->invalidateTags([
+    'markdown.parser.commonmark',
+    'markdown.parser.commonmark-gfm',
+  ]);
+
+}
