@@ -21,13 +21,13 @@
     "drupal/ambientimpact_core": "^2.0@dev || ^3.0@dev",
     "drupal/ambientimpact_markdown": "^3.0@dev",
     "drupal/ambientimpact_ux": "^2.0@dev",
-    "drupal/hook_event_dispatcher": "^3.1 || ^4.0",
+    "drupal/hook_event_dispatcher": "^4.0",
     "drupal/hux": "^1.1",
     "drupal/markdown": "^3.0",
     "drupal/omnipedia_core": "^4.0@dev || ^5.0@dev || ^6.0@dev",
     "drupal/omnipedia_date": "^4.0@dev || ^5.0@dev",
     "league/commonmark": "^2.0",
-    "symfony/css-selector": "^6.2 || ^7.3",
-    "symfony/dom-crawler": "^6.2 || ^7.3"
+    "symfony/css-selector": "^7.3",
+    "symfony/dom-crawler": "^7.3"
   }
 }
