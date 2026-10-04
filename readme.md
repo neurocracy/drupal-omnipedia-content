@@ -19,7 +19,7 @@ use-cases.
 
 # Requirements
 
-* [Drupal 10.3 or 11](https://www.drupal.org/download)
+* [Drupal 11.3 or newer](https://www.drupal.org/download)
 
 * PHP 8.1
 
@@ -70,7 +70,7 @@ In your root `composer.json`, add the following to the `"repositories"` section:
 ### Installing
 
 Once you've completed all of the above, run `composer require
-"drupal/omnipedia_content:^7.0@dev"` in the root of your project to have
+"drupal/omnipedia_content:^8.0@dev"` in the root of your project to have
 Composer install this and its required dependencies for you.
 
 ## Front-end assets
@@ -94,7 +94,7 @@ Once those are defined, add the following to the `"dependencies"` section of
 your top-level `package.json`:
 
 ```json
-"drupal-omnipedia-content": "workspace:^7"
+"drupal-omnipedia-content": "workspace:^8"
 ```
 
 Then run `yarn install` and let Yarn do the rest.
@@ -158,3 +158,9 @@ The following major version bumps indicate breaking changes:
   * Removed the `omnipedia_tooltip` component and moved the functionality it provided (reparent tooltips) to [`omnipedia_site_theme`](https://gitlab.com/neurocracy/omnipedia/omnipedia-theme).
 
   * Removed Symfony 4.x support; only Symfony 6.x is supported now.
+
+* 8.x:
+
+  * Added [CommonMark 2.x](https://commonmark.thephpleague.com/2.x/) support; removed CommonMark 1.x support.
+
+  * Now requires minimum Drupal core 11.3.
