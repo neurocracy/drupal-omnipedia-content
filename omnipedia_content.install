@@ -136,15 +136,63 @@ function omnipedia_content_update_10711(): void {
 }
 
 /**
- * Invalidate container & Markdown CommonMark parsers for CommonMark 2.x.
+ * Update/rebuild Markdown CommonMark parser info for CommonMark 2.x.
  */
 function omnipedia_content_update_11801(): void {
 
-  \Drupal::service('kernel')->invalidateContainer();
-
-  \Drupal::service('cache_tags.invalidator')->invalidateTags([
+  // Update parsers to use 'symbol' config for heading permalinks and remove
+  // the 'inner_contents' setting.
+  foreach ([
     'markdown.parser.commonmark',
     'markdown.parser.commonmark-gfm',
-  ]);
+  ] as $configName) {
+
+    $config = \Drupal::configFactory()->getEditable($configName);
+
+    $extensions = $config->get('extensions');
+
+    foreach ($extensions as $i => &$extension) {
+
+      if (
+        !isset($extension['id']) ||
+        $extension['id'] != 'commonmark-heading-permalink'
+      ) {
+        continue;
+      }
+
+      if (!isset($extension['settings']['inner_contents'])) {
+        continue;
+      }
+
+      $extension['settings']['symbol'] = $extension['settings'][
+        'inner_contents'
+      ];
+
+      unset($extension['settings']['inner_contents']);
+
+      $config->set('extensions', $extensions);
+
+      $config->save();
+
+      // If you don't clear caches when running updates, the cached config will
+      // not have been updated so we need to delete the item ourselves for the
+      // new config to be used.
+      \Drupal::service('cache.config')->delete($configName);
+
+      break;
+
+    }
+
+  }
+
+  \Drupal::service('kernel')->invalidateContainer();
+
+  \Drupal::service(
+    'plugin.manager.markdown.parser',
+  )->clearCachedDefinitions();
+
+  \Drupal::service(
+    'plugin.manager.markdown.extension',
+  )->clearCachedDefinitions();
 
 }
