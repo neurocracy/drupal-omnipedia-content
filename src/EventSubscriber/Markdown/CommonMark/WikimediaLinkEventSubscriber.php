@@ -70,7 +70,11 @@ class WikimediaLinkEventSubscriber implements EventSubscriberInterface {
     // creates a chain that contains the same Wikimedia link.
     //
     // @todo Implement a way to strip/unwrap these links in this context?
-    if (\in_array('attachedData', $document->data['omnipediaContext'])) {
+    if (
+      \in_array('attachedData', $document->data->get(
+        'omnipediaContext', 'none',
+      ))
+    ) {
       return;
     }
 

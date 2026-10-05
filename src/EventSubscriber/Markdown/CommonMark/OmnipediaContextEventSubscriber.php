@@ -78,7 +78,9 @@ class OmnipediaContextEventSubscriber implements EventSubscriberInterface {
         $crawler->filter('omnipedia-context-root')->html()
       ));
 
-      $document->data->append('omnipediaContext', $foundContexts);
+      foreach ($foundContexts as $contextName) {
+        $document->data->append('omnipediaContext', $contextName);
+      }
 
     }
 
@@ -88,7 +90,7 @@ class OmnipediaContextEventSubscriber implements EventSubscriberInterface {
 
     // Provide a 'none' context if no context was provided so that the data is
     // always guaranteed to exist.
-    $document->data->append('omnipediaContext', ['none']);
+    $document->data->append('omnipediaContext', 'none');
 
   }
 
