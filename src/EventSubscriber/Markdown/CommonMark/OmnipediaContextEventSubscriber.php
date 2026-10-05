@@ -32,8 +32,10 @@ class OmnipediaContextEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
+      // Set a negative priority to try to find and set the context as early as
+      // possible for other handlers to find after this.
       AmbientImpactMarkdownEventInterface::COMMONMARK_DOCUMENT_PRE_PARSED =>
-        'onCommonMarkDocumentPreParsed',
+        ['onCommonMarkDocumentPreParsed', -100],
     ];
   }
 
