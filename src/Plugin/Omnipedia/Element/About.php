@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\Attribute\OmnipediaElement;
 use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementBase;
+use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
 use Drupal\omnipedia_core\Service\WikiNodeRevisionInterface;
 use Drupal\omnipedia_date\Service\TimelineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * About element.
- *
- * @OmnipediaElement(
- *   id           = "about",
- *   html_element = "about",
- *   title        = @Translation("About"),
- *   description  = @Translation("Loosely based on the <a href='https://en.wikipedia.org/wiki/Template:About'>Wikipedia Template:About</a>.")
- * )
  */
+#[OmnipediaElement(
+  id: 'about',
+  html_element: 'about',
+  title: new TranslatableMarkup('About'),
+  description: new TranslatableMarkup('Loosely based on the <a href="https://en.wikipedia.org/wiki/Template:About">Wikipedia Template:About</a>.'),
+)]
 class About extends OmnipediaElementBase {
 
   /**

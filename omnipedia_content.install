@@ -196,3 +196,14 @@ function omnipedia_content_update_11801(): void {
   )->clearCachedDefinitions();
 
 }
+
+/**
+ * Rebuild element plug-ins for annotation to attribute discovery.
+ */
+function omnipedia_content_update_11802(): void {
+
+  \Drupal::service(
+    'plugin.manager.omnipedia_element',
+  )->clearCachedDefinitions();
+
+}

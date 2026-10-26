@@ -14,6 +14,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\omnipedia_content\Annotation\OmnipediaElement as OmnipediaElementAnnotation;
+use Drupal\omnipedia_content\Attribute\OmnipediaElement as OmnipediaElementAttribute;
 use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
 use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementInterface;
 use Symfony\Component\DomCrawler\Crawler;
@@ -100,8 +101,14 @@ class OmnipediaElementManager extends DefaultPluginManager implements OmnipediaE
       // interface, Drupal will throw an error.
       OmnipediaElementInterface::class,
 
+      // The name of the attribute that contains the plug-in definition.
+      OmnipediaElementAttribute::class,
+
       // The name of the annotation class that contains the plug-in definition.
-      OmnipediaElementAnnotation::class
+      //
+      // @phpstan-ignore classConstant.deprecatedClass
+      OmnipediaElementAnnotation::class,
+
     );
 
     // This allows the plug-in definitions to be altered by an alter hook. The

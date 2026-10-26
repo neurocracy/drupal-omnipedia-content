@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\omnipedia_content\Attribute\OmnipediaElement;
 use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementBase;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Infobox element.
- *
- * @OmnipediaElement(
- *   id               = "infobox",
- *   html_element     = "infobox",
- *   render_children  = false,
- *   title            = @Translation("Infobox"),
- *   description      = @Translation("Loosely based on the <a href='https://en.wikipedia.org/wiki/Template:Infobox'>Wikipedia Template:Infobox</a>.")
- * )
  */
+#[OmnipediaElement(
+  id: 'infobox',
+  html_element: 'infobox',
+  render_children: false,
+  title: new TranslatableMarkup('Infobox'),
+  description: new TranslatableMarkup('Loosely based on the <a href="https://en.wikipedia.org/wiki/Template:Infobox">Wikipedia Template:Infobox</a>.'),
+)]
 class Infobox extends OmnipediaElementBase {
 
   /**

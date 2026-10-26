@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\omnipedia_content\Attribute\OmnipediaElement;
 use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementBase;
 
 /**
  * Warning element.
- *
- * @OmnipediaElement(
- *   id           = "warning",
- *   html_element = "warning",
- *   title        = @Translation("Warning"),
- *   description  = @Translation("Warning message element.")
- * )
  */
+#[OmnipediaElement(
+  id: 'warning',
+  html_element: 'warning',
+  title: new TranslatableMarkup('Warning'),
+  description: new TranslatableMarkup('Warning message element.'),
+)]
 class Warning extends OmnipediaElementBase {
 
   /**

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_content\Plugin\Omnipedia\Element;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
+use Drupal\omnipedia_content\Attribute\OmnipediaElement;
 use Drupal\omnipedia_content\Plugin\Omnipedia\Element\OmnipediaElementBase;
+use Drupal\omnipedia_content\PluginManager\OmnipediaElementManagerInterface;
 use Drupal\omnipedia_core\Service\WikiNodeRevisionInterface;
 use Drupal\omnipedia_date\Service\TimelineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -14,14 +16,13 @@ use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Main page element.
- *
- * @OmnipediaElement(
- *   id           = "main_page",
- *   html_element = "main-page",
- *   title        = @Translation("Main page"),
- *   description  = @Translation("Main page template, intended to abstract as much of the main page structure as possible.")
- * )
  */
+#[OmnipediaElement(
+  id: 'main_page',
+  html_element: 'main-page',
+  title: new TranslatableMarkup('Main page'),
+  description: new TranslatableMarkup('Main page template, intended to abstract as much of the main page structure as possible.'),
+)]
 class MainPage extends OmnipediaElementBase {
 
   /**
